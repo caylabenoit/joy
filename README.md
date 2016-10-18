@@ -6,3 +6,4 @@ This frameworks simplify and group the use of
 * SQL & data management
 * JSON management
 * Log management
+* An other ...
