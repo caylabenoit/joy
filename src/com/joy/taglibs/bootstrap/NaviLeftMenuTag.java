@@ -64,55 +64,6 @@ public class NaviLeftMenuTag extends SimpleTagSupport {
     public void setActivemenuid(String activemenuname) {
         this.activemenuid = activemenuname;
     }
-
-
-    /**
-     * Construit un morceau d'url avec les parametres seulement (x étant un chiffre)
- PNx : Nom du parametre
- PVx : Valeur du parametre
-     * @param element
-     * @return 
-     */
-    private String buildURLParameter(Element element) {
-        int i=1;
-        String urlPart = "&";
-        while (element.getAttributeValue("pn" + i) != null) {
-            urlPart += element.getAttributeValue("pn" + i) + "=" + element.getAttributeValue("pv" + i) + "&";
-            i++;
-        }
-        return urlPart.substring(0, urlPart.length()-1);
-    }
-
-    /**
-     * Buil a href hyperlink
-     * @param liURL
-     * @param liObject
-     * @param liActionType
-     * @param child
-     * @return 
-     */
-    private String buildURL(String liURL, 
-                            String liObject, 
-                            String liActionType, 
-                            Element child) {
-        String url = "";
-
-        if (liURL == null) {
-            if (liObject != null) {
-                url += "." + Joy.parameters().getJoyDefaultURLPattern() + "?";
-                if (liObject != null)
-                    url += C.ACTION_TAG_OBJECT + "=" + liObject + "&";
-                if (liActionType!= null)
-                    url += C.ACTION_TYPE_TAG + "="  + liActionType;
-                url += buildURLParameter(child);
-            } else { 
-                url += "#";
-            }
-        } else { 
-            url = liURL;
-        }
-        return url;
-    }
     
     /**
      * Fonction recursive de construction de blocs HTML de menu
@@ -121,10 +72,10 @@ public class NaviLeftMenuTag extends SimpleTagSupport {
      * @param CurrentLevel niveau actuel
      * @return Chaine contenant le code HTML complete avec les éléments enfants
      */
-    private String buildMenuBloc(List bloc, 
-                                 String CurrentBloc,
-                                 int CurrentLevel,
-                                 List finalpath) {
+    private String build(List bloc, 
+                        String CurrentBloc,
+                        int CurrentLevel,
+                        List finalpath) {
         
         if (!bloc.isEmpty()) {
             CurrentBloc += eol;
@@ -144,18 +95,18 @@ public class NaviLeftMenuTag extends SimpleTagSupport {
                 boolean hasChild = false;
                 String childBloc = "";
                 
-                if (isMenuSelected(liId, finalpath))
+                if (NaviCommonFunctions.isMenuSelected(liId, finalpath))
                     blocSelected = true;
                 
                 // Regarde si l'élément a des enfants
                 List childs = child.getChildren(C.JOYMENU_TAG);
                 if (!childs.isEmpty()) {
-                    childBloc = buildMenuBloc(childs, childBloc, CurrentLevel+1, finalpath);
+                    childBloc = build(childs, childBloc, CurrentLevel+1, finalpath);
                     hasChild = true;
                 }
 
                 BlocLI += ((liId.equalsIgnoreCase(this.activemenuid)) ? "<LI class='active'>" : "<LI>"); 
-                BlocLI += "<A aria-expanded='false' " + ((liId.equalsIgnoreCase(this.activemenuid)) ? "class='active'" : "") + " href='" + buildURL(liURL, liObject, liActionType, child) + "'>";
+                BlocLI += "<A aria-expanded='false' " + ((liId.equalsIgnoreCase(this.activemenuid)) ? "class='active'" : "") + " href='" + NaviCommonFunctions.buildURL(liURL, liObject, liActionType, child) + "'>";
                 BlocLI += (liClass != null ? "<I class='" + liClass + "'></I>&nbsp;" : "");
                 if (hasChild)
                     BlocLI += "<SPAN class='fa arrow'></SPAN>";
@@ -182,52 +133,13 @@ public class NaviLeftMenuTag extends SimpleTagSupport {
         }
         return CurrentBloc;
     }
-
-    /**
-     * 
-     * @param name
-     * @param finalpath
-     * @return 
-     */
-    private boolean isMenuSelected(String name, List<String> finalpath) {
-        for (String menu : finalpath) 
-            if (name.equalsIgnoreCase(menu))
-                return true;
-        return false;
-    }
-    
-    /**
-     * Get the active item path (all the tree) and put them into a list
-     * @param bloc
-     * @param finalpath 
-     */
-    private void getListOfActiveMenu(List bloc, List finalpath) {
-        Iterator iter = bloc.iterator();
-        while(iter.hasNext()) {
-            Element child = (Element)iter.next();
-            String id = child.getAttributeValue(C.JOYMENUATTR_ID);
-            if (id.equalsIgnoreCase(this.activemenuid)) {
-                Element elt = child;
-                finalpath.add(id);
-                while (elt.getParentElement() != null) {
-                    if (elt.getParentElement().getAttributeValue(C.JOYMENUATTR_ID) != null)
-                        finalpath.add(elt.getParentElement().getAttributeValue(C.JOYMENUATTR_ID));
-                    elt = elt.getParentElement();
-                }
-                return;
-            } else {
-                List childs = child.getChildren(C.JOYMENU_TAG);
-                getListOfActiveMenu(childs, finalpath);
-            }
-        }
-    }
     
     /**
      * Create a top menu
      * @param out write output
      * @throws IOException 
      */
-    private void leftMatisMenu(JspWriter out) throws IOException {         
+    private void menu(JspWriter out) throws IOException {         
         try {
             SAXBuilder sxb = new SAXBuilder();
             org.jdom2.Document document;
@@ -240,10 +152,10 @@ public class NaviLeftMenuTag extends SimpleTagSupport {
             
             List rootpath = racine.getChildren(C.JOYMENU_TAG);
             List<String> finalpath = new ArrayList();
-            getListOfActiveMenu(rootpath, finalpath);
+            NaviCommonFunctions.getListOfActiveMenu(rootpath, finalpath, this.activemenuid);
             
             List root = racine.getChildren(C.JOYMENU_TAG);
-            sMenu = buildMenuBloc(root, sMenu, 1, finalpath);
+            sMenu = build(root, sMenu, 1, finalpath);
             
             out.println("<DIV class='navbar-default sidebar' role='navigation'>");
             out.println("<DIV class='sidebar-nav navbar-collapse'>");
@@ -265,7 +177,7 @@ public class NaviLeftMenuTag extends SimpleTagSupport {
     @Override
     public void doTag() throws JspException, IOException {
         // Create a top menu or reuse the existing one
-        leftMatisMenu(this.getJspContext().getOut());
+        menu(this.getJspContext().getOut());
     }
 
 }

@@ -20,9 +20,18 @@ import com.joy.C;
 import com.joy.Joy;
 import com.joy.mvc.Action;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 
 
 /**
@@ -42,6 +51,45 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
  */
 public class NaviTopLeftMenuTag extends SimpleTagSupport {
     private String title;
+    private String activemenuid;
+    private String xmlconfig;
+    private static final String EOL = "\n";
+    
+    /**
+     * Get the value of activemenuid
+     *
+     * @return the value of activemenuid
+     */
+    public String getActivemenuid() {
+        return activemenuid;
+    }
+
+    /**
+     * Set the value of activemenuid
+     *
+     * @param activemenuid new value of activemenuid
+     */
+    public void setActivemenuid(String activemenuid) {
+        this.activemenuid = activemenuid;
+    }
+
+    /**
+     * Get the value of xmlconfig
+     *
+     * @return the value of xmlconfig
+     */
+    public String getXmlconfig() {
+        return xmlconfig;
+    }
+
+    /**
+     * Set the value of xmlconfig
+     *
+     * @param xmlconfig new value of xmlconfig
+     */
+    public void setXmlconfig(String xmlconfig) {
+        this.xmlconfig = xmlconfig;
+    }
 
     public String getTitle() {
         return title;
@@ -49,6 +97,116 @@ public class NaviTopLeftMenuTag extends SimpleTagSupport {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    private String buildHrefTag(Element elt, 
+                                boolean isDropdown) {
+        String liObject = elt.getAttributeValue(C.ACTION_TAG_OBJECT);
+        String liActionType = elt.getAttributeValue(C.ACTION_TYPE_TAG);
+        String liName = elt.getAttributeValue(C.JOYMENUATTR_NAME);
+        String liClass = elt.getAttributeValue(C.JOYMENUATTR_CLASS);
+        String liId = elt.getAttributeValue(C.JOYMENUATTR_ID);
+        String liURL = elt.getAttributeValue(C.JOYMENUATTR_URL);
+        
+        String ret = "";
+        
+        ret += "<A " + ((liId.equalsIgnoreCase(this.activemenuid)) ? "class='active'" : "");
+        if (isDropdown) {
+            ret += " class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false' ";
+        }
+        ret += " HREF='" + NaviCommonFunctions.buildURL(liURL, liObject, liActionType, elt);
+        ret += "'>";
+        ret += (liClass != null ? "<I class='" + liClass + "'></I>&nbsp;" : "");
+        ret += liName + "</A>";
+        
+        return ret;
+    }
+    
+    private String printChildsLI(List childs) {
+        Iterator iter = childs.iterator();
+        String BlocLI = "";
+        
+        while(iter.hasNext()) { // parcours tous les éléments du bloc 
+            Element child = (Element)iter.next();
+            String liId = child.getAttributeValue(C.JOYMENUATTR_ID);
+                
+            BlocLI += ((liId.equalsIgnoreCase(this.activemenuid)) ? "<LI class='active'>" : "<LI>"); 
+            BlocLI += buildHrefTag(child, false);
+            BlocLI += "</LI>"  + EOL;            
+        }
+        return BlocLI;
+    }
+    
+    
+    /**
+     * Fonction recursive de construction de blocs HTML de menu
+     * @param bloc Bloc courant (donnée récursive)
+     * @param CurrentBloc Chaine contenant le code HTML du menu
+     * @return Chaine contenant le code HTML complete avec les éléments enfants
+     */
+    private String build(List bloc) {
+        String CurrentBloc = EOL;
+        
+        if (!bloc.isEmpty()) {
+            Iterator iter = bloc.iterator();
+            String BlocULStart = "";
+            String BlocULEnd = "";
+            
+            String BlocLI = "";
+            while(iter.hasNext()) { // parcours tous les éléments du bloc 
+                Element child = (Element)iter.next();
+
+                // Regarde si l'élément a des enfants
+                List childs = child.getChildren(C.JOYMENU_TAG);
+                if (!childs.isEmpty()) { // dropdown request
+                    BlocULStart = "<LI class='dropdown'>" + EOL; 
+                    BlocULStart += buildHrefTag(child, true); 
+                    BlocULStart += "<UL class='dropdown-menu dropdown-shortcuts'>" + EOL;
+                    BlocULEnd = "</UL>";
+                    BlocULEnd += "</LI>";
+                    BlocLI = printChildsLI(childs);
+                    
+                    CurrentBloc += EOL + BlocULStart + BlocLI + BlocULEnd + EOL;
+                } else {
+                    childs = new ArrayList();
+                    childs.add(child);
+                    CurrentBloc += EOL + printChildsLI(childs) + EOL;
+                }
+            }
+        }
+        return CurrentBloc;
+    }
+        
+    
+    private void dynamicMenu(JspWriter out) throws IOException {
+        try {
+            SAXBuilder sxb = new SAXBuilder();
+            org.jdom2.Document document;
+            Element racine;
+            String xmlConfigFile = (this.xmlconfig.equals("") ? "joy-menu-topleft.xml" : xmlconfig);
+
+            document = sxb.build(Thread.currentThread().getContextClassLoader().getResourceAsStream(xmlConfigFile));
+            racine = document.getRootElement();
+            List root = racine.getChildren(C.JOYMENU_TAG);
+            
+            out.println("<UL class='nav navbar-nav'>");
+            out.println(build(root));
+            out.println("</UL>");
+            
+        } catch (IOException | JDOMException ex) {
+            Joy.log().debug ( ex.toString());
+            out.println("No menu defined.");
+        }
+    }
+    
+    /**
+     * Create a top menu
+     * @param out write output
+     * @throws IOException 
+     */
+    private void menu(JspWriter out) throws IOException {     
+        JspContext jsp = this.getJspContext();
+        dynamicMenu(out);
     }
     
     /**
@@ -58,33 +216,7 @@ public class NaviTopLeftMenuTag extends SimpleTagSupport {
      */
     @Override
     public void doTag() throws JspException, IOException {
-        // Create a top menu or reuse the existing one
-        JspContext jsp = this.getJspContext();
-        String outStr = "";
-        
-        try {
-            Action actionform = (Action)jsp.findAttribute(C.ACTION_FORM_BEAN);
-            String myTitle = "";
-            if (title==null) {
-                myTitle = Joy.parameters().getApplicationName() + " v" + Joy.parameters().getVersion();
-            } else
-                myTitle = title;
-            outStr += "<!-- Top Left Name -->";
-            outStr += "<div class=\"navbar-header\">";
-            outStr += "<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".navbar-collapse\">";
-            outStr += "  <span class=\"sr-only\">Toggle navigation</span>";
-            outStr += "  <span class=\"icon-bar\"></span>";
-            outStr += "  <span class=\"icon-bar\"></span>";
-            outStr += "  <span class=\"icon-bar\"></span>";
-            outStr += "</button>";
-            outStr += "<a class=\"navbar-brand\" href=\"#\">" + myTitle + "</a>";
-            outStr += "</div>";
-            outStr += "<!-- Top Left Name -->";
-            
-            this.getJspContext().getOut().println(outStr);
-        } catch (Exception e) { 
-            
-        }
+        menu(this.getJspContext().getOut());
     }
 
 }

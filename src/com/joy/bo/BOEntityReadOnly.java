@@ -521,7 +521,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
             for (String sort : sortedFields) 
                 sql += sort + ",";
             sql = sql.substring(0, sql.length() - 1);
-            Joy.log().debug("Order By generated: " + sql);
+            //Joy.log().debug("Order By generated: " + sql);
         }
         return sql;
     }
