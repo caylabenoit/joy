@@ -34,6 +34,10 @@ public class NaviTopMenuTag extends TagSupport {
 
     private String title;
 
+    public NaviTopMenuTag() {
+        this.title = "";
+    }
+
     /**
      * Get the value of title
      *
@@ -57,7 +61,7 @@ public class NaviTopMenuTag extends TagSupport {
      * @param title
      * @return 
      */
-    private void responsiveMenuButton(String title, JspWriter out) {
+    private void responsiveMenuButton(JspWriter out) {
         try {
             String outStr = "";
             outStr += "<!-- Top Left Name -->";
@@ -68,7 +72,17 @@ public class NaviTopMenuTag extends TagSupport {
             outStr += "  <span class=\"icon-bar\"></span>";
             outStr += "  <span class=\"icon-bar\"></span>";
             outStr += "</button>";
-            outStr += "<a class=\"navbar-brand\" href=\"#\">" + title + "</a>";
+            
+            if (this.title.isEmpty()) {
+                outStr += "<DIV class='logobloc'>";
+                String myTitle = Joy.parameters().getApplicationName() + " v" + Joy.parameters().getVersion();
+                outStr += "<A href='" + Joy.url("about", "display") + "'>";
+                outStr += "<IMG src='" + Joy.parameters().getParameter("logo").getValue() + "' class='logomenu' alt='" + myTitle + "'/>";
+                outStr += "</A>";
+                outStr += "</DIV>";
+            } else
+                outStr += "<a class=\"navbar-brand\" href=\"#\">" + title + "</a>";
+
             outStr += "</div>";
             outStr += "<!-- Top Left Name -->";
             
@@ -82,14 +96,9 @@ public class NaviTopMenuTag extends TagSupport {
     public int doStartTag() throws JspException {
         JspWriter out =pageContext.getOut();
         try {
-            String myTitle = "";
-            if (title==null) {
-                myTitle = Joy.parameters().getApplicationName() + " v" + Joy.parameters().getVersion();
-            } else
-                myTitle = title;
             
             out.println("<!-- Start Navi Top Menu -->");
-            responsiveMenuButton(myTitle, out);
+            responsiveMenuButton(out);
             out.println("<DIV class='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>");
             
             

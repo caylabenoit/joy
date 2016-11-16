@@ -75,12 +75,17 @@ public class MappingSpecification {
         LookupMaps.add(lookup);
     }
     
+    /**
+     * Process the mapping
+     * @param entities DB connection
+     * @param forceParams exception & parameters to force
+     * @return 
+     */
     public StatMap process(BOFactory entities, Object... forceParams) {
         StatMap stats = new StatMap();
         ResultSet rsFrom;
         
         try {
-            
             IEntity boTo = entities.getEntity(To);
             IEntity boFrom = entities.getEntity(From);
             if (boFrom == null)
@@ -104,6 +109,7 @@ public class MappingSpecification {
                 // Manage single fields map first
                 for (FieldMap map : FieldMaps) {    // go through all the fields to map
                     //Joy.log().debug("Map Field | " + map.getFieldNameFrom() + " --> " +map.getFieldNameTo());
+                    
                     if (!map.isKey()) {// normal map (not a key)
                         Object val = null;
                         if (!map.getFieldNameFrom().isEmpty()) {
@@ -116,7 +122,7 @@ public class MappingSpecification {
                                 case "SYSDATE": // system date
                                     val = new Date();
                                     break;
-                                case "%1": // Given fixed parameter
+                                case "%1": // Given fixed parameter (only one for the moment)
                                     if (forceParams.length == 1)
                                         val = forceParams[0];
                                     else
@@ -172,7 +178,6 @@ public class MappingSpecification {
                     stats.incRowsInserted(boTo.insert());
                 else
                     stats.incRowsUpdated(boTo.update());
-                
             }
             entities.closeResultSet(rsFrom);
             return stats;

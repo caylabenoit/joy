@@ -156,13 +156,17 @@ public class NaviLeftMenuTag extends SimpleTagSupport {
             
             List root = racine.getChildren(C.JOYMENU_TAG);
             sMenu = build(root, sMenu, 1, finalpath);
-            
+
             out.println("<DIV class='navbar-default sidebar' role='navigation'>");
+            //out.println("<DIV class='sidebar-title'>");
+            //String myTitle = Joy.parameters().getApplicationName() + " v" + Joy.parameters().getVersion();
+            //out.println("<A class=\"navbar-brand\" href=\"#\">" + myTitle + "</a>");
+            //out.println("</DIV>");
             out.println("<DIV class='sidebar-nav navbar-collapse'>");
             out.println(sMenu);
             out.println("</DIV>");
             out.println("</DIV>");
-                
+            
         } catch (IOException | JDOMException ex) {
             Joy.log().debug ( ex.toString());
             out.println("No menu defined.");
