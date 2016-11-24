@@ -116,12 +116,15 @@ public class BOEntityComposite  {
      * @return 
      */
     private String getSort() {
-        String mySorter = (this.sorts.isEmpty() ? "" : " ORDER BY ");
+        if (this.sorts.isEmpty())
+            return "";
+        String mySorter = " ORDER BY ";
         
         for (BOCompositeSorter filter : this.sorts) {
-            mySorter += filter.getSort() + " ";
+            mySorter += filter.getSort() + ",";
         }
-        return mySorter;
+        
+        return mySorter.substring(0, mySorter.length()-1);
     }
     
     /**
@@ -335,7 +338,7 @@ public class BOEntityComposite  {
             String alias = jnXml.getAttributeValue(C.ENTITIES_COMPOSITE_ATTR_ALIAS);
             String desc = jnXml.getAttributeValue(C.ENTITIES_COMPOSITE_ATTR_DESC);
             if (desc == null) desc = C.NO;
-            String myName = jnXml.getAttributeValue(C.ENTITIES_COMPOSITE_ATTR_FIELD);
+            String myName = jnXml.getText();
             this.addSort(alias, myName, desc.equalsIgnoreCase(C.YES));
         }
     }

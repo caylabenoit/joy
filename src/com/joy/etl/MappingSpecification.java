@@ -117,7 +117,7 @@ public class MappingSpecification {
                             val = rsFrom.getObject(map.getFieldNameFrom()); 
                             
                         } else {
-                            // get the given value
+                            // get the static given value
                             switch (map.getValue().toUpperCase()) {
                                 case "SYSDATE": // system date
                                     val = new Date();
@@ -169,7 +169,8 @@ public class MappingSpecification {
                     ResultSet rsLookup = boLookup.select(); // lookup execution
                     if (rsLookup.next()) { // retrieve lookup results
                         boTo.field(lookup.getTo()).setValue(rsLookup.getObject(lookup.getEntityLookupKey()));
-                    }
+                    } else // no lookun value found, put null instead
+                        boTo.field(lookup.getTo()).setValue(null);
                     entities.closeResultSet(rsLookup);
                 }
                 
