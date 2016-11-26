@@ -31,7 +31,7 @@ public class ListenerBasic  implements ServletContextListener {
         try {
             return context.getInitParameter(ParamName);
         } catch (Exception e) {
-            Joy.log().error(e);
+            Joy.LOG().error(e);
             return "";
         }
     }
@@ -55,7 +55,7 @@ public class ListenerBasic  implements ServletContextListener {
      */
     public void joyInit(ServletContextEvent sce) {
         // Initialisation des entités
-        Joy.init(sce.getServletContext());
+        Joy.INIT(sce.getServletContext());
     }
     
     public void init(ServletContextEvent sce) {}

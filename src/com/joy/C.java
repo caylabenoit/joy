@@ -152,6 +152,7 @@ public class C {
     /////////
     public static final String JOTYLOG_TAG_FILENAME = "joy-logfilename";
     public static final String JOTYLOG_TAGATTR_DATEPREFIX = "dateprefix";
+    public static final String JOTYLOG_TAGATTR_VERSIONPREFIX = "versionprefix";
     public static final String JOTYLOG_TAG_DIRECTORY = "joy-logdirectory";
     public static final String JOTYLOG_TAG_LEVELS = "joy-loglevels";
     public static final String JOTYLOG_TAG_LEVEL = "joy-loglevel";

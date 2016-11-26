@@ -28,7 +28,7 @@ import org.jdom2.Element;
  */
 public class NaviCommonFunctions {
     /**
-     * Construit un morceau d'url avec les parametres seulement (x étant un chiffre)
+     * Construit un morceau d'URL avec les parametres seulement (x étant un chiffre)
      * @param element
      * @return 
      */
@@ -43,7 +43,7 @@ public class NaviCommonFunctions {
     }
 
     /**
-     * Build a href hyperlink
+     * Build a HREF hyperlink
      * @param liURL
      * @param liObject
      * @param liActionType
@@ -58,7 +58,7 @@ public class NaviCommonFunctions {
 
         if (liURL == null) {
             if (liObject != null) {
-                url += "." + Joy.parameters().getJoyDefaultURLPattern() + "?";
+                url += "." + Joy.PARAMETERS().getJoyDefaultURLPattern() + "?";
                 if (liObject != null)
                     url += C.ACTION_TAG_OBJECT + "=" + liObject + "&";
                 if (liActionType!= null)

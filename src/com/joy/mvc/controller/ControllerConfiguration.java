@@ -67,7 +67,7 @@ public class ControllerConfiguration {
         JoyDBProvider connectionCheck = null;
         if (entities != null)
             connectionCheck = entities.getDB();
-        Joy.log().debug("ActionConfig initialized: " + messageBundle +
+        Joy.LOG().debug("ActionConfig initialized: " + messageBundle +
                         ", MessageBundle initialized: " + messageBundle +
                         ", Entities initialized: " + entities +
                         ", DB Connection initialized: " + connectionCheck);

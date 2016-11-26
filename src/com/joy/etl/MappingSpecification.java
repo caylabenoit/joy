@@ -78,7 +78,7 @@ public class MappingSpecification {
     /**
      * Process the mapping
      * @param entities DB connection
-     * @param forceParams exception & parameters to force
+     * @param forceParams exception & PARAMETERS to force
      * @return 
      */
     public StatMap process(BOFactory entities, Object... forceParams) {
@@ -93,7 +93,7 @@ public class MappingSpecification {
             List<FieldMap> CheckIfExists = new ArrayList();
             boolean InsertReq = true;
 
-            Joy.log().debug("Map Entity " + boFrom + " to " + boTo);
+            Joy.LOG().debug("Map Entity " + boFrom + " to " + boTo);
             
             // Build the Check list field list before
             for (FieldMap field : this.FieldMaps) 
@@ -108,7 +108,7 @@ public class MappingSpecification {
             while (rsFrom.next()) {
                 // Manage single fields map first
                 for (FieldMap map : FieldMaps) {    // go through all the fields to map
-                    //Joy.log().debug("Map Field | " + map.getFieldNameFrom() + " --> " +map.getFieldNameTo());
+                    //Joy.LOG().debug("Map Field | " + map.getFieldNameFrom() + " --> " +map.getFieldNameTo());
                     
                     if (!map.isKey()) {// normal map (not a key)
                         Object val = null;
@@ -184,7 +184,7 @@ public class MappingSpecification {
             return stats;
             
         } catch (Exception e) {
-            Joy.log().error(e);
+            Joy.LOG().error(e);
             stats.setFatalError(true);
             return stats;
         }

@@ -30,12 +30,13 @@ public class JoyLogDetails {
     private String filename;
     private String folder;
     private boolean prefixDate;
-    
+    private boolean prefixVersion;
     
     public JoyLogDetails() {
         filename="";
         folder="";
         prefixDate=false;
+        prefixVersion=false;
     }
 
     public String getBasicFile() {
@@ -44,6 +45,14 @@ public class JoyLogDetails {
     
     public String getFile() {
         return getFilename();
+    }
+
+    public boolean isPrefixVersion() {
+        return prefixVersion;
+    }
+
+    public void setPrefixVersion(boolean prefixVersion) {
+        this.prefixVersion = prefixVersion;
     }
     
     public void setPrefixDate(boolean PrefixDate) {
@@ -63,15 +72,19 @@ public class JoyLogDetails {
     }
     
     private String getDirectory() {
-        return (folder.isEmpty() ? Joy.parameters().getApplicationFolder() + "/" + C.LOG_DIR_FROM_APPDIR : folder);
+        return (folder.isEmpty() ? Joy.PARAMETERS().getApplicationFolder() + "/" + C.LOG_DIR_FROM_APPDIR : folder);
     }
     
     private String getFilename() {
-        if (prefixDate) { 
+        String myFilenamePrefix = "";
+        if (this.prefixDate) { 
             Calendar cal = Calendar.getInstance();
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_");
-            return dateFormat.format(cal.getTime()) + filename;
-        } else
-            return filename;
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            myFilenamePrefix += dateFormat.format(cal.getTime());
+        } 
+        if (!Joy.PARAMETERS().getVersion().isEmpty() && this.prefixVersion) {
+            myFilenamePrefix += "_" + Joy.PARAMETERS().getVersion();
+        }
+        return  myFilenamePrefix + "_" + this.filename;
     }
 }

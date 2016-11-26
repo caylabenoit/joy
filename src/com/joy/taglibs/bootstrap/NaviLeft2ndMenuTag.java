@@ -96,7 +96,7 @@ public class NaviLeft2ndMenuTag extends SimpleTagSupport {
                 String name = item.getAttributeValue(C.JOYMENUATTR_NAME);
                 String object = item.getAttributeValue(C.ACTION_TAG_OBJECT);
                 String actiontype = item.getAttributeValue(C.ACTION_TYPE_TAG);
-                String url = Joy.basicURL(object, actiontype);
+                String url = Joy.URL(object, actiontype);
                 
                 itemLine += "<a href='" + url + "'  class=\"list-group-item\"";
                 if (activemenuid.equalsIgnoreCase(id))
@@ -117,7 +117,7 @@ public class NaviLeft2ndMenuTag extends SimpleTagSupport {
                 String name = item.getAttributeValue(C.JOYMENUATTR_NAME);
                 String object = item.getAttributeValue(C.ACTION_TAG_OBJECT);
                 String actiontype = item.getAttributeValue(C.ACTION_TYPE_TAG);
-                String url = Joy.basicURL(object, actiontype);
+                String url = Joy.URL(object, actiontype);
                 
                 buttonLine += "<a href='" + url + "'  class=\"btn btn-default btn-block\">";
                 buttonLine += name;
@@ -133,7 +133,7 @@ public class NaviLeft2ndMenuTag extends SimpleTagSupport {
             out.print(sMenu);
             
         } catch (IOException | JDOMException ex) {
-            Joy.log().debug ( ex.toString());
+            Joy.LOG().debug ( ex.toString());
             out.println("No menu defined.");
         }
     }

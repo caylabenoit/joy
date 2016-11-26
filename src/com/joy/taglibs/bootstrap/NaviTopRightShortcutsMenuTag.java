@@ -31,16 +31,16 @@ import org.jdom2.input.SAXBuilder;
 /**
  * Taglib d'affichage d'un menu
 *    Chaque element de menu est placé dans un tag <joy-menu></joy-menu>
-*    Attributs du tag:
-*    * name (obligatoire) : nom du menu
-*    [choix]
-*    * url (obligatoire): URL du menu (http://)
-*    Ou
-*    * object (obligatoire) nom du tag Object (joy)
-*    * actiontype (facultatif) nom de l'actiontype (joy)
-*    * parametres (entier x de 1 à ...)
-*        - pnx= Nom du parametre x
-*        - pnv= Valeur du parametre x
+    Attributs du tag:
+ name (obligatoire) : nom du menu
+    [choix]
+ URL (obligatoire): JOYURL du menu (http://)
+    Ou
+ object (obligatoire) nom du tag Object (joy)
+ actiontype (facultatif) nom de l'actiontype (joy)
+ parametres (entier x de 1 à ...)
+        - pnx= Nom du parametre x
+        - pnv= Valeur du parametre x
  * @author Benoit CAYLA (benoit@famillecayla.fr) 
  */
 public class NaviTopRightShortcutsMenuTag extends SimpleTagSupport {
@@ -132,12 +132,12 @@ public class NaviTopRightShortcutsMenuTag extends SimpleTagSupport {
             out.println("<ul class=\"dropdown-menu dropdown-shortcuts\">");
             out.println(sMenu);
             out.println("<li class=\"divider\"></li>");
-            out.println("<li><a class=\"text-center lishortcutitem\" href=\""+ Joy.basicURL("Home", "display") + "\"><strong>Go Home</strong>&nbsp;<i class=\"fa fa-angle-right\"></i></a></li>");
+            out.println("<li><a class=\"text-center lishortcutitem\" href=\""+ Joy.URL("Home", "display") + "\"><strong>Go Home</strong>&nbsp;<i class=\"fa fa-angle-right\"></i></a></li>");
             out.println("</ul></li>");
             out.println("<!-- End Shortcuts -->");
                 
         } catch (IOException | JDOMException ex) {
-            Joy.log().debug ( ex.toString());
+            Joy.LOG().debug ( ex.toString());
             out.println("No menu defined.");
         }
     }

@@ -28,16 +28,16 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 /**
  * Taglib d'affichage d'un menu
 *    Chaque element de menu est placé dans un tag <joy-menu></joy-menu>
-*    Attributs du tag:
-*    * name (obligatoire) : nom du menu
-*    [choix]
-*    * url (obligatoire): URL du menu (http://)
-*    Ou
-*    * object (obligatoire) nom du tag Object (joy)
-*    * actiontype (facultatif) nom de l'actiontype (joy)
-*    * parametres (entier x de 1 à ...)
-*        - pnx= Nom du parametre x
-*        - pnv= Valeur du parametre x
+    Attributs du tag:
+ name (obligatoire) : nom du menu
+    [choix]
+ URL (obligatoire): JOYURL du menu (http://)
+    Ou
+ object (obligatoire) nom du tag Object (joy)
+ actiontype (facultatif) nom de l'actiontype (joy)
+ parametres (entier x de 1 à ...)
+        - pnx= Nom du parametre x
+        - pnv= Valeur du parametre x
  * @author Benoit CAYLA (benoit@famillecayla.fr) CAYLA
  */
 public class NaviTopRightUserMgtMenuTag extends SimpleTagSupport {
@@ -68,9 +68,9 @@ public class NaviTopRightUserMgtMenuTag extends SimpleTagSupport {
             outStr += "  <li><a href=\"#\"><i class=\"fa fa-gear fa-fw\"></i> Settings</a></li>";
             outStr += "  <li class=\"divider\"></li>";
             if (!User.isEmpty()) 
-                outStr += "<li><a href=\""+ Joy.url("login", "logout") + "\"><i class=\"fa fa-sign-out fa-fw\"></i> Logout</a>";
+                outStr += "<li><a href=\""+ Joy.URL("login", "logout") + "\"><i class=\"fa fa-sign-out fa-fw\"></i> Logout</a>";
             else
-                outStr += "<li><a href=\""+ Joy.url("login", "request") + "\"><i class=\"fa fa-sign-out fa-fw\"></i> Login</a>";
+                outStr += "<li><a href=\""+ Joy.URL("login", "request") + "\"><i class=\"fa fa-sign-out fa-fw\"></i> Login</a>";
             outStr += "  </li>";
             outStr += "</UL>";
             outStr += "</LI>";

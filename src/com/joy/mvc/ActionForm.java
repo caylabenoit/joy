@@ -113,7 +113,7 @@ public class ActionForm {
             }
             
         } catch (SQLException e) {
-            Joy.log().error(e);
+            Joy.LOG().error(e);
             hasNoError = false;
         } 
         this.addFormMatrixEntry(FormTagName, matrix );
@@ -144,7 +144,7 @@ public class ActionForm {
                 }
             }
         } catch (SQLException e) {
-            Joy.log().error(e);
+            Joy.LOG().error(e);
             hasNoError= false;
         } 
         return hasNoError;
@@ -176,7 +176,7 @@ public class ActionForm {
             }
 
         } catch (SQLException e) {
-            Joy.log().error(e);
+            Joy.LOG().error(e);
             hasNoError = false;
         }
         this.addFormVectorEntry(FormTagName, columns);

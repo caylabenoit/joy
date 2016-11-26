@@ -139,13 +139,13 @@ public class Action extends ActionForm {
                 m_AttachedFiles = upload.parseRequest(request);
 
             } catch (FileUploadException ex) {
-                Joy.log().error("Error while getting multipart data");
+                Joy.LOG().error("Error while getting multipart data");
             }
         }
     }
     
     /**
-     * Set all the request parameters & attributes to the Action object
+     * Set all the request PARAMETERS & attributes to the Action object
      * @param CurrentSession
      * @param CurrentRequest 
      */

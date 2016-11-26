@@ -61,7 +61,7 @@ public class JoyTaskManager {
                            BOFactory entities) {
         // start a new task / thread
         try {
-            Joy.log().debug("Create new Task for " + taskName);
+            Joy.LOG().debug("Create new Task for " + taskName);
             ActionTypeTASK taskThread = (ActionTypeTASK) Class.forName(className).newInstance();
             taskThread.setRequest(request);
             if (taskObject == null)
@@ -72,14 +72,14 @@ public class JoyTaskManager {
             taskThread.setTaskName(taskName);
             taskThread.setEntities(entities);
             taskThread.setTaskId(this.setNewId());
-            Joy.log().debug("Start Task id " + taskThread.getId());
+            Joy.LOG().debug("Start Task id " + taskThread.getId());
             taskThread.start();
             tasks.add(taskThread);
-            Joy.log().debug("Task started");
+            Joy.LOG().debug("Task started");
             
             return true;
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            Joy.log().fatal(e);
+            Joy.LOG().fatal(e);
             return false;
         }
     }
@@ -134,7 +134,7 @@ public class JoyTaskManager {
             return myList.toString();
             
         } catch (Exception e) {
-            Joy.log().error(e);
+            Joy.LOG().error(e);
             return "";
         }
     }
@@ -156,7 +156,7 @@ public class JoyTaskManager {
             return myList.toString();
             
         } catch (Exception e) {
-            Joy.log().error(e);
+            Joy.LOG().error(e);
             return "";
         }
     }

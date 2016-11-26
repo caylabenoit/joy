@@ -39,16 +39,16 @@ public class ActionTypeCmdLine extends ActionTypeAsync {
 
     @Override
     public void execute() {
-        Joy.log().info ( "Request to Launch command line");
+        Joy.LOG().info ( "Request to Launch command line");
         
         try {
             String cmd = this.getCommandLine();
             this.setHasBeenLaunched(true);
-            this.setResultOut(Joy.executeCommandLine(cmd));
+            this.setResultOut(Joy.EXECUTE_CMD(cmd));
             
-            Joy.log().debug ( "End of execution !");
+            Joy.LOG().debug ( "End of execution !");
         } catch (Exception ex) {
-            Joy.log().error( ex);
+            Joy.LOG().error( ex);
         } 
     }
     

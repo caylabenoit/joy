@@ -66,14 +66,14 @@ public class ActionTypeAsync extends Action {
         this.setHasBeenLaunched(true);
 
         try {
-            Joy.log().debug ( "End of execution !");
+            Joy.LOG().debug ( "End of execution !");
             this.setResultOut(null);
 
         } catch (Exception e) {
-            Joy.log().error (  e.toString());
+            Joy.LOG().error (  e.toString());
             this.setResultOut(e.toString());
         }
-        Joy.log().debug ( "End of execution !");
+        Joy.LOG().debug ( "End of execution !");
     }
     
     public boolean beforeWait() {

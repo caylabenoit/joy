@@ -53,13 +53,13 @@ public class JoyReadStream implements Runnable {
                 String s = br.readLine ();
                 if (s == null) break;
                 cmdreturn = s;
-                //log4jProvider.log("JoyReadStream.run()", "Command Returning > [" + name + "] " + cmdreturn);
+                //log4jProvider.LOG("JoyReadStream.run()", "Command Returning > [" + name + "] " + cmdreturn);
             }
             is.close ();  
             
         } catch (Exception ex) {
-            Joy.log().error("Command Returning > [" + name + "] " + cmdreturn);
-            Joy.log().error("Exception > " + ex);
+            Joy.LOG().error("Command Returning > [" + name + "] " + cmdreturn);
+            Joy.LOG().error("Exception > " + ex);
             ex.printStackTrace ();
         }
     }

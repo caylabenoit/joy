@@ -58,7 +58,7 @@ public class DsbHTMLBloc extends SimpleTagSupport {
             }
             out.print(retText);
         } catch (Exception e) {
-            Joy.log().fatal(e);
+            Joy.LOG().fatal(e);
         }
     }
 

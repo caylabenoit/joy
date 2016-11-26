@@ -53,7 +53,7 @@ public class JoyDBProvider {
         try {
             dbConnection.close();
         } catch (SQLException ex) {
-            Joy.log().error (ex);
+            Joy.LOG().error (ex);
         }
     }
 
@@ -68,21 +68,21 @@ public class JoyDBProvider {
 
         if (dbConnection == null) {
             try {
-                Joy.log().debug ("New Connection initalization (direct)");
-                Joy.log().debug ("Connection Driver: " + driver);
-                Joy.log().debug ("Connection URL: " + url);
-                Joy.log().debug ("Connection User: " + user);
+                Joy.LOG().debug ("New Connection initalization (direct)");
+                Joy.LOG().debug ("Connection Driver: " + driver);
+                Joy.LOG().debug ("Connection URL: " + url);
+                Joy.LOG().debug ("Connection User: " + user);
                 
                 Class.forName(driver);
                 
                 dbConnection = DriverManager.getConnection(url, user, password);
-                Joy.log().info ("New Connection Initialized");
+                Joy.LOG().info ("New Connection Initialized");
                 
             } catch (ClassNotFoundException cnfe) {
-                Joy.log().error ("ClassNotFoundException> " + cnfe);
+                Joy.LOG().error ("ClassNotFoundException> " + cnfe);
                 
             } catch (SQLException sqe) {
-                Joy.log().error ("SQLException> " + sqe);
+                Joy.LOG().error ("SQLException> " + sqe);
             }
         }
     }    
@@ -94,27 +94,27 @@ public class JoyDBProvider {
 
         if (dbConnection == null) {
             try {
-                Joy.log().debug ("New Connection initalization from config file");
+                Joy.LOG().debug ("New Connection initalization from config file");
                 JoyConfigfileProvider config = new JoyConfigfileProvider();
                 String driver = config.get("driver");
                 String url = config.get("url");
                 String user = config.get("user");
                 String password = config.get("password");
                 
-                Joy.log().debug ("Connection Driver: " + driver);
-                Joy.log().debug ("Connection URL: " + url);
-                Joy.log().debug ("Connection User: " + user);
+                Joy.LOG().debug ("Connection Driver: " + driver);
+                Joy.LOG().debug ("Connection URL: " + url);
+                Joy.LOG().debug ("Connection User: " + user);
                 
                 Class.forName(driver);
                 
                 dbConnection = DriverManager.getConnection(url, user, password);
-                Joy.log().info ("New Connection Initialized");
+                Joy.LOG().info ("New Connection Initialized");
                 
             } catch (ClassNotFoundException cnfe) {
-                Joy.log().error ("ClassNotFoundException> " + cnfe);
+                Joy.LOG().error ("ClassNotFoundException> " + cnfe);
                 
             } catch (SQLException sqe) {
-                Joy.log().error ("SQLException> " + sqe);
+                Joy.LOG().error ("SQLException> " + sqe);
             }
         }
     }
@@ -130,15 +130,15 @@ public class JoyDBProvider {
                 //LogProvider.debug ("No need to connect again, reuse existing connection");
 
             } else {
-                Joy.log().info ("Get new connection using datasource " + dsString);
+                Joy.LOG().info ("Get new connection using datasource " + dsString);
                 initContext = new InitialContext();
                 DataSource ds = (DataSource)initContext.lookup(dsString);
                 dbConnection = ds.getConnection();
             }
         } catch (NamingException | SQLException ex) {
-            Joy.log().warn("NamingException or SQLException error: " + ex);
+            Joy.LOG().warn("NamingException or SQLException error: " + ex);
         } catch (Exception e) {
-            Joy.log().warn ("Unexpected error: " + e);
+            Joy.LOG().warn ("Unexpected error: " + e);
         }
     }
 
@@ -164,53 +164,53 @@ public class JoyDBProvider {
     
     public ResultSet getResultSet(String SQL) {
         try {
-            Joy.log().debug("SQL > " + SQL);
+            Joy.LOG().debug("SQL > " + SQL);
             PreparedStatement ps = getConnection().prepareStatement(SQL);
             return ps.executeQuery();
         } catch (SQLException e) {
-            Joy.log().error(e);
+            Joy.LOG().error(e);
         }
         return null;
     }
     
     private ResultSet getResultSet(PreparedStatement ps) {
         try {
-            Joy.log().debug("Connection: " + this.dbConnection + " | Get resultset With PreparedStatement");
+            Joy.LOG().debug("Connection: " + this.dbConnection + " | Get resultset With PreparedStatement");
             return ps.executeQuery();
         } catch (SQLException e) {
-            Joy.log().error(e);
+            Joy.LOG().error(e);
         }
         return null;
     }
     
     public PreparedStatement prepareSQL(String SQL) {
         try {
-            Joy.log().debug("Connection: " + this.dbConnection + " | SQL > " + SQL);
+            Joy.LOG().debug("Connection: " + this.dbConnection + " | SQL > " + SQL);
             return getConnection().prepareStatement(SQL);
         } catch (SQLException e) {
-            Joy.log().error(e);
+            Joy.LOG().error(e);
         }
         return null;
     }
     
     public void closeResultSet(ResultSet rs) {
         try {
-            Joy.log().debug("Close recordset, Cursor: " + rs.toString());
+            Joy.LOG().debug("Close recordset, Cursor: " + rs.toString());
             rs.close();
         } catch (SQLException e) {
-            Joy.log().error(e);
+            Joy.LOG().error(e);
         }
     }
 
     public void runScript(String myFile) {
         try {
-            Joy.log().info("Run script from " + myFile);
+            Joy.LOG().info("Run script from " + myFile);
             Reader reader = new FileReader(myFile);
             SQLScriptRunner runer = new SQLScriptRunner(dbConnection, true, true);
             runer.runScript(reader);
             
         } catch (IOException | SQLException ex) {
-            Joy.log().error(ex);
+            Joy.LOG().error(ex);
         }
     }
 
@@ -267,10 +267,10 @@ public class JoyDBProvider {
                                               (fieldLabel == null ? fieldName : fieldLabel));
                 ent.fields().add(myField);
             } 
-            Joy.log().info(i-1 + " Field(s) successfully added to Entity " + ent.getName());
+            Joy.LOG().info(i-1 + " Field(s) successfully added to Entity " + ent.getName());
 
         } catch (Exception ex) {
-            Joy.log().error(ex);
+            Joy.LOG().error(ex);
         }
     }
     

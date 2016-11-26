@@ -109,7 +109,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
             myClone.fields = listField;
             
         } catch(CloneNotSupportedException cnse) {
-            Joy.log().error(cnse);
+            Joy.LOG().error(cnse);
         }
         return myClone;
     }
@@ -270,7 +270,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
         this.filters = new ArrayList();
         this.distinct = false;
         this.name = "";
-        this.dateFormat = Joy.parameters().getJoyDefaultDateFormat();
+        this.dateFormat = Joy.PARAMETERS().getJoyDefaultDateFormat();
         this.limitRecords = -1;
         this.query = "";
         this.name = "";
@@ -288,7 +288,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
             if (field.getLabel().equalsIgnoreCase(Name) || field.getColumnName().equalsIgnoreCase(Name)) 
                 retField = field;
         if (retField == null)
-            Joy.log().error("Field " + Name + " not found.");
+            Joy.LOG().error("Field " + Name + " not found.");
         return retField;
     }
 
@@ -296,7 +296,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
     public BOField field(int index) {
         BOField retField = fields.get(index);
         if (retField == null) {
-            Joy.log().error("Field with index " + index + " not found.");
+            Joy.LOG().error("Field with index " + index + " not found.");
         }
         return retField;
     }
@@ -340,11 +340,11 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
             
             JSONObject all = new JSONObject();
             all.put(this.name, lines);
-            Joy.log().info("JSON Export Successul.");
+            Joy.LOG().info("JSON Export Successul.");
             return all;
             
         } catch (SQLException | JSONException e) {
-            Joy.log().error(e);
+            Joy.LOG().error(e);
         }
         return null;
     }
@@ -397,7 +397,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
                         break;
                 }
         } catch (SQLException e) {
-            Joy.log().error(e);
+            Joy.LOG().error(e);
         }
     }
     
@@ -410,7 +410,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
                                 BOQueryExecution query) {
         int i=1;
         for (BOField obj : query.getValues()) {
-            Joy.log().debug("Connection: " + dbConnection + " | SQL '?' Value order (" + i + ") replaced by [" + obj.getValue() + "]" );
+            Joy.LOG().debug("Connection: " + dbConnection + " | SQL '?' Value order (" + i + ") replaced by [" + obj.getValue() + "]" );
             setValue(ps, obj, i++);
         }
     }
@@ -504,7 +504,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
         sql += getSQLFrom(From);
         sql += getSQLWhere(myQuery, filtering);
         sql += getSQLOrderBy(sorted);
-        Joy.log().debug("SQL generated: " + sql);
+        Joy.LOG().debug("SQL generated: " + sql);
         myQuery.setSQL(sql);
         return myQuery;
     }
@@ -521,7 +521,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
             for (String sort : sortedFields) 
                 sql += sort + ",";
             sql = sql.substring(0, sql.length() - 1);
-            //Joy.log().debug("Order By generated: " + sql);
+            //Joy.LOG().debug("Order By generated: " + sql);
         }
         return sql;
     }
@@ -539,7 +539,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
             setQueryValues(ps, lQuery);
             return ps.executeQuery();
         } catch (SQLException ex) {
-            Joy.log().error(ex);
+            Joy.LOG().error(ex);
         }
         return null;
     }
@@ -565,7 +565,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
             
             return result;
         } catch (SQLException ex) {
-            Joy.log().error(ex);
+            Joy.LOG().error(ex);
             return -1;
         }
     }
@@ -585,7 +585,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
             
             return exportResultSet(rs);
         } catch (SQLException ex) {
-            Joy.log().error(ex);
+            Joy.LOG().error(ex);
         }
         return null;
     }

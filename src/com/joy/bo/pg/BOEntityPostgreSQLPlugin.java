@@ -50,7 +50,7 @@ public class BOEntityPostgreSQLPlugin  extends BOEntityReadWrite {
         if (limitRecords > 0)
                 sql += " LIMIT " + limitRecords;
         
-        Joy.log().debug("SQL generated: " + sql);
+        Joy.LOG().debug("SQL generated: " + sql);
         
         myQuery.setSQL(sql);
         return myQuery;

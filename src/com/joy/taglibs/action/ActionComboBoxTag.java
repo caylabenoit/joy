@@ -131,7 +131,7 @@ public class ActionComboBoxTag extends SimpleTagSupport {
                 out.print(sCombo);
             }
         } catch (Exception e) {
-            Joy.log().error ( e.toString());
+            Joy.LOG().error ( e.toString());
         }
     }
 }

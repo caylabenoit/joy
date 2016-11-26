@@ -34,16 +34,16 @@ import org.jdom2.input.SAXBuilder;
 /**
  * Taglib d'affichage d'un menu
 *    Chaque element de menu est placé dans un tag <joy-menu></joy-menu>
-*    Attributs du tag:
-*    * name (obligatoire) : nom du menu
-*    [choix]
-*    * url (obligatoire): URL du menu (http://)
-*    Ou
-*    * object (obligatoire) nom du tag Object (joy)
-*    * actiontype (facultatif) nom de l'actiontype (joy)
-*    * parametres (entier x de 1 à ...)
-*        - pnx= Nom du parametre x
-*        - pnv= Valeur du parametre x
+    Attributs du tag:
+ name (obligatoire) : nom du menu
+    [choix]
+ URL (obligatoire): JOYURL du menu (http://)
+    Ou
+ object (obligatoire) nom du tag Object (joy)
+ actiontype (facultatif) nom de l'actiontype (joy)
+ parametres (entier x de 1 à ...)
+        - pnx= Nom du parametre x
+        - pnv= Valeur du parametre x
  * @author Benoit CAYLA (benoit@famillecayla.fr) 
  */
 public class NaviTopLeftMenuTag extends SimpleTagSupport {
@@ -191,7 +191,7 @@ public class NaviTopLeftMenuTag extends SimpleTagSupport {
             out.println("</UL>");
             
         } catch (IOException | JDOMException ex) {
-            Joy.log().debug ( ex.toString());
+            Joy.LOG().debug ( ex.toString());
             out.println("No menu defined.");
         }
     }

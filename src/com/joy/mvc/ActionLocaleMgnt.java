@@ -54,7 +54,7 @@ public class ActionLocaleMgnt {
         try {
             Locale currentLocale;
             currentLocale = new Locale(getLanguage(), getCountry());
-            messages = ResourceBundle.getBundle(Joy.parameters().getJoyBundledMessageFile(), currentLocale);
+            messages = ResourceBundle.getBundle(Joy.PARAMETERS().getJoyBundledMessageFile(), currentLocale);
             return true;
             
         } catch( Exception e) {

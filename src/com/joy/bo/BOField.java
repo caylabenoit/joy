@@ -82,7 +82,7 @@ public class BOField implements Cloneable {
             myClone = super.clone();
             
         } catch(CloneNotSupportedException cnse) {
-            Joy.log().error(cnse);
+            Joy.LOG().error(cnse);
         }
         return myClone;
     }
@@ -222,7 +222,7 @@ public class BOField implements Cloneable {
                 return -1;
             }
         } catch (SQLException ex) {
-            Joy.log().error(ex);
+            Joy.LOG().error(ex);
             return 0;
         }
     }

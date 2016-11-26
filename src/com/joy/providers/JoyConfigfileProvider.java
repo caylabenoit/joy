@@ -38,7 +38,7 @@ public class JoyConfigfileProvider {
             }
             
         } catch (IOException ex) {
-            Joy.log().debug (ex.toString());
+            Joy.LOG().debug (ex.toString());
         }
     }
     

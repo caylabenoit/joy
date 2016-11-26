@@ -59,7 +59,7 @@ import javax.servlet.http.HttpSession;
 *           si [objectname] n'est pas trouvé dans les <actionRequest>, le framework pointe directement sur 
 *           <redirects_no_action> et recherche avec le tag [objectname] dans les <redirect> proposés :
 *                                <redirects_no_action>
-*                                    <redirect tag="[objectname]">[url]</redirect>
+*                                    <redirect tag="[objectname]">[URL]</redirect>
 *
 *   -> actiontype (./action?object[objectname]&actiontype=[actiontypename]) : selon le tag proposé permet d'appeler 
 *               une méthode spécifique de traitement de l'Action.
@@ -80,6 +80,14 @@ import javax.servlet.http.HttpSession;
 
 public class JoyController extends HttpServlet {
 
+    private void loginfo(String myLog) {
+        try {
+            Joy.LOG().error( myLog);
+        } catch (Exception e) {
+            Joy.SYSTEM_LOG(myLog);
+        }
+    }
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -88,11 +96,11 @@ public class JoyController extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
-            Input request parameters :
+            Input request PARAMETERS :
             object : specify the <object> tag in the Action.xml file
                 * if object="command" -> command to execute, nowait parameter specify a wait page or not
             actiontype : Action to do, callback to the designed Action in the Action class
-            Command launch url sample
+            Command launch URL sample
             http://localhost:18180/GovManagementTool/Action?object=cmdwf&wait=yes&workflow=wf_Full_Delta_SC
      */
     protected void processRequest(HttpServletRequest request, 
@@ -105,23 +113,23 @@ public class JoyController extends HttpServlet {
         try {
             joySrvCfg = checkInit(request.getServletContext());
             joySrvCfg.checks();
-            Joy.log().debug("New HTTP Request initialization, URL=" + request.getRequestURL() + " | QueryString=" + request.getQueryString());
+            Joy.LOG().debug("New HTTP Request initialization, URL=" + request.getRequestURL() + " | QueryString=" + request.getQueryString());
             
             ActionRequest req = joySrvCfg.getActionConfig().getActionRequest(getAttributeOrParameter(request, C.ACTION_TAG_OBJECT));
 
-            Joy.log().debug("HTTP Session management");
+            Joy.LOG().debug("HTTP Session management");
             // Session management
             HttpSession mySession = request.getSession();
             if (mySession.isNew()) {
-                Joy.log().debug("This session has never been initialized, Configure a new session");
+                Joy.LOG().debug("This session has never been initialized, Configure a new session");
                 mySession = request.getSession();
-                mySession.setMaxInactiveInterval(Joy.parameters().getSessionItemout()*60);
+                mySession.setMaxInactiveInterval(Joy.PARAMETERS().getSessionItemout()*60);
                 mySession.setAttribute("Anonymous", "true");
             } else 
-                Joy.log().debug("Session Already configured");
+                Joy.LOG().debug("Session Already configured");
 
             // Request management (depending of the object type)
-            Joy.log().debug("Request=" + request.getQueryString());
+            Joy.LOG().debug("Request=" + request.getQueryString());
             if (req.getIsInitialized()) {
                 String objectType = req.getObjectType();
 
@@ -164,16 +172,20 @@ public class JoyController extends HttpServlet {
                 // http://localhost:18180/GovManagementTool/action?object=[tag]
                 redirect = manageRedirectionOnlyRequest(mySession, request, req, joySrvCfg);
             }
-            Joy.log().debug( "URL redirection> " + redirect);
+            Joy.LOG().debug( "URL redirection> " + redirect);
             
         } catch (Exception ex) {
-            Joy.log().error( "Exception=" + ex);
+            try {
+                Joy.LOG().error( "Exception=" + ex);
+            } catch (Exception e) {
+                Joy.SYSTEM_LOG( "Exception=" + ex);
+            }
         } 
         
         if (redirect.isEmpty())
             redirect = C.PAGE_ERROR;
         
-        Joy.log().debug("End of HTTP request treatment");
+        Joy.LOG().debug("End of HTTP request treatment");
         if (joySrvCfg.getEntities() != null)
             joySrvCfg.getEntities().End(); // Close the connection attached to the request
         
@@ -194,7 +206,7 @@ public class JoyController extends HttpServlet {
                                                 HttpServletRequest request,
                                                 ActionRequest req,
                                                 ControllerConfiguration joySrvConfig) {  
-        Joy.log().debug( "Redirection without action requested.");
+        Joy.LOG().debug( "Redirection without action requested.");
         Action act = new Action();
         act.setMessageBundle(joySrvConfig.getMessageBundle());
         act.init(mySession, request);
@@ -217,21 +229,21 @@ public class JoyController extends HttpServlet {
         String redirect = C.PAGE_404;
         
         try {
-            Joy.log().debug("Authentication action requested");
+            Joy.LOG().debug("Authentication action requested");
             ActionTypeLogin actionLogin = (ActionTypeLogin) Class.forName(req.getJavaclass()).newInstance();
             actionLogin.init(mySession, request);
             String redirectTag = C.ACTION_TAG_LOGIN_REQUEST;
 
             String loginType = getAttributeOrParameter(request, C.ACTION_TYPE_TAG).toUpperCase();
             if (loginType.equalsIgnoreCase(C.ATYPE_LOGIN)) { // effective login
-                Joy.log().debug("Login requested");
+                Joy.LOG().debug("Login requested");
                 redirectTag = actionLogin.login();
                 if (redirectTag.equalsIgnoreCase(C.ACTION_SUCCESS)) 
                     mySession.setAttribute(C.JOY_ANONYMOUS_LOGIN, "false");
                 redirectTag = C.ACTION_TAG_LOGIN_AFTERLOGIN;
 
             } else if (loginType.equalsIgnoreCase(C.ATYPE_LOGOUT)) { // effective logout
-                Joy.log().debug("Logout requested");
+                Joy.LOG().debug("Logout requested");
                 redirectTag = actionLogin.logout();
                 if (redirectTag.equalsIgnoreCase(C.ACTION_SUCCESS)) {
                     // remove all session attributes
@@ -241,25 +253,25 @@ public class JoyController extends HttpServlet {
                 redirectTag = C.ACTION_TAG_LOGIN_AFTERLOGOUT;
 
             } else { // login form requested
-                Joy.log().debug("Login form requested");
+                Joy.LOG().debug("Login form requested");
                 redirectTag = actionLogin.request();
             }
 
             ActionRedirect redLog = req.getRedirectFromTag(redirectTag);
             if (redLog == null) {
-                Joy.log().error( "Redirection Tag error, impossible to match the result tag with a valid URL.");
+                Joy.LOG().error( "Redirection Tag error, impossible to match the result tag with a valid URL.");
                 redirect = C.PAGE_ERROR;
             } else 
                 redirect = redLog.getUrl();
 
-            Joy.log().debug( "Tag redirection> " + redirect);
+            Joy.LOG().debug( "Tag redirection> " + redirect);
             request.setAttribute(C.ACTION_FORM_BEAN, actionLogin);
         } catch (ClassNotFoundException ex) {
-            Joy.log().error( "ClassNotFoundException=" + ex);
+            Joy.LOG().error( "ClassNotFoundException=" + ex);
         } catch (InstantiationException ex) {
-            Joy.log().error( "InstantiationException=" + ex);
+            Joy.LOG().error( "InstantiationException=" + ex);
         } catch (IllegalAccessException ex) {
-            Joy.log().error( "IllegalAccessException=" + ex);
+            Joy.LOG().error( "IllegalAccessException=" + ex);
         }
         
         return redirect;
@@ -292,7 +304,7 @@ public class JoyController extends HttpServlet {
                                    ActionRequest req,
                                    ControllerConfiguration joySrvConfig) {
         try {
-            Joy.log().debug("REST action requested");
+            Joy.LOG().debug("REST action requested");
             ActionTypeREST actionRestObject = (ActionTypeREST) Class.forName(req.getJavaclass()).newInstance();
             actionRestObject.init(mySession, request);
             actionRestObject.setEntities(joySrvConfig.getEntities());
@@ -316,13 +328,13 @@ public class JoyController extends HttpServlet {
             actionRestObject.endOfWork();
             
         } catch (ClassNotFoundException ex) {
-            Joy.log().error( "ClassNotFoundException=" + ex);
+            Joy.LOG().error( "ClassNotFoundException=" + ex);
         } catch (InstantiationException ex) {
-            Joy.log().error( "InstantiationException=" + ex);
+            Joy.LOG().error( "InstantiationException=" + ex);
         } catch (IllegalAccessException ex) {
-            Joy.log().error( "IllegalAccessException=" + ex);
+            Joy.LOG().error( "IllegalAccessException=" + ex);
         } catch (IOException ex) {
-            Joy.log().error( "IOException=" + ex);
+            Joy.LOG().error( "IOException=" + ex);
         }
     }
     
@@ -346,7 +358,7 @@ public class JoyController extends HttpServlet {
             String object = request.getParameter(C.ACTION_TAG_OBJECT);
             boolean result;
             // create a new task
-            result = Joy.taskManager().newTask(object,
+            result = Joy.TASKS().newTask(object,
                                                request.getParameter("P1"), 
                                                req.getJavaclass(),
                                                mySession, 
@@ -358,7 +370,7 @@ public class JoyController extends HttpServlet {
             out.close();
 
         } catch (IOException ex) {
-            Joy.log().error(ex + "IOException=");
+            Joy.LOG().error(ex + "IOException=");
         } finally {
             try { out.close(); }catch (Exception e) {}
         }
@@ -383,7 +395,7 @@ public class JoyController extends HttpServlet {
             //////////////////////////////////////////////////////////////////////////////////////////
             // http://localhost:18180/GovManagementTool/action?object=[tag] / objecttype=form
             
-            Joy.log().debug("Display Form action requested");
+            Joy.LOG().debug("Display Form action requested");
             ActionTypeForm actionFormObject = (ActionTypeForm) Class.forName(req.getJavaclass()).newInstance();
             actionFormObject.init(mySession, request);
             actionFormObject.collectAttachedFiles(request);
@@ -404,13 +416,13 @@ public class JoyController extends HttpServlet {
                 default:
                     redirectTag = actionFormObject.execute(actionType);
             }
-            Joy.log().debug( "Tag redirection> " + redirectTag);
+            Joy.LOG().debug( "Tag redirection> " + redirectTag);
             
             // convertit la tag en redirection effective :
             if (!redirectTag.equals("")) {
                 ActionRedirect red = req.getRedirectFromTag(redirectTag);
                 if (red == null) {
-                    Joy.log().error( "Redirection Tag error, impossible to match the result tag with a valid URL.");
+                    Joy.LOG().error( "Redirection Tag error, impossible to match the result tag with a valid URL.");
                     redirect = C.PAGE_ERROR;
                 } else {
                     redirect = red.getUrl();
@@ -419,11 +431,11 @@ public class JoyController extends HttpServlet {
             request.setAttribute(C.ACTION_FORM_BEAN, actionFormObject);
             
         } catch (ClassNotFoundException ex) {
-            Joy.log().error( "ClassNotFoundException=" + ex);
+            Joy.LOG().error( "ClassNotFoundException=" + ex);
         } catch (InstantiationException ex) {
-            Joy.log().error( "InstantiationException=" + ex);
+            Joy.LOG().error( "InstantiationException=" + ex);
         } catch (IllegalAccessException ex) {
-            Joy.log().error( "IllegalAccessException=" + ex);
+            Joy.LOG().error( "IllegalAccessException=" + ex);
         }
         
         return redirect;
@@ -439,7 +451,7 @@ public class JoyController extends HttpServlet {
         try {
             return getServletContext().getInitParameter(ParamName);
         } catch (Exception e) {
-            Joy.log().error(e);
+            Joy.LOG().error(e);
             return "";
         }
     }
@@ -451,11 +463,11 @@ public class JoyController extends HttpServlet {
     private ControllerConfiguration checkInit(ServletContext sce) {
         
         // Initialisation du framework (base de données, logs et entités)
-        Joy.init(sce);
+        Joy.INIT(sce);
         ControllerConfiguration srvConfig = new ControllerConfiguration();
         
         // Set new DB connection
-        srvConfig.setEntities((BOFactory)Joy.entities().clone()); 
+        srvConfig.setEntities((BOFactory)Joy.ENTITIES().clone()); 
         
         // Initialisation du fichier action
         if (!srvConfig.getActionConfig().isInitialized())
@@ -463,9 +475,9 @@ public class JoyController extends HttpServlet {
         
         // Initialisation des fichiers de traduction
         if (!srvConfig.getMessageBundle().isInitilized()) {
-            Joy.log().debug ( "Initialize locales language and country.");
-            srvConfig.getMessageBundle().setCountry(Joy.parameters().getDefaultLocalCountry());
-            srvConfig.getMessageBundle().setLanguage(Joy.parameters().getDefaultLocalLanguage());
+            Joy.LOG().debug ( "Initialize locales language and country.");
+            srvConfig.getMessageBundle().setCountry(Joy.PARAMETERS().getDefaultLocalCountry());
+            srvConfig.getMessageBundle().setLanguage(Joy.PARAMETERS().getDefaultLocalLanguage());
             srvConfig.getMessageBundle().init();
         }
         return srvConfig;

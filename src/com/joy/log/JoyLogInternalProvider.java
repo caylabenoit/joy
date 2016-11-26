@@ -41,7 +41,7 @@ public class JoyLogInternalProvider implements Ilog {
     private boolean activeInfo;
     private boolean activeWarning;
     private boolean activeError;
-
+    
     public boolean isActiveDebug() {
         return activeDebug;
     }
@@ -118,7 +118,7 @@ public class JoyLogInternalProvider implements Ilog {
         
         try {
             org.jdom2.Document doc;
-            doc = Joy.openXMLConfig(logConfigFile);
+            doc = Joy.OPEN_XML(logConfigFile);
             racine = doc.getRootElement();
             
             // Get the file
@@ -128,10 +128,15 @@ public class JoyLogInternalProvider implements Ilog {
             String datePref = elt.getAttributeValue(C.JOTYLOG_TAGATTR_DATEPREFIX);
             if (datePref != null)
                 logDetails.setPrefixDate(datePref.equalsIgnoreCase(C.YES));
+            // Get the version prefix
+            String verPref = elt.getAttributeValue(C.JOTYLOG_TAGATTR_VERSIONPREFIX);
+            if (verPref != null)
+                logDetails.setPrefixVersion(verPref.equalsIgnoreCase(C.YES));
+            
             // Get the directory
             logDetails.setDirectory(racine.getChildText(C.JOTYLOG_TAG_DIRECTORY));
             
-            // Get the log activation
+            // Get the LOG activation
             List<Element> levels = racine.getChild(C.JOTYLOG_TAG_LEVELS).getChildren(C.JOTYLOG_TAG_LEVEL);
             for (Element level : levels) {
                 String lev = level.getText();
@@ -151,7 +156,7 @@ public class JoyLogInternalProvider implements Ilog {
     }
     
     /**
-     * Initialize the internal log
+     * Initialize the internal LOG
      * @param logConfigFile
      * @return 
      */
@@ -172,7 +177,7 @@ public class JoyLogInternalProvider implements Ilog {
     }
     
     /**
-     * Print the log line
+     * Print the LOG line
      * @param level
      * @param line 
      */
@@ -182,7 +187,7 @@ public class JoyLogInternalProvider implements Ilog {
             
             Exception e = new Exception();
             String callername = ((e.getStackTrace())[2]).getClassName()  + "." + ((e.getStackTrace())[2]).getMethodName();
-            String myLog = Joy.getCurrentDate() + "\t" + level + "\t[" + callername + "]\t" +  line;
+            String myLog = Joy.CURRENT_STR_DATE() + "\t" + level + "\t[" + callername + "]\t" +  line;
 
             if (logStream != null) {
                 if (!currentStreamFile.equalsIgnoreCase(logDetails.getFile())) 

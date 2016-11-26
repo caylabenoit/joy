@@ -151,7 +151,7 @@ public class JoyFormButtonTag extends SimpleTagSupport {
             strButtonTag += " type='button' ";
             strButtonTag += " onclick=\"javascript:history.back();\" "; 
         } else if (link) {
-            String myurl = Joy.basicURL(object, actiontype);
+            String myurl = Joy.URL(object, actiontype);
             myurl += (!p1.isEmpty() ? "&" + p1 : "");
             strButtonTag += " type='button' ";
             strButtonTag += " onclick=\"javascript:window.open('" + myurl + "', '_self');\" "; 

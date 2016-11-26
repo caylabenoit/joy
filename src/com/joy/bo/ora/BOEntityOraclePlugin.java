@@ -53,7 +53,7 @@ public class BOEntityOraclePlugin extends BOEntityReadWrite {
         
         sql += getSQLOrderBy(sorted);
 
-        Joy.log().debug("SQL generated: " + sql);
+        Joy.LOG().debug("SQL generated: " + sql);
         
         myQuery.setSQL(sql);
         return myQuery;

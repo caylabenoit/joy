@@ -33,7 +33,7 @@ public class JoyTask extends Thread {
     private HttpServletRequest request;     // http request
     private JoyTaskManager taskManager;     // reference to the task manager
     private String taskName;                // task name (given by the P1 parameter)
-    private BOFactory entities;            // entities
+    private BOFactory entities;            // ENTITIES
     private String taskObject;              // Task type, is equal to the first parameter of thhp query (and the joy Object tag)
     private int taskId;                     // Task ID, is given by the task manager
     private JoyTaskStatus status;           // Task status
@@ -75,7 +75,7 @@ public class JoyTask extends Thread {
     }
     
     public String getStringStartDatetime() {
-        return Joy.formatDate(startDatetime);
+        return Joy.DATE_FORMAT(startDatetime);
     }
     
     public Date getEndDatetime() {
@@ -83,7 +83,7 @@ public class JoyTask extends Thread {
     }
     
     public String getStringEndDatetime() {
-        return Joy.formatDate(endDatetime);
+        return Joy.DATE_FORMAT(endDatetime);
     }
     
     public String getMessage() {

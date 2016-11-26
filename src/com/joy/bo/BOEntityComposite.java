@@ -104,7 +104,7 @@ public class BOEntityComposite  {
                 IEntity query = entities.getEntity(Entity);
                 return "(" + query.getQuery() + ")";
             } catch (Exception ex) { 
-                Joy.log().warn(ex);
+                Joy.LOG().warn(ex);
                 return  Entity; 
             }
         } else
@@ -210,7 +210,7 @@ public class BOEntityComposite  {
         try {
             generatedQuery = this.getSelect() + this.getFrom() + this.getFilter() + this.getGroup() + this.getSort();
         } catch (Exception ex) {
-            Joy.log().error("Impossible to generate query for Entity " + this.name + ", Error: " + ex + " | Resisual: " + generatedQuery);
+            Joy.LOG().error("Impossible to generate query for Entity " + this.name + ", Error: " + ex + " | Resisual: " + generatedQuery);
         }
         return generatedQuery;
     }
@@ -373,7 +373,7 @@ public class BOEntityComposite  {
             initGroups(entityXml);
             
         } catch (Exception ex) {
-            Joy.log().error("Entity " + this.name + " cannot be initialized, Error: " + ex);
+            Joy.LOG().error("Entity " + this.name + " cannot be initialized, Error: " + ex);
         }
     }
     

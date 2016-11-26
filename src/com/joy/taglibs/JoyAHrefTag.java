@@ -81,7 +81,7 @@ public class JoyAHrefTag extends TagSupport{
         String hyperlink = "";
         
         try {
-            aHref += "." + Joy.parameters().getJoyDefaultURLPattern();
+            aHref += "." + Joy.PARAMETERS().getJoyDefaultURLPattern();
             aHref += "?" + C.ACTION_TAG_OBJECT + "=" + object;
             if (actiontype != null)
                 aHref += "&" + C.ACTION_TYPE_TAG + "=" + actiontype;

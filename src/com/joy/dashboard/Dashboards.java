@@ -63,8 +63,8 @@ public class Dashboards {
 
             // go through the dashboards
             org.jdom2.Document document;
-            Joy.log().info("Open Dashboard configuration file: " + dashbInitializationFile);
-            document = Joy.openXMLConfig(dashbInitializationFile);
+            Joy.LOG().info("Open Dashboard configuration file: " + dashbInitializationFile);
+            document = Joy.OPEN_XML(dashbInitializationFile);
             Element xmlRoot = document.getRootElement();
             
             // Get the templates first
@@ -100,7 +100,7 @@ public class Dashboards {
                         dbColumn.setTitle(eltCol.getAttribute("title").getValue());
                         dbColumn.setTemplate(getTemplateByName(dbColumn.getBlocType()));
                         
-                        // Get the parameters
+                        // Get the PARAMETERS
                         List<Element> eltParams = eltCol.getChildren("joy-param");
                         for (Element eltParam : eltParams) {
                             DashboardBlocParameter param = new DashboardBlocParameter();
@@ -117,7 +117,7 @@ public class Dashboards {
             }
             
         } catch (Exception e) {
-            Joy.log().error(e);
+            Joy.LOG().error(e);
             return false;
         }
         return true;

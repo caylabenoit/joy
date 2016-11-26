@@ -83,13 +83,13 @@ public class JoyConnectionDetail {
     public JoyDBProvider getDB() {
         
         // Connection to the DB, get the main Datasource name first
-        Joy.log().info ("Get new DB connection in the pool");
+        Joy.LOG().info ("Get new DB connection in the pool");
         JoyDBProvider DbConn = new JoyDBProvider();
         if (this.dataSource != null) {
             DbConn.initFromDataSource(this.dataSource); 
         } 
         if (!DbConn.isInitialized()) {
-            Joy.log().info ("DataSource unavailable or not reacheable, try a direct connection now.");
+            Joy.LOG().info ("DataSource unavailable or not reacheable, try a direct connection now.");
             // try with a JDBC direct connection now
             String drivername = this.driver;
             String urlname = this.url;
@@ -97,16 +97,16 @@ public class JoyConnectionDetail {
             String pwd = this.password;
             DbConn.init(drivername, urlname, username, pwd); 
         }
-        Joy.log().info ("Connection opened successfully ? " + DbConn.isInitialized());
+        Joy.LOG().info ("Connection opened successfully ? " + DbConn.isInitialized());
         
-        Joy.log().info ("Queries Initialization.");
+        Joy.LOG().info ("Queries Initialization.");
         if (DbConn.isInitialized()) {
             for (JoyInitQuery  query : initqueries) {
                 if (query.getDBProvider().equalsIgnoreCase(DbConn.getDBProvider())) 
                     DbConn.executeSQL(query.getSQL());
             }
         }
-        Joy.log().info ("Connection initialized successfully.");
+        Joy.LOG().info ("Connection initialized successfully.");
         
         return DbConn;
     }

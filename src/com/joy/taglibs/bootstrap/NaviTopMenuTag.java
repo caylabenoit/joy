@@ -75,9 +75,9 @@ public class NaviTopMenuTag extends TagSupport {
             
             if (this.title.isEmpty()) {
                 outStr += "<DIV class='logobloc'>";
-                String myTitle = Joy.parameters().getApplicationName() + " v" + Joy.parameters().getVersion();
-                outStr += "<A href='" + Joy.url("about", "display") + "'>";
-                outStr += "<IMG src='" + Joy.parameters().getParameter("logo").getValue() + "' class='logomenu' alt='" + myTitle + "'/>";
+                String myTitle = Joy.PARAMETERS().getApplicationName() + " v" + Joy.PARAMETERS().getVersion();
+                outStr += "<A href='" + Joy.URL("about", "display") + "'>";
+                outStr += "<IMG src='" + Joy.PARAMETERS().getParameter("logo").getValue() + "' class='logomenu' alt='" + myTitle + "'/>";
                 outStr += "</A>";
                 outStr += "</DIV>";
             } else

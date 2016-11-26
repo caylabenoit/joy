@@ -46,6 +46,8 @@ import org.apache.commons.io.IOUtils;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import com.joy.log.Ilog;
+import java.text.ParseException;
+
 
 /**
  *
@@ -53,30 +55,30 @@ import com.joy.log.Ilog;
  */
 public class Joy {
 
-    private static JoyParameterFactory s_Params;          // Global parameters from xml file
-    private static List<BOFactory> s_BOEntities;     // Data entities
-    private static Ilog s_Log;            // log
-    private static boolean s_joyIsInitialized = false;
-    private static JoyTaskManager s_taskManager;
+    private static JoyParameterFactory S_PARAMS;          // Global PARAMETERS from xml file
+    private static List<BOFactory> S_BOENTITIES;     // Data ENTITIES
+    private static Ilog S_LOG;            // LOG
+    private static boolean S_INITIALIZED = false;
+    private static JoyTaskManager S_TASK_MANAGER;
 
-    public static Ilog log() {
-        return s_Log;
+    public static void SYSTEM_LOG(String log) {
+        System.out.println("JOY> " + log);
+    }
+    
+    public static Ilog LOG() {
+        return S_LOG;
     }
 
-    public static BOFactory entities() {
-        return s_BOEntities.get(0);
+    public static BOFactory ENTITIES() {
+        return S_BOENTITIES.get(0);
     }
 
-    public static BOFactory entities(int index) {
-        return s_BOEntities.get(index);
+    public static JoyParameterFactory PARAMETERS() {
+        return S_PARAMS;
     }
 
-    public static JoyParameterFactory parameters() {
-        return s_Params;
-    }
-
-    public static JoyTaskManager taskManager() {
-        return s_taskManager;
+    public static JoyTaskManager TASKS() {
+        return S_TASK_MANAGER;
     }
 
     /**
@@ -84,7 +86,7 @@ public class Joy {
      *
      * @return répertoire WEB-INF
      */
-    public static String getWebInfPath() {
+    public static String WEBINF_PATH() {
         //className= package/subPackage/subsubPackage/../ClassName.class
         String className = JoyConfigfileProvider.class.getName().replaceAll("\\.", "/") + ".class";
         //Use the ClassLoader to find the absolute path to this file.
@@ -109,11 +111,11 @@ public class Joy {
      * @param line ligne de commande
      * @return résultat de l'éxécution
      */
-    public static String executeCommandLine(String line) {
+    public static String EXECUTE_CMD(String line) {
         String retValue = "";
 
         try {
-            s_Log.debug("Action : execute command line: " + line);
+            S_LOG.debug("Action : execute command line: " + line);
 
             if (!line.equalsIgnoreCase("")) {
                 Process p = Runtime.getRuntime().exec(line);
@@ -122,13 +124,13 @@ public class Joy {
                     //ReadStream s2 = new JoyReadStream("stderr", p.getErrorStream ());
                     s1.start();
                     //s2.start ();
-                    s_Log.debug("Waiting ...");
+                    S_LOG.debug("Waiting ...");
                     p.waitFor();
-                    s_Log.debug("Returning -> " + s1.getCmdreturn());
+                    S_LOG.debug("Returning -> " + s1.getCmdreturn());
                     retValue = s1.getCmdreturn();
 
                 } catch (InterruptedException e) {
-                    s_Log.error(e.toString());
+                    S_LOG.error(e.toString());
                     retValue = e.toString();
 
                 } finally {
@@ -137,9 +139,9 @@ public class Joy {
                     }
                 }
             }
-            s_Log.debug("End of execution !");
+            S_LOG.debug("End of execution !");
         } catch (IOException ex) {
-            s_Log.error(ex);
+            S_LOG.error(ex);
             retValue = ex.toString();
         }
         return retValue;
@@ -151,7 +153,7 @@ public class Joy {
      * @param in input stream
      * @return String variable
      */
-    public static String convertInputStreamToString(InputStream in) {
+    public static String STREAM_TO_STRING(InputStream in) {
         try {
             StringWriter writer = new StringWriter();
             Charset encoding = null;
@@ -164,64 +166,67 @@ public class Joy {
     }
 
     /**
-     * Initiliaze all the Joy entities, Joy parameters, Joy connection and Joy
-     * logs
+     * Initiliaze all the Joy ENTITIES, Joy PARAMETERS, Joy connection and Joy logs
      *
      * @param sce Contexte de l'application
      * @return Initialisation OK
      */
-    public static boolean init(ServletContext sce) {
+    public static boolean INIT(ServletContext sce) {
         boolean logInit;
         boolean entityInit = false;
         boolean logParam;
 
-        if (!s_joyIsInitialized) {
-            s_Params = new JoyParameterFactory();
+        if (!S_INITIALIZED) {
+            SYSTEM_LOG("********************************************************************");
+            S_PARAMS = new JoyParameterFactory();
 
             // 1 - Get the appdir parameter first
             String appdir = sce.getInitParameter(C.APPDIR_PARAMETER);
-            if (appdir == null) {
+            if (appdir == null)
                 appdir = "";
-            }
-            s_Params.setApplicationFolder(appdir);
-            System.out.println("Joy: Application directory = " + (appdir.isEmpty() ? "Not defined" : appdir));
-
-            // 2 - Initialisation des logs
-            System.out.println("Joy: Configuration folder : " + s_Params.getConfigFolder());
-            String lojInternalFile = s_Params.getConfigFolder() + sce.getInitParameter("joy-log");
-            System.out.println("Joy: Log configuration file : " + lojInternalFile);
-            s_Log = new JoyLogInternalProvider();
-            s_Log.init(lojInternalFile);
-            logInit = s_Log.isInitialized();
-            System.out.println("Joy: Internal Log Initialization : " + (logInit ? "OK" : "KO"));
-
-            // 3 - Initialisation des parametres
-            String paramFile = s_Params.getConfigFolder() + sce.getInitParameter("joy-parameters");
-            System.out.println("Joy: Initialize joy parameters with parameter file : " + paramFile);
-            logParam = s_Params.init(paramFile);
-            Joy.log().info("Joy: Joy Parameters Initialization : " + (logParam ? "OK" : "KO"));
+            
+            S_PARAMS.setApplicationFolder(appdir);
+            SYSTEM_LOG("Application directory = " + (appdir.isEmpty() ? "Not defined" : appdir));
+            
+            // 2 - Initialisation des parametres
+            String paramFile = S_PARAMS.getConfigFolder() + sce.getInitParameter("joy-parameters");
+            SYSTEM_LOG("Initialize joy parameters with parameter file : " + paramFile);
+            logParam = S_PARAMS.init(paramFile);
+            SYSTEM_LOG("Joy Parameters Initialization : " + (logParam ? "OK" : "KO"));
+            
+            // 3 - Initialisation des logs
+            SYSTEM_LOG("Configuration folder : " + S_PARAMS.getConfigFolder());
+            String lojInternalFile = S_PARAMS.getConfigFolder() + sce.getInitParameter("joy-log");
+            SYSTEM_LOG("Log configuration file : " + lojInternalFile);
+            S_LOG = new JoyLogInternalProvider();
+            S_LOG.init(lojInternalFile);
+            logInit = S_LOG.isInitialized();
+            SYSTEM_LOG("Internal Log Initialization : " + (logInit ? "OK" : "KO"));
 
             // 4 - Initialisation des entités & DB
-            s_BOEntities = new ArrayList();
-            for (String entitiesName : s_Params.getEntities()) {
+            S_BOENTITIES = new ArrayList();
+            for (String entitiesName : S_PARAMS.getEntities()) {
                 BOFactory entities = new BOFactory();
-                String entityFile = s_Params.getConfigFolder() + entitiesName;
+                String entityFile = S_PARAMS.getConfigFolder() + entitiesName;
                 entities.init(entityFile);
-                s_BOEntities.add(entities);
+                S_BOENTITIES.add(entities);
                 entityInit = entities.isInitialized();
             }
-
+            SYSTEM_LOG("Entities Initialization : " + (entityInit ? "OK" : "KO"));
+            
             // 5 - Taks Manager Initalization
-            s_taskManager = new JoyTaskManager();
-            s_taskManager.init();
+            S_TASK_MANAGER = new JoyTaskManager();
+            S_TASK_MANAGER.init();
+            SYSTEM_LOG("Task Manager Initialized");
 
-            Joy.log().info("Joy: Joy Entities Initialization : " + (entityInit ? "OK" : "KO"));
+            S_INITIALIZED = true;
 
-            s_joyIsInitialized = true;
-
+            SYSTEM_LOG("Joy Framework initialized successfully :-)");
+            SYSTEM_LOG("********************************************************************");
+            
             return (logInit && entityInit && logParam);
         } else {
-            return s_joyIsInitialized;
+            return S_INITIALIZED;
         }
     }
 
@@ -232,43 +237,39 @@ public class Joy {
      * @param size Taille max de la chaine
      * @return chaine réduire
      */
-    public static String shortenString(String s, int size) {
+    public static String SHORTEN_STRING(String s, int size) {
+        String after = " ...";
         if (s == null) {
             return "";
         } else {
             if (s.length() >= size) {
-                return s.substring(0, size - 1) + " ...";
+                return s.substring(0, size - after.length()) + after;
             } else {
                 return s;
             }
         }
     }
-
-    public static String basicURL(String _object,
-            String _actiontype) {
-        return url(_object, _actiontype);
-    }
-
-    public static String href(String _object,
+    
+    public static String HREF(String _object,
             String _actiontype,
             String _Label,
             String... args) {
-        return "<A HREF='" + url(_object, _actiontype, args) + "'>" + _Label + "</A>";
+        return "<A HREF='" + URL(_object, _actiontype, args) + "'>" + _Label + "</A>";
     }
 
     /**
-     * Retourne l'url avec les éléments de base Joy
+     * Retourne l'URL avec les éléments de base Joy
      *
      * @param _object élément Object / fichier joy-actions.xml
      * @param _actiontype élément ActionType / fichier joy-actions.xml
-     * @param args dynamic list of parameters
-     * @return Début d'url
+     * @param args dynamic list of PARAMETERS
+     * @return Début d'URL
      */
-    public static String url(String _object,
+    public static String URL(String _object,
                              String _actiontype,
                              String... args) {
 
-        String urlRet = "." + Joy.parameters().getJoyDefaultURLPattern();
+        String urlRet = "." + Joy.PARAMETERS().getJoyDefaultURLPattern();
         String sepNext = "&";
         String sep = "?";
         
@@ -289,10 +290,10 @@ public class Joy {
                 urlRet += sep + paramName + "=" + paramValue;
                 sep = sepNext;
             } catch (UnsupportedEncodingException ex) {
-                Joy.log().error("Error while encoding and/or creating URL, " + ex);
+                Joy.LOG().error("Error while encoding and/or creating URL, " + ex);
             }
         }
-        //Joy.log().debug("Returning url --> " + urlRet);
+        //Joy.LOG().debug("Returning URL --> " + urlRet);
         return urlRet;
     }
 
@@ -309,11 +310,11 @@ public class Joy {
      * @param request HTTP request
      * @return Action Object
      */
-    public static Action currentAction(HttpServletRequest request) {
+    public static Action CURRENT_ACTION(HttpServletRequest request) {
         try {
             return (Action) request.getAttribute(C.ACTION_FORM_BEAN);
         } catch (Exception e) {
-            Joy.log().debug("Impossible to retrieve current action, " + e);
+            Joy.LOG().debug("Impossible to retrieve current action, " + e);
             return null;
         }
     }
@@ -323,11 +324,11 @@ public class Joy {
      * @param jsp JSP context
      * @return Action Object
      */
-    public static Action currentAction(JspContext jsp) {
+    public static Action CURRENT_ACTION(JspContext jsp) {
         try {
             return (Action) jsp.findAttribute(C.ACTION_FORM_BEAN);
         } catch (Exception e) {
-            Joy.log().debug("Impossible to retrieve current action, " + e);
+            Joy.LOG().debug("Impossible to retrieve current action, " + e);
             return null;
         }
     }
@@ -336,8 +337,8 @@ public class Joy {
      * Get the current date in the dd/MM/yyyy HH:mm:ss format
      * @return current date
      */
-    public static String getCurrentDate() {
-        return getCurrentDate("dd/MM/yyyy HH:mm:ss");
+    public static String CURRENT_STR_DATE() {
+        return CURRENT_STR_DATE("dd/MM/yyyy HH:mm:ss");
     }
     
     /** 
@@ -345,17 +346,31 @@ public class Joy {
      * @param format date format (example "dd/MM/yyyy HH:mm:ss")
      * @return current date
      */
-    public static String getCurrentDate(String format) {
+    public static String CURRENT_STR_DATE(String format) {
         Calendar cal = Calendar.getInstance();
         DateFormat dateFormat = new SimpleDateFormat(format);
         return dateFormat.format(cal.getTime());
     }
 
+    public static String DATE_TO_STRING(Date myDate, String format) {
+        DateFormat dateFormat = new SimpleDateFormat(format);
+        return dateFormat.format(myDate);
+    }
+    
+    public static Date STRING_TO_DATE(String myDate, String format) {
+        try {
+            DateFormat dateFormat = new SimpleDateFormat(format);
+            return dateFormat.parse(myDate);
+        } catch (ParseException ex) {
+            return null;
+        }
+    }
+    
     /** 
      * Get the current date
      * @return current date
      */
-    public static Date getDate() {
+    public static Date CURRENT_DATE() {
         Calendar cal = Calendar.getInstance();
         return cal.getTime();
     }
@@ -366,7 +381,7 @@ public class Joy {
      * @param format format (example: "dd/MM/yyyy HH:mm:ss")
      * @return formatted date
      */
-    public static String formatDate(Date myDate, String format) {
+    public static String DATE_FORMAT(Date myDate, String format) {
         try {
             if (myDate == null)  return "";
             Calendar cal = Calendar.getInstance();
@@ -379,17 +394,17 @@ public class Joy {
     
     /**
      * Format a date --> string (format=dd/MM/yyyy HH:mm:ss). 
-     * Take the Joy format (in parameters.xml) or by default "dd/MM/yyyy HH:mm:ss"
+     * Take the Joy format (in PARAMETERS.xml) or by default "dd/MM/yyyy HH:mm:ss"
      * @param myDate date to format
      * @return formatted date in string
      */
-    public static String formatDate(Date myDate) {
+    public static String DATE_FORMAT(Date myDate) {
         String format = "dd/MM/yyyy HH:mm:ss";
 
         try {
             if (myDate == null) return "";
-            if (Joy.parameters().getJoyDefaultDateFormat() != null) 
-                format = Joy.parameters().getJoyDefaultDateFormat();
+            if (Joy.PARAMETERS().getJoyDefaultDateFormat() != null) 
+                format = Joy.PARAMETERS().getJoyDefaultDateFormat();
             Calendar cal = Calendar.getInstance();
             DateFormat dateFormat = new SimpleDateFormat(format);
             return dateFormat.format(myDate);
@@ -403,7 +418,7 @@ public class Joy {
      * @param xmlFileName xml file
      * @return dom document
      */
-    public static org.jdom2.Document openXMLConfig(String xmlFileName) {
+    public static org.jdom2.Document OPEN_XML(String xmlFileName) {
         SAXBuilder sxb = new SAXBuilder();
         org.jdom2.Document document = null;
 
@@ -411,7 +426,7 @@ public class Joy {
         try {
             document = sxb.build(Thread.currentThread().getContextClassLoader().getResourceAsStream(xmlFileName));
         } catch (JDOMException | IOException ex) {
-            Joy.log().info("Impossible to open XML file through through current context, " + ex);
+            Joy.LOG().info("Impossible to open XML file through current context, " + ex);
         }
 
         // direct open
@@ -420,7 +435,7 @@ public class Joy {
                 File file = new File(xmlFileName);
                 document = sxb.build(file);
             } catch (JDOMException | IOException ex) {
-                Joy.log().error("Exception (opening direct file) =" + ex);
+                Joy.LOG().error("Exception (opening direct file) =" + ex);
             }
         }
 
@@ -431,7 +446,7 @@ public class Joy {
         }
     }
 
-    public static String rgba(String color, String transparency) {
+    public static String RGBA(String color, String transparency) {
         return "rgba(" + color + "," + transparency + ")";
     }
 
@@ -440,7 +455,7 @@ public class Joy {
      * @param filename
      * @return
      */
-    public static String readFileAsString(String filename) {
+    public static String FILE_TO_STRING(String filename) {
         BufferedReader reader = null;
         try {
             InputStream myFile = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
@@ -450,17 +465,17 @@ public class Joy {
             while ((line = reader.readLine()) != null) {
                 out.append(line);
             }
-            System.out.println(out.toString());   //Prints the string content read from input stream
+            SYSTEM_LOG(out.toString());   //Prints the string content read from input stream
             reader.close();
             return out.toString();
 
         } catch (IOException ex) {
-            Joy.log().error(ex);
+            Joy.LOG().error(ex);
         } finally {
             try {
                 reader.close();
             } catch (IOException ex) {
-                Joy.log().error(ex);
+                Joy.LOG().error(ex);
             }
         }
         return "";

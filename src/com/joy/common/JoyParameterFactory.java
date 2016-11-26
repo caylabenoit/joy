@@ -134,8 +134,8 @@ public class JoyParameterFactory {
     }
     
     /**
-     * Initialize all the Joy parameters here
-     * @param xmlFileName pathname of the joy-parameters.xml file
+     * Initialize all the Joy PARAMETERS here
+     * @param xmlFileName pathname of the joy-PARAMETERS.xml file
      * @return true if all have been initialized successfully
      */
     public boolean init(String xmlFileName) {
@@ -144,46 +144,47 @@ public class JoyParameterFactory {
         org.jdom2.Document doc;
         
         try {
-            doc = Joy.openXMLConfig(xmlFileName);
+            doc = Joy.OPEN_XML(xmlFileName);
             racine = doc.getRootElement();
             
-            Joy.log().info("Get the fixed Joy framework parameters");
-            // Get the Joy mandatory parameters
+            Joy.SYSTEM_LOG("Get the fixed Joy framework parameters");
+            // Get the Joy mandatory PARAMETERS
             defaultURLPattern = racine.getChildText(C.PARAMETERS_TAG_URLPATTERN);
-            Joy.log().info("Default URL pattern: " + defaultURLPattern);
+            Joy.SYSTEM_LOG("Default URL pattern: " + defaultURLPattern);
             
             bundledMessageFile = racine.getChildText(C.PARAMETERS_TAG_BUNDLEMSG);
-            Joy.log().info("Bundled files: " + bundledMessageFile);
+            Joy.SYSTEM_LOG("Bundled files: " + bundledMessageFile);
             
             defaultDateFormat = racine.getChildText(C.PARAMETERS_TAG_DATEFORMAT);
-            Joy.log().info("Date Format: " + defaultDateFormat);
+            Joy.SYSTEM_LOG("Date Format: " + defaultDateFormat);
             
             version = racine.getChildText(C.PARAMETERS_TAG_VERSION);
-            Joy.log().info("Joy Version: " + version);
+            Joy.SYSTEM_LOG("Version: " + version);
             
             applicationName = racine.getChildText(C.PARAMETERS_TAG_APPNAME);
-            Joy.log().info("Joy Application name: " + applicationName);
+            Joy.SYSTEM_LOG("Application name: " + applicationName);
             
             defaultLocalCountry = racine.getChildText(C.PARAMETERS_TAG_LOCALE);
-            Joy.log().info("Joy Version: " + defaultLocalCountry);
+            Joy.SYSTEM_LOG("Version: " + defaultLocalCountry);
+            
             defaultLocalLanguage = racine.getChildText(C.PARAMETERS_TAG_LOCALE_LANG);
-            Joy.log().info("Joy Version: " + defaultLocalLanguage);
+            Joy.SYSTEM_LOG("Locale Language: " + defaultLocalLanguage);
             
             try {
                 sessionTimeoutMin = Integer.valueOf(racine.getChildText(C.PARAMETERS_TAG_SESSION_TIMEOUT));
             } catch (Exception e) {
                 sessionTimeoutMin = 10;
             }
-            Joy.log().info("Joy Session Timeout: " + sessionTimeoutMin + " Minute(s)");
+            Joy.SYSTEM_LOG("Session Timeout: " + sessionTimeoutMin + " Minute(s)");
             
-            // Get all the entities
+            // Get all the ENTITIES
             List entities = racine.getChild(C.PARAMETERS_TAG_ENTITIES).getChildren(C.PARAMETERS_TAG_ENTITY);
             if (entities != null) {
                 Iterator entityIt = entities.iterator();
                 while(entityIt.hasNext()) {
                     Element ent = (Element)entityIt.next();
                     entitiesConfigList.add(ent.getText());
-                    Joy.log().info("Add entity " + ent.getText() + " in the Joy scope");
+                    Joy.SYSTEM_LOG("Add entity " + ent.getText() + " in the Joy scope");
                 }
             }
             
@@ -198,12 +199,12 @@ public class JoyParameterFactory {
                                                              map.getText() : 
                                                              this.getConfigFolder() +  map.getText()));
                     mappingConfigList.add(signature);
-                    Joy.log().info("Add mapping " + signature.getName() + " which refers to " + signature.getConfigFile() + "  in the Joy scope");
+                    Joy.SYSTEM_LOG("Add mapping " + signature.getName() + " which refers to " + signature.getConfigFile() + "  in the Joy scope");
                 }
             }
             
-            // Optional Application parameters
-            Joy.log().info("Collect all the Application parameters");
+            // Optional Application PARAMETERS
+            Joy.SYSTEM_LOG("Collect all the Application parameters");
             List parameters = racine.getChildren(C.PARAMETERS_SINGLEPARAM);
             if (parameters != null) {
                 Iterator paramIt = parameters.iterator();
@@ -237,7 +238,7 @@ public class JoyParameterFactory {
             initialized = true;
             
         } catch (Exception ex) {
-            Joy.log().error( "Exception=" + ex);
+            Joy.SYSTEM_LOG( "ERROR : Exception=" + ex);
         }
         return initialized;
     }

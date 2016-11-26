@@ -122,7 +122,7 @@ public class NaviBreadCrumbsTag extends SimpleTagSupport {
             out.println("</OL>");
                 
         } catch (IOException | JDOMException ex) {
-            Joy.log().debug ( ex.toString());
+            Joy.LOG().debug ( ex.toString());
             out.println("No menu defined.");
         }
     }

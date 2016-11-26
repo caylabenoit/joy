@@ -32,16 +32,16 @@ import org.jdom2.input.SAXBuilder;
 /**
  * Taglib d'affichage d'un menu
 *    Chaque element de menu est placé dans un tag <joy-menu></joy-menu>
-*    Attributs du tag:
-*    * name (obligatoire) : nom du menu
-*    [choix]
-*    * url (obligatoire): URL du menu (http://)
-*    Ou
-*    * object (obligatoire) nom du tag Object (joy)
-*    * actiontype (facultatif) nom de l'actiontype (joy)
-*    * parametres (entier x de 1 à ...)
-*        - pnx= Nom du parametre x
-*        - pnv= Valeur du parametre x
+    Attributs du tag:
+ name (obligatoire) : nom du menu
+    [choix]
+ URL (obligatoire): JOYURL du menu (http://)
+    Ou
+ object (obligatoire) nom du tag Object (joy)
+ actiontype (facultatif) nom de l'actiontype (joy)
+ parametres (entier x de 1 à ...)
+        - pnx= Nom du parametre x
+        - pnv= Valeur du parametre x
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
 public class NaviLeftMenuTag extends SimpleTagSupport {
@@ -159,8 +159,8 @@ public class NaviLeftMenuTag extends SimpleTagSupport {
 
             out.println("<DIV class='navbar-default sidebar' role='navigation'>");
             //out.println("<DIV class='sidebar-title'>");
-            //String myTitle = Joy.parameters().getApplicationName() + " v" + Joy.parameters().getVersion();
-            //out.println("<A class=\"navbar-brand\" href=\"#\">" + myTitle + "</a>");
+            //String myTitle = Joy.PARAMETERS().getApplicationName() + " v" + Joy.PARAMETERS().getVersion();
+            //out.println("<A class=\"navbar-brand\" HREF=\"#\">" + myTitle + "</a>");
             //out.println("</DIV>");
             out.println("<DIV class='sidebar-nav navbar-collapse'>");
             out.println(sMenu);
@@ -168,7 +168,7 @@ public class NaviLeftMenuTag extends SimpleTagSupport {
             out.println("</DIV>");
             
         } catch (IOException | JDOMException ex) {
-            Joy.log().debug ( ex.toString());
+            Joy.LOG().debug ( ex.toString());
             out.println("No menu defined.");
         }
     }

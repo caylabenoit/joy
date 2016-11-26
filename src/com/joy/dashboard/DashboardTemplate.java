@@ -52,9 +52,9 @@ public class DashboardTemplate {
     public void setBodyContent(String TemplateFile) {
         try {
             if (!TemplateFile.isEmpty())
-                this.bodyContent = Joy.readFileAsString(TemplateFile);
+                this.bodyContent = Joy.FILE_TO_STRING(TemplateFile);
         } catch (Exception e) { 
-            Joy.log().error(e);
+            Joy.LOG().error(e);
             this.bodyContent = "";
         }
     }
@@ -62,9 +62,9 @@ public class DashboardTemplate {
     public void setAfterBodyContent(String TemplateFile) {
         try {
             if (!TemplateFile.isEmpty())
-                this.afterBodyContent = Joy.readFileAsString(TemplateFile);
+                this.afterBodyContent = Joy.FILE_TO_STRING(TemplateFile);
         } catch (Exception e) { 
-            Joy.log().error(e);
+            Joy.LOG().error(e);
             this.afterBodyContent = "";
         }
     }

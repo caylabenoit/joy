@@ -53,9 +53,9 @@ public class ActionConfiguration {
             return (xmlRoot != null) ;
             
         } catch (JDOMException ex) {
-            Joy.log().error( "JDOMException=" + ex);
+            Joy.LOG().error( "JDOMException=" + ex);
         } catch (IOException ex) {
-            Joy.log().error( "IOException=" + ex);
+            Joy.LOG().error( "IOException=" + ex);
         }
         return false;
     }

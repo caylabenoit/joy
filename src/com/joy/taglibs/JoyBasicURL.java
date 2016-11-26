@@ -56,7 +56,7 @@ public class JoyBasicURL extends SimpleTagSupport {
         JspContext jsp = this.getJspContext();
         JspWriter out =jsp.getOut();
         
-        String retText = Joy.url(object, actiontype);
+        String retText = Joy.URL(object, actiontype);
         out.print(retText);
     }
 

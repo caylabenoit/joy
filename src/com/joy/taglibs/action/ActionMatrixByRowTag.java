@@ -17,6 +17,7 @@
 package com.joy.taglibs.action;
 
 import com.joy.C;
+import com.joy.Joy;
 import com.joy.mvc.formbean.JoyFormVectorEntry;
 import java.io.IOException;
 import javax.servlet.jsp.JspContext;
@@ -30,6 +31,19 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
  */
 public class ActionMatrixByRowTag extends SimpleTagSupport {
     private String name;
+    private int maxlength;
+
+    public ActionMatrixByRowTag() {
+        maxlength = 0;
+    }
+
+    public int getMaxlength() {
+        return maxlength;
+    }
+
+    public void setMaxlength(int maxlength) {
+        this.maxlength = maxlength;
+    }
     
     @Override
     public void doTag() throws JspException, IOException {
@@ -44,7 +58,10 @@ public class ActionMatrixByRowTag extends SimpleTagSupport {
         if (row != null) {
             String val = "";
             try {
-                val = row.getVectorValue(name);
+                if (maxlength > 0)
+                    val = Joy.SHORTEN_STRING(row.getVectorValue(name), maxlength);
+                else
+                    val = row.getVectorValue(name);
             } catch (Exception e) {}
             out.print((val==null ? "": val));
         }

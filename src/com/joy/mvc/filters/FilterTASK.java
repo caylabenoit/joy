@@ -59,10 +59,10 @@ public class FilterTASK implements Filter
             int i;
             String urlFinal;
             
-            Joy.log().debug("URI Request=" + uri);
-            // si l'url est de la forme ./task/[tag]/param1/param2/ etc.
+            Joy.LOG().debug("URI Request=" + uri);
+            // si l'URL est de la forme ./task/[tag]/param1/param2/ etc.
             // on met les parametres dans la request
-            urlFinal = "/" + uriParts[1] + Joy.parameters().getJoyDefaultURLPattern() + "?" + C.ACTION_TAG_OBJECT + "=" + uriParts[3];
+            urlFinal = "/" + uriParts[1] + Joy.PARAMETERS().getJoyDefaultURLPattern() + "?" + C.ACTION_TAG_OBJECT + "=" + uriParts[3];
             for (i=4; i < uriParts.length; i++) {
                 urlFinal += "&" + C.ACTION_REST_PARAM_PREFIX + String.valueOf(i-3) + "=" + uriParts[i];
             }
@@ -70,7 +70,7 @@ public class FilterTASK implements Filter
             
         } catch (Exception t) {
             try {
-                Joy.log().warn("TASK Error: " + t);
+                Joy.LOG().warn("TASK Error: " + t);
                 chain.doFilter(request, response);
             } catch (IOException | ServletException ex) {
                 Logger.getLogger(FilterTASK.class.getName()).log(Level.SEVERE, null, ex);

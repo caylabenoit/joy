@@ -38,13 +38,13 @@ public class MappingFactory {
     public boolean init(String filename)  {
         try {
             //m_document = sxb.build(Thread.currentThread().getContextClassLoader().getResourceAsStream(filename));
-            m_document = Joy.openXMLConfig(filename);
+            m_document = Joy.OPEN_XML(filename);
             m_racine = m_document.getRootElement();
             return (m_racine != null) ;
             
         } catch (Exception ex) {
-            Joy.log().error( "Exception=" + ex );
-            Joy.log().error( "The file " + filename + " may not found !");
+            Joy.LOG().error( "Exception=" + ex );
+            Joy.LOG().error( "The file " + filename + " may not found !");
         } 
         return false;
     }
@@ -112,7 +112,7 @@ public class MappingFactory {
                 mapping.add(map);
             }
         } catch (Exception e) {
-            Joy.log().error( "Exception=" + e);
+            Joy.LOG().error( "Exception=" + e);
         }
     }
     

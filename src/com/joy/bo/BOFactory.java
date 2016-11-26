@@ -59,10 +59,10 @@ public class BOFactory implements Cloneable {
                     field.setDB(myClone.getDB());
             }
             
-            Joy.log().debug("Clone new BOEntities with new connection [" + myClone.dbConnection + "]");
+            Joy.LOG().debug("Clone new BOEntities with new connection [" + myClone.dbConnection + "]");
             
         } catch(CloneNotSupportedException cnse) {
-            Joy.log().error(cnse);
+            Joy.LOG().error(cnse);
         }
         return myClone;
     }
@@ -77,13 +77,13 @@ public class BOFactory implements Cloneable {
      * @return BOEntityReadWrite, BOView or BOEntityCustom
      */
     private IEntity Entity(String Name) {
-        //Joy.log().debug("Get Entity: " + name);
+        //Joy.LOG().debug("Get Entity: " + name);
         for (IEntity entity : this.entities) 
             if (entity.getLabel().equalsIgnoreCase(Name) || entity.getName().equalsIgnoreCase(Name)) {
                 IEntity myClone = (IEntity)entity.clone();
                 myClone.setDB(this.getDB());
                 myClone.reset();
-                Joy.log().debug("Return Entity [" + Name + "] - " + myClone + " with connection: " + myClone.getDB());
+                Joy.LOG().debug("Return Entity [" + Name + "] - " + myClone + " with connection: " + myClone.getDB());
                 return myClone;
             }
         return null;
@@ -141,7 +141,7 @@ public class BOFactory implements Cloneable {
             entity.setBoType(BOEntityType.boReadWrite);
             db.getMetadataFromDB(entity, null, remapsField); 
             
-            // Get all the init values if any
+            // Get all the INIT values if any
             List<Element> inits = entityXml.getChildren("joy-init-record");
             for (Element initRec : inits) {
                 BOInitRecord rec = new BOInitRecord();
@@ -160,9 +160,9 @@ public class BOFactory implements Cloneable {
             // Set and add BO
             entities.add(entity);
             if (entity.isInitialized())
-                Joy.log().debug("Table " + entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE) + " Added successfully");
+                Joy.LOG().debug("Table " + entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE) + " Added successfully");
             else
-                Joy.log().error("Table " + entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE) + " has not been Added successfully !!!");
+                Joy.LOG().error("Table " + entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE) + " has not been Added successfully !!!");
         }
     }
     
@@ -201,9 +201,9 @@ public class BOFactory implements Cloneable {
             // Set and add BO
             entities.add(entity);
             if (entity.isInitialized())
-                Joy.log().debug("Custom Entity " + entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE) + " Added successfully");
+                Joy.LOG().debug("Custom Entity " + entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE) + " Added successfully");
             else
-                Joy.log().error("Custom Entity " + entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE) + " has not been Added successfully !!!");
+                Joy.LOG().error("Custom Entity " + entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE) + " has not been Added successfully !!!");
         }
     }
 
@@ -221,7 +221,7 @@ public class BOFactory implements Cloneable {
                     String myClass = plugin.getClassName();
                     retEntity = (IEntity)Class.forName(myClass).newInstance();
                 } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
-                    Joy.log().error(ex);
+                    Joy.LOG().error(ex);
                 }
             }
         }
@@ -254,7 +254,7 @@ public class BOFactory implements Cloneable {
             String myQuery =  myEntityFactory.getQuery();
             db.getMetadataFromDB(entity, myQuery, remapsField);
             entity.setQuery(myQuery);
-            Joy.log().debug("Composite Entity SQL Query :" + myQuery);
+            Joy.LOG().debug("Composite Entity SQL Query :" + myQuery);
             
             // Label assignment
             String label = (entityXml.getAttributeValue(C.ENTITIES_LABEL_ATTRIBUTE) == null ? "" : entityXml.getAttributeValue(C.ENTITIES_LABEL_ATTRIBUTE));
@@ -264,9 +264,9 @@ public class BOFactory implements Cloneable {
             // Set and add BO
             entities.add(entity);
             if (entity.isInitialized())
-                Joy.log().debug("Composite Entity " + EntityName + " Added successfully");
+                Joy.LOG().debug("Composite Entity " + EntityName + " Added successfully");
             else
-                Joy.log().error("Composite Entity " + EntityName + " has not been Added successfully !!!");
+                Joy.LOG().error("Composite Entity " + EntityName + " has not been Added successfully !!!");
         }
     }
     
@@ -279,8 +279,8 @@ public class BOFactory implements Cloneable {
         JoyDBProvider DbConn = null;
         try {
             org.jdom2.Document document;
-            Joy.log().info("Open Global Entity configuration file: " + FileConfigEntity);
-            document = Joy.openXMLConfig(FileConfigEntity);
+            Joy.LOG().info("Open Global Entity configuration file: " + FileConfigEntity);
+            document = Joy.OPEN_XML(FileConfigEntity);
             Element root = document.getRootElement();
 
             // attach initalization queries if any here
@@ -312,13 +312,13 @@ public class BOFactory implements Cloneable {
                 this.plugins.add(new BOPlugin(plugin.getAttributeValue("name"), plugin.getText()));
             }
             
-            // Initialize the entities
+            // Initialize the ENTITIES
             Iterator ilist = eltfiles.iterator();
             while(ilist.hasNext()) {   // parcours toutes les queries
                 Element fileRoot = (Element)ilist.next();
                 String filename = fileRoot.getText();
-                Joy.log().debug("Open Entity configuration file: " + filename);
-                Element rootfile = Joy.openXMLConfig(filename).getRootElement();
+                Joy.LOG().debug("Open Entity configuration file: " + filename);
+                Element rootfile = Joy.OPEN_XML(filename).getRootElement();
                 // Get the Tables myEntities only
                 initTables(rootfile, DbConn);
                 // Get the Custom Query myEntities only
@@ -330,10 +330,10 @@ public class BOFactory implements Cloneable {
             DbConn.end();
             
             initialized = true;
-            Joy.log().info("Entities and Queries have been configured.");
+            Joy.LOG().info("Entities and Queries have been configured.");
             
         } catch (Exception e) {
-            Joy.log().error(e);
+            Joy.LOG().error(e);
             initialized = false;
             return false;
         }
@@ -343,7 +343,7 @@ public class BOFactory implements Cloneable {
     
     public void End() {
         if (poolManagementActive) {
-            Joy.log().debug("Close Connection [" + dbConnection + "]");
+            Joy.LOG().debug("Close Connection [" + dbConnection + "]");
             if (dbConnection != null)
                 dbConnection.end();
         }
