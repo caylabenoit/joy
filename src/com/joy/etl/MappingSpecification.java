@@ -139,7 +139,8 @@ public class MappingSpecification {
                             
                     } else { // it's a key !
                         if (CheckIfExists.isEmpty()) { // No checks for this mapping, Calculate a new ID and direct insert
-                            boTo.field(map.getFieldNameTo()).setNextIDValue();
+                            int newid = boTo.getNewIDForField(map.getFieldNameTo());
+                            boTo.field(map.getFieldNameTo()).setValue(newid);
                             InsertReq = true;
                         } else { // some checks requested, try to get the possible existing match in the "to entity"
                             IEntity boToCheck = entities.getEntity(To);
@@ -151,7 +152,8 @@ public class MappingSpecification {
                                 boTo.field(map.getFieldNameTo()).setKeyValue(rsCheck.getObject(map.getFieldNameTo()));
                                 InsertReq = false;
                             } else { // no match, create a new key
-                                boTo.field(map.getFieldNameTo()).setNextIDValue();
+                                int newid = boTo.getNewIDForField(map.getFieldNameTo());
+                                boTo.field(map.getFieldNameTo()).setValue(newid);
                                 InsertReq = true;
                             }
                             entities.closeResultSet(rsCheck);

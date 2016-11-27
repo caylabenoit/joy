@@ -16,12 +16,8 @@
  */
 package com.joy.bo;
 
-import com.joy.C;
 import com.joy.Joy;
 import static com.joy.bo.BOFieldType.*;
-import com.joy.providers.JoyDBProvider;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  *
@@ -48,10 +44,6 @@ public class BOField implements Cloneable {
      */
     protected boolean key;
     /**
-     * Indicates if this field can be used to calculate a new ID (Max +1)
-     */
-    protected boolean enableNewID;
-    /**
      * Data type
      */
     protected BOFieldType dataType;
@@ -70,10 +62,7 @@ public class BOField implements Cloneable {
      * Just indicate if a value has already been set
      */
     protected boolean valueSet;
-    /**
-     * DB connection
-     */
-    protected JoyDBProvider dbConnection;
+
 
     @Override
     protected Object clone()  {
@@ -85,10 +74,6 @@ public class BOField implements Cloneable {
             Joy.LOG().error(cnse);
         }
         return myClone;
-    }
-    
-    public void setDB(JoyDBProvider con) {
-        dbConnection = con;
     }
     
     public String getLabel() {
@@ -132,12 +117,6 @@ public class BOField implements Cloneable {
     public Object getValue() {
         return value;
     }
-
-    public int setNextIDValue() {
-        int newID = this.getNextID();
-        setValue(newID);
-        return newID;
-    }
     
     public void setValue(Object Value) {
         this.value = Value;
@@ -168,24 +147,14 @@ public class BOField implements Cloneable {
         this.dataType = FieldType;
     }
 
-    public boolean isEnableNewID() {
-        return enableNewID;
-    }
-
-    public void setEnableNewID(boolean enableNewID) {
-        this.enableNewID = enableNewID;
-    }
-
     public BOField(String TableName, String ColumnName, boolean Key, BOFieldType FieldType, String Label) {
         this.name = ColumnName;
         this.table = TableName;
         this.key = Key;
         this.dataType = FieldType;
         this.value = null;
-        this.enableNewID = false;
         this.doNotUse = false;
         this.valueSet = false;
-        this.dbConnection = null;
         this.label = Label;
     }
 
@@ -195,36 +164,7 @@ public class BOField implements Cloneable {
         this.key = false;
         this.dataType = fieldString;
         this.value = null;
-        this.enableNewID = false;
         this.doNotUse = false;
         this.valueSet = false;
     }
-
-    /** 
-     * Returns the next ID (by increasing the maximum existing ID
-     * @return new and not yet used ID
-     */
-    public int getNextID() {
-        try {
-            if (this.dataType == fieldInteger) {
-                String sql = "SELECT ";
-                int nId = 1;
-                sql += "MAX(" + this.name + ") AS " + C.ENTITYFIELD_COUNT_FIELD;
-                sql += " FROM " + table;
-            
-                ResultSet rs = dbConnection.getResultSet(sql);
-                if (rs.next()) {
-                    nId = rs.getInt(C.ENTITYFIELD_COUNT_FIELD) + 1;
-                }
-                dbConnection.closeResultSet(rs);
-                return nId;
-            } else {
-                return -1;
-            }
-        } catch (SQLException ex) {
-            Joy.LOG().error(ex);
-            return 0;
-        }
-    }
-    
 }

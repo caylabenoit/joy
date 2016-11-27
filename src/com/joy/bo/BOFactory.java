@@ -55,8 +55,6 @@ public class BOFactory implements Cloneable {
             
             for (IEntity entity : this.entities) {
                 entity.setDB(myClone.getDB());
-                for (BOField field : entity.fields()) 
-                    field.setDB(myClone.getDB());
             }
             
             Joy.LOG().debug("Clone new BOEntities with new connection [" + myClone.dbConnection + "]");

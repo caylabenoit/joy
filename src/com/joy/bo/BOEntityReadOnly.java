@@ -121,9 +121,6 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
     @Override
     public void setDB(JoyDBProvider con) {
         dbConnection = con;
-        for (BOField field : fields) {
-            field.setDB(con);
-        }
     }
     
     @Override
@@ -639,4 +636,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
 
     @Override
     public void addDefaultRecord(BOInitRecord record) {}
+    
+    @Override
+    public int getNewIDForField(String fieldname) { return -1; }
 }

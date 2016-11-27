@@ -120,6 +120,7 @@ public interface IEntity {
     public int insert();
     public int update();
     public int upsert();
+    public int getNewIDForField(String fieldname);
     // Read specific (query) interface
     public void setQuery(String Query);
     public String getQuery();

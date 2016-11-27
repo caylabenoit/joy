@@ -16,6 +16,7 @@
  */
 package com.joy.bo;
 
+import com.joy.C;
 import com.joy.Joy;
 import com.joy.json.JSONObject;
 import com.joy.common.ActionLogReport;
@@ -27,8 +28,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import static com.joy.bo.BOEntityType.boReadWrite;
+import static com.joy.bo.BOFieldType.fieldInteger;
 import com.joy.bo.init.BOInitField;
 import com.joy.bo.init.BOInitRecord;
+import java.sql.ResultSet;
 import java.util.List;
 
 /**
@@ -295,6 +298,44 @@ public class BOEntityReadWrite extends BOEntityReadOnly {
     @Override
     public void addDefaultRecord(BOInitRecord record) {
         defaultRecords.add(record);
+    }
+    
+    /** 
+     * Returns the next ID (by increasing the maximum existing ID
+     * @param fieldname field name
+     * @return new and not yet used ID (-1 in case of error)
+     */
+    @Override
+    public int getNewIDForField(String fieldname) {
+        try {
+            // find the field
+            BOField myField = null;
+            for (BOField field : this.fields) {
+                if (field.getColumnName().equalsIgnoreCase(fieldname))
+                    myField = field;
+            }
+            
+            // get the new id
+            if (myField != null) 
+                if (myField.dataType == fieldInteger) {
+                    String sql = "SELECT ";
+                    int nId;
+                    sql += "MAX(" + myField.name + ") AS " + C.ENTITYFIELD_COUNT_FIELD;
+                    sql += " FROM " + this.name;
+
+                    ResultSet rs = dbConnection.getResultSet(sql);
+                    if (rs.next()) {
+                        nId = rs.getInt(C.ENTITYFIELD_COUNT_FIELD) + 1;
+                    } else
+                        nId = -1;
+                    dbConnection.closeResultSet(rs);
+                    return nId;
+                }
+            
+        } catch (SQLException ex) {
+            Joy.LOG().error(ex);
+        }
+        return -1;
     }
     
 }
