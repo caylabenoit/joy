@@ -426,16 +426,17 @@ public class Joy {
         try {
             document = sxb.build(Thread.currentThread().getContextClassLoader().getResourceAsStream(xmlFileName));
         } catch (JDOMException | IOException ex) {
-            Joy.LOG().info("Impossible to open XML file through current context, " + ex);
+            Joy.SYSTEM_LOG("Impossible to open XML file through current context, " + ex);
         }
 
         // direct open
         if (document == null) {
             try {
+                Joy.SYSTEM_LOG("File Direct Open instead ...");
                 File file = new File(xmlFileName);
                 document = sxb.build(file);
             } catch (JDOMException | IOException ex) {
-                Joy.LOG().error("Exception (opening direct file) =" + ex);
+                Joy.SYSTEM_LOG("Exception (opening direct file) =" + ex);
             }
         }
 

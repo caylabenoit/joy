@@ -89,9 +89,9 @@ public class DashboardBloc {
     
     /**
      * Return the bloc content by using templates & parameters
- Replace the parameters between [] into the template by the values 
- replace also the predefined tags [id], [size], [title] and [type]
- (be careful the \n are removed)
+     * Replace the parameters between [] into the template by the values 
+     * replace also the predefined tags [id], [size], [title] and [type]
+     * (be careful the \n are removed)
      * @return Content
      */
     private String getContent(String myContent) {

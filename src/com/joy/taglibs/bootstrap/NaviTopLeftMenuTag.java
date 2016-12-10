@@ -134,7 +134,6 @@ public class NaviTopLeftMenuTag extends SimpleTagSupport {
         return BlocLI;
     }
     
-    
     /**
      * Fonction recursive de construction de blocs HTML de menu
      * @param bloc Bloc courant (donnée récursive)
