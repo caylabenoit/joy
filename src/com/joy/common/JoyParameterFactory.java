@@ -89,7 +89,6 @@ public class JoyParameterFactory {
                 return param;
         return null;
     }
-    
 
     public JoyParameterFactory() {
         initialized = false;

@@ -51,13 +51,22 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
     protected JoyDBProvider dbConnection;   // DB connection
     protected BOEntityType boType;          // type of entity : table or query
     protected int limitRecords;             // limit the number of record collected
-
+    protected String group;                 // Entity group
+    
     @Override
     public String getQuery() {
         if (this.boType != boReadWrite) 
             return query;
         else
             return "SELECT * FROM " + this.name;   
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 
     @Override
@@ -315,30 +324,44 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
      */
     protected JSONObject exportResultSet(ResultSet rs)  {
         try {
-            Collection<JSONObject> lines = new ArrayList<>();
+            Collection<JSONObject> rows = new ArrayList<>();
+            Collection<JSONObject> colsName = new ArrayList<>();
+            boolean firstpass = false;
+            
             while (rs.next()) {
-                JSONObject oneLine = new JSONObject();
+                Collection<JSONObject> columns = new ArrayList<>();
                 for (int i=1; i <= rs.getMetaData().getColumnCount() ; i++) {
                     String colName = rs.getMetaData().getColumnName(i).toUpperCase();
                     Object val = rs.getObject(colName);
-                    //if (val != null) {
                     if (val == null) 
                         val = "";
-                    JSONObject valueset = new JSONObject();
-                    valueset.put("name", colName);
-                    valueset.put("value", val.toString());
-                    oneLine.put(colName, valueset);
-                    //}
+                    JSONObject column = new JSONObject();
+                    column.put("name", colName);
+                    column.put("value", val.toString());
+                    columns.add(column);
+                    
+                    if (!firstpass) {
+                        JSONObject columnName = new JSONObject();
+                        columnName.put("name", colName);
+                        colsName.add(columnName);
+                    }
                 }
-                JSONObject jsonOneLine = new JSONObject();
-                jsonOneLine.put("row", oneLine);
-                lines.add(jsonOneLine);
+                firstpass = true;
+                JSONObject myCol = new JSONObject();
+                myCol.put("columns", columns);
+                rows.add(myCol);
             }
             
-            JSONObject all = new JSONObject();
-            all.put(this.name, lines);
+            
+            JSONObject entity = new JSONObject();
+            entity.put("entity", this.name);
+            entity.put("data", rows);
+            entity.put("rowcount", rows.size());
+            entity.put("columncount", colsName.size());
+            entity.put("columnnames", colsName);
+            
             Joy.LOG().info("JSON Export Successul.");
-            return all;
+            return entity;
             
         } catch (SQLException | JSONException e) {
             Joy.LOG().error(e);

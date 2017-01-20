@@ -124,4 +124,7 @@ public interface IEntity {
     // Read specific (query) interface
     public void setQuery(String Query);
     public String getQuery();
+    // Group management
+    public String getGroup();
+    public void setGroup(String group);
 }

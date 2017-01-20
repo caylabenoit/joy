@@ -104,8 +104,18 @@ public class Dashboards {
                         List<Element> eltParams = eltCol.getChildren("joy-param");
                         for (Element eltParam : eltParams) {
                             DashboardBlocParameter param = new DashboardBlocParameter();
-                            param.setName(eltParam.getAttribute("name").getValue());
-                            param.setValue(eltParam.getText());
+                            String paramName = eltParam.getAttribute("name").getValue();
+                            boolean isJoyParameter = false;
+                            try {
+                                isJoyParameter = eltParam.getAttribute("joy").getValue().equalsIgnoreCase("yes");
+                            } catch (Exception e) {}
+                            if (isJoyParameter) {
+                                param.setName(paramName);
+                                param.setValue(Joy.PARAMETERS().getParameter(paramName).getValue().toString());
+                            } else {
+                                param.setName(paramName);
+                                param.setValue(eltParam.getText());
+                            }
                             dbColumn.addParameter(param);
                         }
 

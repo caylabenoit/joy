@@ -74,8 +74,7 @@ public class BOFactory implements Cloneable {
      * @param Name Entity name
      * @return BOEntityReadWrite, BOView or BOEntityCustom
      */
-    private IEntity Entity(String Name) {
-        //Joy.LOG().debug("Get Entity: " + name);
+    public IEntity getEntity(String Name) {
         for (IEntity entity : this.entities) 
             if (entity.getLabel().equalsIgnoreCase(Name) || entity.getName().equalsIgnoreCase(Name)) {
                 IEntity myClone = (IEntity)entity.clone();
@@ -87,8 +86,24 @@ public class BOFactory implements Cloneable {
         return null;
     }
     
-    public IEntity getEntity(String Name) {
-        return Entity(Name);
+    /**
+     * Get and return the requested entity
+     * @param group Entity group
+     * @param Name Entity name
+     * @return BOEntityReadWrite, BOView or BOEntityCustom
+     */
+    public IEntity getEntity(String group, String name) {
+        for (IEntity entity : this.entities)
+            if (group.equalsIgnoreCase(entity.getGroup())) {
+                if (entity.getLabel().equalsIgnoreCase(name) || entity.getName().equalsIgnoreCase(name)) {
+                    IEntity myClone = (IEntity)entity.clone();
+                    myClone.setDB(this.getDB());
+                    myClone.reset();
+                    Joy.LOG().debug("Return Entity [" + name + "] - " + myClone + " with connection: " + myClone.getDB() + " in group: " + group);
+                    return myClone;
+                }
+            }
+        return null;
     }
     
     public boolean isInitialized() {
@@ -124,7 +139,8 @@ public class BOFactory implements Cloneable {
      * @param root
      * @param db 
      */
-    private void initTables(Element root, 
+    private void initTables(String group,
+                            Element root, 
                             JoyDBProvider db) {
         List tables = root.getChildren(C.ENTITIES_JOY_TABLE_TAG);
         Iterator i1 = tables.iterator();
@@ -135,6 +151,7 @@ public class BOFactory implements Cloneable {
             // Get all the fields remaps
             List<BOMapFieldLabel> remapsField = getMappedFields(entityXml); 
             IEntity entity = getEntityPlugin(db);
+            entity.setGroup(group);
             entity.setName(entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE));
             entity.setBoType(BOEntityType.boReadWrite);
             db.getMetadataFromDB(entity, null, remapsField); 
@@ -169,7 +186,9 @@ public class BOFactory implements Cloneable {
      * @param entities
      * @param root 
      */
-    private void initQueries(Element root, JoyDBProvider db) {
+    private void initQueries(String group,
+                            Element root, 
+                            JoyDBProvider db) {
         List eltentities = root.getChildren(C.ENTITIES_JOY_QUERY_TAG);
         Iterator i1 = eltentities.iterator();
         while(i1.hasNext()) {   // parcours toutes les queries
@@ -186,6 +205,7 @@ public class BOFactory implements Cloneable {
             // get all the fields remaps
             List<BOMapFieldLabel> remapsField = getMappedFields(entityXml); 
             IEntity entity = getEntityPlugin(db);
+            entity.setGroup(group);
             entity.setName(entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE));
             entity.setBoType(BOEntityType.boReadOnly);
             entity.setQuery(queryContent);
@@ -231,7 +251,9 @@ public class BOFactory implements Cloneable {
      * @param entities
      * @param root 
      */
-    private void initComposites(Element root, JoyDBProvider db) {
+    private void initComposites(String group,
+                                Element root, 
+                                JoyDBProvider db) {
         List eltentities = root.getChildren(C.ENTITIES_JOY_COMPOSITE_TAG);
         Iterator i1 = eltentities.iterator();
         
@@ -247,6 +269,7 @@ public class BOFactory implements Cloneable {
             List<BOMapFieldLabel> remapsField = getMappedFields(entityXml); 
             //IEntity entity = new BOEntityReadWrite();
             IEntity entity = getEntityPlugin(db);
+            entity.setGroup(group);
             entity.setName(entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE));
             entity.setBoType(BOEntityType.boReadOnly);
             String myQuery =  myEntityFactory.getQuery();
@@ -310,19 +333,20 @@ public class BOFactory implements Cloneable {
                 this.plugins.add(new BOPlugin(plugin.getAttributeValue("name"), plugin.getText()));
             }
             
-            // Initialize the ENTITIES
+            // Initialize the ENTITIES by loading the different files
             Iterator ilist = eltfiles.iterator();
             while(ilist.hasNext()) {   // parcours toutes les queries
                 Element fileRoot = (Element)ilist.next();
                 String filename = fileRoot.getText();
-                Joy.LOG().debug("Open Entity configuration file: " + filename);
+                String group = fileRoot.getAttributeValue("group");
+                Joy.LOG().debug("Open Entity configuration file: " + filename + " for the group: " + group);
                 Element rootfile = Joy.OPEN_XML(filename).getRootElement();
                 // Get the Tables myEntities only
-                initTables(rootfile, DbConn);
+                initTables(group, rootfile, DbConn);
                 // Get the Custom Query myEntities only
-                initQueries(rootfile, DbConn);
+                initQueries(group, rootfile, DbConn);
                 // Build the composites queries
-                initComposites(rootfile, DbConn);
+                initComposites(group, rootfile, DbConn);
             }
             
             DbConn.end();
