@@ -35,6 +35,7 @@ public class JoyParameterFactory {
     private String defaultURLPattern;
     private String bundledMessageFile;
     private String defaultDateFormat;
+    private boolean noLogin;
     private String version;
     private List<String> entitiesConfigList;
     private List<MappingSignature> mappingConfigList;
@@ -43,6 +44,10 @@ public class JoyParameterFactory {
     private String defaultLocalCountry;
     private String defaultLocalLanguage;
     private String applicationName;
+
+    public boolean isNoLogin() {
+        return noLogin;
+    }
     
     public String getApplicationName() {
         return applicationName;
@@ -92,6 +97,7 @@ public class JoyParameterFactory {
 
     public JoyParameterFactory() {
         initialized = false;
+        noLogin = false;
         defaultURLPattern="";
         applicationParameters = new ArrayList();
         entitiesConfigList = new ArrayList();
@@ -147,9 +153,13 @@ public class JoyParameterFactory {
             racine = doc.getRootElement();
             
             Joy.SYSTEM_LOG("Get the fixed Joy framework parameters");
+            
             // Get the Joy mandatory PARAMETERS
             defaultURLPattern = racine.getChildText(C.PARAMETERS_TAG_URLPATTERN);
             Joy.SYSTEM_LOG("Default URL pattern: " + defaultURLPattern);
+            
+            noLogin =  racine.getChildText(C.PARAMETERS_NO_LOGIN).equalsIgnoreCase(C.YES);
+            Joy.SYSTEM_LOG("No login: " + racine.getChildText(C.PARAMETERS_NO_LOGIN));
             
             bundledMessageFile = racine.getChildText(C.PARAMETERS_TAG_BUNDLEMSG);
             Joy.SYSTEM_LOG("Bundled files: " + bundledMessageFile);

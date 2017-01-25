@@ -19,6 +19,7 @@ package com.joy.taglibs.action;
 import com.joy.C;
 import com.joy.mvc.Action;
 import java.io.IOException;
+import java.util.Objects;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -38,7 +39,49 @@ public class ActionInputTextTag extends SimpleTagSupport {
     private int maxlength;
     private String ariadescribedby;
     private String placeholder;
+    private String glypheicon;  // Glyphe to display before the input box
+    private String freetagasis;
 
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 29 * hash + Objects.hashCode(this.freetagasis);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ActionInputTextTag other = (ActionInputTextTag) obj;
+        return true;
+    }
+
+    public String getFreetagasis() {
+        return freetagasis;
+    }
+
+    public void setFreetagasis(String freetagasis) {
+        this.freetagasis = freetagasis;
+    }
+    
+    
+    
+    public String getGlypheicon() {
+        return glypheicon;
+    }
+
+    public void setGlypheicon(String glypheicon) {
+        this.glypheicon = glypheicon;
+    }
+    
     public String getAriadescribedby() {
         return ariadescribedby;
     }
@@ -134,10 +177,16 @@ public class ActionInputTextTag extends SimpleTagSupport {
         if (actionform != null) {
             if (!readonly) {
                 String value = "";
-                retText = "<INPUT type='text' ";
+                retText  = "<DIV class='form-group'>";
+                if (this.glypheicon != null) {
+                    retText += "<DIV class='input-group'>";
+                    retText += "<SPAN class='input-group-addon'><SPAN class='glyphicon " + this.glypheicon + "' aria-hidden='true'></SPAN></SPAN>";
+                }
+                retText += "<INPUT type='text' ";
+                if (this.freetagasis != null) {
+                    retText += " " + this.freetagasis + " "; 
+                }
                 retText += " name='" + this.name + "' "; 
-                //if (this.readonly)
-                //    retText += " readonly='readonly' ";
                 if (this.size > 0)
                     retText += " size='" + String.valueOf(this.size) + "' ";
                 try {
@@ -157,6 +206,10 @@ public class ActionInputTextTag extends SimpleTagSupport {
                 if (!this.placeholder.isEmpty())
                     retText += " placeholder='" + this.placeholder + "' "; 
                 retText += " />";
+                if (this.glypheicon != null) 
+                    retText += "</DIV>";
+                retText += "<DIV class=\"help-block with-errors\"></DIV>";
+                retText += "</DIV>";
                 
             } else {
                 retText += "<INPUT type='hidden' ";

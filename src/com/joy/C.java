@@ -67,7 +67,6 @@ public class C {
     public static final String ACTION_ERROR = "ERROR";
     public static final int EXEC_SUCCESS = 1;
     public static final int EXEC_ERROR = 0;  
-    public static final String JOY_ANONYMOUS_LOGIN = "Anonymous";
     // ActionsTypes list pour form
     public static final String ATYPE_FORM_EDIT = "EDIT";
     public static final String ATYPE_FORM_ADD = "ADD";
@@ -140,6 +139,7 @@ public class C {
     public static final String PARAMETERS_SP_ATTR_NAME = "name";
     public static final String PARAMETERS_SP_ATTR_LIST = "list";
     public static final String PARAMETERS_SP_PARAMVAL = "app_parameter-value";
+    public static final String PARAMETERS_NO_LOGIN = "no-login";
     
     ////////
     // Tags

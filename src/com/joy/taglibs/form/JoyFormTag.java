@@ -71,7 +71,7 @@ public class JoyFormTag extends TagSupport  {
     public int doStartTag() throws JspException {
         try {
             JspWriter out =pageContext.getOut();
-            out.println("<FORM " + (inline?"class='form-inline'" : "") + " role='form' method='POST' action='" + Joy.PARAMETERS().getJoyDefaultActionName() + "' name='" + name + "' id='" + (id==null ? name : id) + "'>");
+            out.println("<FORM data-toggle='validator' " + (inline?"class='form-inline'" : "") + " role='form' method='POST' action='" + Joy.PARAMETERS().getJoyDefaultActionName() + "' name='" + name + "' id='" + (id==null ? name : id) + "'>");
             if (actiontype != null)
                 out.println("<INPUT type='hidden' name='" + C.ACTION_TYPE_TAG + "' id='" + C.ACTION_TYPE_TAG + "' value='" + actiontype + "' />");
             out.println("<INPUT type='hidden' name='" + C.ACTION_TAG_OBJECT + "' id='" + C.ACTION_TAG_OBJECT + "' value='" + object + "' />" );

@@ -74,31 +74,31 @@ public class ActionConfiguration {
         
         result = new ActionRequest();
         
-        if (_object.equalsIgnoreCase("login")) {
+        if (_object.equalsIgnoreCase(C.ACTION_TAG_OBJECTTYPE_LOGIN)) {
             
             // Login management into tag <loginRequest>
             Element levelLogin = xmlRoot.getChild("loginRequest");
             if (levelLogin != null) {
-                result.setObject("login");
-                result.setObjectType("login");
+                result.setObject(C.ACTION_TAG_OBJECTTYPE_LOGIN);
+                result.setObjectType(C.ACTION_TAG_OBJECTTYPE_LOGIN);
                 result.setJavaclass(getElementText(levelLogin, C.ACTION_TAG_ACTION));
-                result.setFlowType("login");
+                result.setFlowType(C.ACTION_TAG_OBJECTTYPE_LOGIN);
                 // add the Request redirection
                 Element requestTag = levelLogin.getChild("request");
                 ActionRedirect redirReq = new ActionRedirect();
-                redirReq.setTag("REQUEST");
+                redirReq.setTag(C.ACTION_TAG_LOGIN_REQUEST);
                 redirReq.setUrl(requestTag.getText());
                 result.addRedirection(redirReq);
                 // add the Success redirection
                 Element successTag = levelLogin.getChild("afterlogin");
                 ActionRedirect successobj = new ActionRedirect();
-                successobj.setTag("AFTERLOGIN");
+                successobj.setTag(C.ACTION_TAG_LOGIN_AFTERLOGIN);
                 successobj.setUrl(successTag.getText());
                 result.addRedirection(successobj);
                 // add the Request redirection
                 Element failTag = levelLogin.getChild("afterlogout");
                 ActionRedirect failobj = new ActionRedirect();
-                failobj.setTag("AFTERLOGOUT");
+                failobj.setTag(C.ACTION_TAG_LOGIN_AFTERLOGOUT);
                 failobj.setUrl(failTag.getText());
                 result.addRedirection(failobj);
  

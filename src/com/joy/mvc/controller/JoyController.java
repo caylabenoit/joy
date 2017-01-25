@@ -109,6 +109,7 @@ public class JoyController extends HttpServlet {
         
         String redirect = C.PAGE_404;
         ControllerConfiguration joySrvCfg = null;
+        boolean loginRedir;
         
         try {
             joySrvCfg = checkInit(request.getServletContext());
@@ -117,60 +118,65 @@ public class JoyController extends HttpServlet {
             
             ActionRequest req = joySrvCfg.getActionConfig().getActionRequest(getAttributeOrParameter(request, C.ACTION_TAG_OBJECT));
 
-            Joy.LOG().debug("HTTP Session management");
             // Session management
             HttpSession mySession = request.getSession();
-            if (mySession.isNew()) {
-                Joy.LOG().debug("This session has never been initialized, Configure a new session");
-                mySession = request.getSession();
-                mySession.setMaxInactiveInterval(Joy.PARAMETERS().getSessionItemout()*60);
-                mySession.setAttribute("Anonymous", "true");
-            } else 
-                Joy.LOG().debug("Session Already configured");
-
+            //if (mySession.isNew() && !req.getObjectType().equalsIgnoreCase(C.ACTION_TAG_OBJECTTYPE_LOGIN)) {
+            if (!Joy.PARAMETERS().isNoLogin()) {
+                if (mySession.getAttribute("JOY_SESSION") == null && !req.getObjectType().equalsIgnoreCase(C.ACTION_TAG_OBJECTTYPE_LOGIN)) {
+                    Joy.LOG().debug("This session has never been initialized. Redirect automatically to login page");
+                    // redirects to login page
+                    redirect = joySrvCfg.getActionConfig().getActionRequest(C.ACTION_TAG_OBJECTTYPE_LOGIN).getRedirectFromTag(C.ACTION_TAG_LOGIN_REQUEST).getUrl();
+                    loginRedir = true;
+                } else
+                    loginRedir = false;
+            } else
+                loginRedir = false;
+            
             // Request management (depending of the object type)
             Joy.LOG().debug("Request=" + request.getQueryString());
-            if (req.getIsInitialized()) {
-                String objectType = req.getObjectType();
+            if (!loginRedir) {
+                if (req.getIsInitialized()) {
+                    String objectType = req.getObjectType();
 
-                switch (objectType) {
-                    //////////////////////////////////////////////////////////////////////////////////////////
-                    case C.ACTION_TAG_OBJECTTYPE_LOGIN:
-                        // http://localhost:18180/GovManagementTool/action?object=login --> redirect to login page
-                        // http://localhost:18180/GovManagementTool/action?object=login/actiontype=connect --> Validate credentials
-                        redirect = manageLoginRequest(mySession, request, req);
-                        break;
-                        
-                    //////////////////////////////////////////////////////////////////////////////////////////
-                    case C.ACTION_TAG_OBJECTTYPE_REST: 
-                        // http://localhost:18180/GovManagementTool/action?object=[tag] / objecttype=rest
-                        // http://localhost:18180/GovManagementTool/rest/[tag]/P1/P2/P3/...
-                        manageRESTRequest(mySession, request, response, req, joySrvCfg);
-                        joySrvCfg.getEntities().End();
-                        return;
+                    switch (objectType) {
+                        //////////////////////////////////////////////////////////////////////////////////////////
+                        case C.ACTION_TAG_OBJECTTYPE_LOGIN:
+                            // http://localhost:18180/GovManagementTool/action?object=login --> redirect to login page
+                            // http://localhost:18180/GovManagementTool/action?object=login/actiontype=connect --> Validate credentials
+                            redirect = manageLoginRequest(mySession, request, req);
+                            break;
 
-                    //////////////////////////////////////////////////////////////////////////////////////////
-                    case C.ACTION_TAG_OBJECTTYPE_TASK: 
-                        // http://localhost:18180/GovManagementTool/action?object=[tag] / objecttype=task
-                        // http://localhost:18180/GovManagementTool/task/[tag]/P1/P2/P3/...
-                        manageTASKRequest(mySession, request, response, req, joySrvCfg);
-                        //joySrvCfg.getBOFactory().End();
-                        return;
-                        
-                    //////////////////////////////////////////////////////////////////////////////////////////
-                    case C.ACTION_TAG_OBJECTTYPE_FORM: 
-                        // http://localhost:18180/GovManagementTool/action?object=[tag] / objecttype=form
-                        redirect = manageFormRequest(mySession, request, req, joySrvCfg);
-                        break;
-                        
-                    default:
-                        redirect = C.PAGE_404;
-                        break;
+                        //////////////////////////////////////////////////////////////////////////////////////////
+                        case C.ACTION_TAG_OBJECTTYPE_REST: 
+                            // http://localhost:18180/GovManagementTool/action?object=[tag] / objecttype=rest
+                            // http://localhost:18180/GovManagementTool/rest/[tag]/P1/P2/P3/...
+                            manageRESTRequest(mySession, request, response, req, joySrvCfg);
+                            joySrvCfg.getEntities().End();
+                            return;
+
+                        //////////////////////////////////////////////////////////////////////////////////////////
+                        case C.ACTION_TAG_OBJECTTYPE_TASK: 
+                            // http://localhost:18180/GovManagementTool/action?object=[tag] / objecttype=task
+                            // http://localhost:18180/GovManagementTool/task/[tag]/P1/P2/P3/...
+                            manageTASKRequest(mySession, request, response, req, joySrvCfg);
+                            //joySrvCfg.getBOFactory().End();
+                            return;
+
+                        //////////////////////////////////////////////////////////////////////////////////////////
+                        case C.ACTION_TAG_OBJECTTYPE_FORM: 
+                            // http://localhost:18180/GovManagementTool/action?object=[tag] / objecttype=form
+                            redirect = manageFormRequest(mySession, request, req, joySrvCfg);
+                            break;
+
+                        default:
+                            redirect = C.PAGE_404;
+                            break;
+                    }
+
+                } else { 
+                    // http://localhost:18180/GovManagementTool/action?object=[tag]
+                    redirect = manageRedirectionOnlyRequest(mySession, request, req, joySrvCfg);
                 }
-                    
-            } else { 
-                // http://localhost:18180/GovManagementTool/action?object=[tag]
-                redirect = manageRedirectionOnlyRequest(mySession, request, req, joySrvCfg);
             }
             Joy.LOG().debug( "URL redirection> " + redirect);
             
@@ -180,7 +186,7 @@ public class JoyController extends HttpServlet {
             } catch (Exception e) {
                 Joy.SYSTEM_LOG( "Exception=" + ex);
             }
-        } 
+        }
         
         if (redirect.isEmpty())
             redirect = C.PAGE_ERROR;
@@ -239,7 +245,7 @@ public class JoyController extends HttpServlet {
                 Joy.LOG().debug("Login requested");
                 redirectTag = actionLogin.login();
                 if (redirectTag.equalsIgnoreCase(C.ACTION_SUCCESS)) 
-                    mySession.setAttribute(C.JOY_ANONYMOUS_LOGIN, "false");
+                    mySession.setAttribute("JOY_SESSION", "yes");
                 redirectTag = C.ACTION_TAG_LOGIN_AFTERLOGIN;
 
             } else if (loginType.equalsIgnoreCase(C.ATYPE_LOGOUT)) { // effective logout
@@ -248,7 +254,6 @@ public class JoyController extends HttpServlet {
                 if (redirectTag.equalsIgnoreCase(C.ACTION_SUCCESS)) {
                     // remove all session attributes
                     removeAllSessionAttributes(mySession);
-                    mySession.setAttribute(C.JOY_ANONYMOUS_LOGIN, "true");
                 }
                 redirectTag = C.ACTION_TAG_LOGIN_AFTERLOGOUT;
 

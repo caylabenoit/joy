@@ -144,6 +144,7 @@ public class JoyFormButtonTag extends SimpleTagSupport {
         
         if (submit) {
             // do nothing, default behavior :-)
+            strButtonTag += " type='submit' ";
         } else if (cancel) {
             strButtonTag += " type='button' ";
             strButtonTag += " type='Reset' ";
