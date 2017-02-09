@@ -196,4 +196,8 @@ public class C {
     
     // Nothing in Dynatree
     public static final String JSON_EMPTY = "{\"title\": \"Nothing\"}";
+    
+    public static final String RESTFUL_NOT_FOUND = "JOY_RESTFUL_NOT_FOUND";
+    public static final String RESTFUL_ALREADY_EXIST = "JOY_RESTFUL_ALREADY_EXIST";
+    public static final String RESTFUL_NO_CONTENT = "JOY_RESTFUL_NO_CONTENT";
 }

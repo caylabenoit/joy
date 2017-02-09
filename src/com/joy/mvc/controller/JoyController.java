@@ -19,6 +19,7 @@ package com.joy.mvc.controller;
 import com.joy.mvc.actionTypes.ActionTypeREST;
 import com.joy.mvc.actionTypes.ActionTypeForm;
 import com.joy.C;
+import static com.joy.C.*;
 import com.joy.Joy;
 import com.joy.bo.BOFactory;
 import com.joy.mvc.Action;
@@ -36,6 +37,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import static javax.servlet.http.HttpServletResponse.*;
 import javax.servlet.http.HttpSession;
 
 /*
@@ -309,12 +311,46 @@ public class JoyController extends HttpServlet {
                                    ActionRequest req,
                                    ControllerConfiguration joySrvConfig) {
         try {
+            // https://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/http/HttpServletResponse.html
+            String resultREST = "";
             Joy.LOG().debug("REST action requested");
             ActionTypeREST actionRestObject = (ActionTypeREST) Class.forName(req.getJavaclass()).newInstance();
             actionRestObject.init(mySession, request);
             actionRestObject.setEntities(joySrvConfig.getEntities());
-            String resultREST = actionRestObject.restGet();
-            
+            switch (request.getMethod()) {
+                case "PUT": // Update-Replace
+                    resultREST = actionRestObject.restPut(); 
+                    response.setStatus(SC_OK);
+                    if (resultREST.equalsIgnoreCase(RESTFUL_NOT_FOUND))
+                        response.setStatus(SC_NOT_FOUND);
+                    else if (resultREST.equalsIgnoreCase(RESTFUL_NO_CONTENT))
+                        response.setStatus(SC_NO_CONTENT);
+                    break;
+                    
+                case "DELETE": // Delete
+                    resultREST = actionRestObject.restDelete(); 
+                    response.setStatus(SC_OK);
+                    if (resultREST.equalsIgnoreCase(RESTFUL_NOT_FOUND))
+                        response.setStatus(SC_NOT_FOUND);
+                    break;
+                    
+                case "POST": // Create
+                    resultREST = actionRestObject.restPost(); 
+                    response.setStatus(SC_OK);
+                    if (resultREST.equalsIgnoreCase(RESTFUL_NOT_FOUND))
+                        response.setStatus(SC_NOT_FOUND);
+                    else if (resultREST.equalsIgnoreCase(RESTFUL_ALREADY_EXIST))
+                        response.setStatus(SC_CONFLICT);
+                    break;
+                    
+                case "GET": // Get-read default
+                default:
+                    resultREST = actionRestObject.restGet();
+                    response.setStatus(SC_OK);
+                    if (resultREST.equalsIgnoreCase(RESTFUL_NOT_FOUND))
+                        response.setStatus(SC_NOT_FOUND);
+            }
+
             if (req.getFlowType().equalsIgnoreCase(C.FLOWTYPE_FILE)) {
                 // Force a file download
                 response.setContentType ("unknown/unknown");
