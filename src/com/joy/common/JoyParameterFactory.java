@@ -20,6 +20,8 @@ import com.joy.C;
 import com.joy.Joy;
 import com.joy.common.JoyParameter.ParameterType;
 import com.joy.etl.MappingSignature;
+import com.joy.json.JSONArray;
+import com.joy.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -250,5 +252,24 @@ public class JoyParameterFactory {
             Joy.SYSTEM_LOG( "ERROR : Exception=" + ex);
         }
         return initialized;
+    }
+
+    public JSONObject getJson() {
+        JSONObject paramsObj = new JSONObject();
+        
+        // fixed & mandatory parameters
+        paramsObj.put("appname", this.getApplicationName());
+        paramsObj.put("country", this.getDefaultLocalCountry());
+        paramsObj.put("lang", this.getDefaultLocalLanguage());
+        paramsObj.put("dateformat", this.getJoyDefaultDateFormat());
+        paramsObj.put("urlpatterm", this.getJoyDefaultURLPattern());
+        paramsObj.put("version", this.getVersion());
+        
+        // Other parameters
+        for (JoyParameter param : this.applicationParameters) {
+            paramsObj.put(param.getName(), param.getValue());
+        }
+ 
+        return paramsObj;
     }
 }

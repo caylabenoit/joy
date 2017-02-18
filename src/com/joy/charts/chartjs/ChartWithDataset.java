@@ -17,6 +17,8 @@
 package com.joy.charts.chartjs;
 
 import com.joy.common.JoyParameter;
+import com.joy.json.JSONArray;
+import com.joy.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,14 +46,14 @@ public class ChartWithDataset {
     } 
     
     public ChartWithDataset() {
-        points = new ArrayList();
+        points = (List<ChartDatasetPoint>)new ArrayList();
         oneColorByValue = false;
-        colors = new ArrayList();
+        colors = (List<JoyParameter>)new ArrayList();
         transparency = "1";
     }
     
     public ChartWithDataset(List<JoyParameter> _Colors, String _transparency) {
-        points = new ArrayList();
+        points = (List<ChartDatasetPoint>)new ArrayList();
         oneColorByValue = false;
         transparency = _transparency;
         colors = _Colors;
@@ -97,7 +99,7 @@ public class ChartWithDataset {
      * @return 
      */
     private List<String> getDatasets() {
-        List<String> labelsUndup = new ArrayList();
+        List<String> labelsUndup = (List<String>)new ArrayList();
         
         for (ChartDatasetPoint point : points) {
             // add unique values in datasets list
@@ -105,15 +107,6 @@ public class ChartWithDataset {
                 labelsUndup.add(point.getDataset());
         }
         return labelsUndup;
-    }
-    
-    private String getJsonFromList(List<String> labelsUndup) {
-        String result = "";
-        for (String label : labelsUndup) {
-            // returns the label string list
-            result += "\"" + label + "\",";
-        }
-        return "[" + result.substring(0, result.length() - 1) + "]";
     }
     
     /**
@@ -131,69 +124,55 @@ public class ChartWithDataset {
     }
     
     /**
-     * Buils the values with the matching labels for the dataset
-     * @param dataset
-     * @param labels
-     * @return 
+     * Returns the JSON data for displayin with chart.js
+     * @return JSON data
      */
-    private String getValues(String dataset, List<Float> values) {
-        String result = "";
+    public JSONObject getJsonData() {
+        JSONObject finalJson = new JSONObject();
         
-        for (Float val : values) {
-            result += String.valueOf(val) + ",";
-        }
-        return "[" + result.substring(0, result.length() - 1) + "]";
-    }
-
-    private String getColorByValues(List<Float> values) {
-        String result = "";
-
-        for (int i=0; i < values.size(); i++) {
-            result += "\"" + getRGBA(i) + "\",";
-        }
-        return "[" + result.substring(0, result.length() - 1) + "]";
-    }
-    
-    /**
-     * returns the data configuration
-     * @return 
-     */
-    public String getChartData() {
-        String result = "";
+        // Labels first
         List<String> labels = this.getLabels();
+        JSONArray labelList = new JSONArray();
+        for (String label : labels) {
+            labelList.put(label);
+        }
+        finalJson.put("labels", labelList);
+        
+        // datasets then
         List<String> datasets = this.getDatasets();
-        result = "{";
-        
-        if (this.isEmpty())
-            return "{}";
-        
-        // add the labels first :
-        result += "\"labels\" : " + getJsonFromList(labels) + ",";
-
-        // add the datasets afterwards
-        result += "\"datasets\" : [";
+        JSONArray jsonDatasets = new JSONArray();
         int i = 0;
         for (String dataset : datasets) {
-            List<Float> values = new ArrayList();
+            JSONObject datasetJson = new JSONObject();
+            List<Float> values = (List<Float>)new ArrayList();
             for (String label : labels) { // go through labels
                 values.add(getValue(dataset, label));
             }
-            if (i>0) result += ",";
-            result += "{";
-            result += "\"label\" : \"" + dataset + "\", ";
-            if (oneColorByValue || datasets.size() == 1)
-                result += "\"backgroundColor\" : " + this.getColorByValues(values) + ", ";
-            else    
-                result += "\"backgroundColor\" : \"" + getRGBA(i) + "\", ";
-            result += "\"data\" : " + getValues(dataset, values);
-            result += "}";
+            datasetJson.put("label", dataset);
+            if (oneColorByValue || datasets.size() == 1) {
+                JSONArray colorList = new JSONArray();
+                for (int j=0; j < values.size(); j++) {
+                    colorList.put(getRGBA(j));
+                }
+                datasetJson.put("backgroundColor", colorList);
+            } else  
+                datasetJson.put("backgroundColor", this.getRGBA(i));
+            jsonDatasets.put(datasetJson);
+            
+            JSONArray valuesList = new JSONArray();
+            for (Float value : values) {
+                valuesList.put(String.valueOf(value));
+            }
+            datasetJson.put("data", valuesList);
+            
             i++;
         }
-        result += "]";
-        result += "}";
-        return result;
+        finalJson.put("datasets", jsonDatasets);
+        
+        return finalJson;
     }
     
+ 
     /**
      * Return the RGBA color code for javascript
      * Needed : parameter transparency value and ChartsColors list

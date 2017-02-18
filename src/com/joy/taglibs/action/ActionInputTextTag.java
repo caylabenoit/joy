@@ -41,7 +41,16 @@ public class ActionInputTextTag extends SimpleTagSupport {
     private String placeholder;
     private String glypheicon;  // Glyphe to display before the input box
     private String freetagasis;
+    private String dataerror;
 
+    public String getDataerror() {
+        return dataerror;
+    }
+
+    public void setDataerror(String dataerror) {
+        this.dataerror = dataerror;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 3;
@@ -123,6 +132,7 @@ public class ActionInputTextTag extends SimpleTagSupport {
         this.required="no";
         this.ariadescribedby = "";
         this.placeholder = "";
+        this.dataerror = "";
     }
 
     public String getName() {
@@ -205,6 +215,9 @@ public class ActionInputTextTag extends SimpleTagSupport {
                     retText += " aria-describedby='" + this.ariadescribedby + "' "; 
                 if (!this.placeholder.isEmpty())
                     retText += " placeholder='" + this.placeholder + "' "; 
+                if (!this.dataerror.isEmpty())
+                    retText += " data-error='" + this.dataerror + "' "; 
+                
                 retText += " />";
                 if (this.glypheicon != null) 
                     retText += "</DIV>";
