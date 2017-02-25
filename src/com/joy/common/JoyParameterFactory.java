@@ -262,7 +262,7 @@ public class JoyParameterFactory {
         paramsObj.put("country", this.getDefaultLocalCountry());
         paramsObj.put("lang", this.getDefaultLocalLanguage());
         paramsObj.put("dateformat", this.getJoyDefaultDateFormat());
-        paramsObj.put("urlpatterm", this.getJoyDefaultURLPattern());
+        paramsObj.put("urlpattern", this.getJoyDefaultURLPattern());
         paramsObj.put("version", this.getVersion());
         
         // Other parameters

@@ -32,7 +32,6 @@ public class JoyFormVectorEntry extends JoyFormCommonInputs {
         selected = "";
         this.setInputType(JoyFormInputTypes.Vector);
     }
-
     
     public String getSelected() {
         return selected;

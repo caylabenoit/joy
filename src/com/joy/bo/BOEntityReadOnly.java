@@ -335,10 +335,10 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
                     Object val = rs.getObject(colName);
                     if (val == null) 
                         val = "";
-                    JSONObject column = new JSONObject();
+                    /*JSONObject column = new JSONObject();
                     column.put("name", colName);
-                    column.put("value", val.toString());
-                    columns.add(column);
+                    column.put("value", val.toString()); */
+                    columns.add(Joy.GET_JSON_VALUESET(colName, val.toString()));
                     
                     if (!firstpass) {
                         JSONObject columnName = new JSONObject();

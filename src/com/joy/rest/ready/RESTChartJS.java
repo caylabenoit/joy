@@ -14,27 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.joy.mvc.ready;
+package com.joy.rest.ready;
 
 import com.joy.Joy;
 import com.joy.charts.chartjs.ChartWithDataset;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import com.joy.bo.IEntity;
-import com.joy.mvc.utils.RESTEntityCommon;
+import com.joy.rest.utils.RESTEntityCommon;
 
 /**
- *
+ * Usage :
+ *  [URL]/charts/[SDS|MDS]/[ENTITYT NAME]/[PARAM NAME 1]/[PARAM VALUE 1]/...
  * @author Benoit CAYLA (benoit@famillecayla.fr)
- * P1: type de chart (polar, bar, line, donut, pie)
- * P2: nom de la query
- * P3 ... PX : parametres de la query --> par paire : (NOM Colonne, valeur colonne)
- 
- Pour polar (SQL)
-  field 1 : libellé (string)
-  field 2 : valeur (numérique)
+ * P1: Chart type
+ *   SDS for One dataset only
+ *   MDS for many datasets
+ * P2: Entity name
+ * P3 ... PX : Query parameters --> par pair : (Name, Value)
+ *
+ * Entity must return these columns/fields (in the good order) :
+ * For SDS query 
+ *      Entity field 1 : Label (string)
+ *      Entity field 2 : Value (Must be numerical)
+ * For MDS query 
+ *      Entity field 1 : label
+ *      Entity field 2 : dataset
+ *      Entity field 3 : value (numeric)
  */
-public class RESTChart extends RESTEntityCommon {
+public class RESTChartJS extends RESTEntityCommon {
 
     @Override
     public String restGet() {
@@ -51,11 +59,11 @@ public class RESTChart extends RESTEntityCommon {
     /**
      * Return the data for multiple datasets request
      * P2 contains the Query reference (entity)
-     * SQL query must return 3 columns :
-     *  Col 1 : label
-     *  Col 2 : dataset
-     *  Col 3 : value (numeric)
-     * @return 
+     * SQL query must have these 3 columns/fields :
+     *      Col 1 : label
+     *      Col 2 : dataset
+     *      Col 3 : value (numeric)
+     * @return JSON for chart.js
      */
     private String getMultipleDatasetsData() {
         try {
@@ -86,7 +94,7 @@ public class RESTChart extends RESTEntityCommon {
      * SQL query must return 2 columns :
      *  Col 1 : label
      *  Col 2 : Value (numeric)
-     * @return 
+     * @return JSON for chart.js
      */
     private String getSingleDatasetData() {
         if (this.getStrArgumentValue("P2").isEmpty())

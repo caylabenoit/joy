@@ -14,29 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.joy.mvc.ready;
+package com.joy.rest.ready;
 
-import com.joy.mvc.utils.RESTEntityCommon;
-import com.joy.C;
 import com.joy.Joy;
+import com.joy.mvc.actionTypes.ActionTypeREST;
 
 /**
- * search terms with criterias
- * call with ./rest/entity/[Entity]/[criteria 1]/[Value 1]/[criteria 2]/[Value 2]
- *           Example : http://localhost:18080/dgm/rest/entity/[ENTITY NAME]/[PARAM NAME 1]/[PARAM VALUE 1]
+ * Returns a JSON with all the tasks
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-
-public class RESTEntity extends RESTEntityCommon {
+public class RESTTasksList extends ActionTypeREST {
 
     @Override
     public String restGet() {
-        String myEntity = this.getStrArgumentValue("P1");
+        int limit = 0;
         try {
-            return this.getFilteredEntity(myEntity.toUpperCase(), 2).exp().toString();
+            limit = this.getIntArgumentValue("P1");
+        } catch (Exception e) {}
+        
+        try {
+            return Joy.TASKS().getJSONTasksDesc(limit); 
         } catch (Exception e) {
-            Joy.LOG().error(e);
-            return C.JSON_EMPTY;
+            Joy.LOG().fatal(e);
+            return "";
         }
     }
     

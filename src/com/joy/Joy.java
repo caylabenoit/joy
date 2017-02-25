@@ -19,6 +19,7 @@ package com.joy;
 import com.joy.bo.BOFactory;
 import com.joy.common.JoyParameterFactory;
 import com.joy.common.JoyReadStream;
+import com.joy.json.JSONObject;
 import com.joy.log.JoyLogInternalProvider;
 import com.joy.mvc.Action;
 import com.joy.providers.JoyConfigfileProvider;
@@ -480,5 +481,18 @@ public class Joy {
             }
         }
         return "";
+    }
+    
+    /**
+     * Return a JSON valueset in the Joy standard format
+     * @param label field label
+     * @param value field value
+     * @return JSON Object
+     */
+    public static JSONObject GET_JSON_VALUESET(String label, Object value) {
+        JSONObject column = new JSONObject();
+        column.put("name", label);
+        column.put("value", value);
+        return column;
     }
 }

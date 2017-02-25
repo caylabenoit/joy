@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.joy.mvc.utils;
+package com.joy.rest.utils;
 
 import com.joy.Joy;
 import com.joy.bo.BOFieldType;
