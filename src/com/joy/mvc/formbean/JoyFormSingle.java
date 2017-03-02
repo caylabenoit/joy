@@ -20,26 +20,26 @@ package com.joy.mvc.formbean;
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class JoyFormSingleEntry extends JoyFormCommonInputs {
+public class JoyFormSingle extends JoyFormCommonInputs {
     private Object value;
 
-    JoyFormSingleEntry() {
+    JoyFormSingle() {
         value = "";
     }
 
-    public JoyFormSingleEntry(String Name, String Value) {
+    public JoyFormSingle(String Name, String Value) {
         super(Name, JoyFormInputTypes.Single);
         this.setID(Value);
         this.setValue(Value);
     }
     
-    public JoyFormSingleEntry(String Name, Object Value) {
+    public JoyFormSingle(String Name, Object Value) {
         super(Name, JoyFormInputTypes.Single);
         this.setID(Name);
         this.setValue(Value);
     }
     
-    public JoyFormSingleEntry(String Name, String ID, Object Value) {
+    public JoyFormSingle(String Name, String ID, Object Value) {
         super(Name, JoyFormInputTypes.Single);
         this.setID(ID);
         this.setValue(Value);

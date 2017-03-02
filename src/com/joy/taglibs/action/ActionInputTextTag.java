@@ -18,6 +18,7 @@ package com.joy.taglibs.action;
 
 import com.joy.C;
 import com.joy.mvc.Action;
+import com.joy.mvc.ActionForm;
 import java.io.IOException;
 import java.util.Objects;
 import javax.servlet.jsp.JspContext;
@@ -182,7 +183,7 @@ public class ActionInputTextTag extends SimpleTagSupport {
         String retText = "";
         
         // Get the Action object
-        Action actionform = (Action)jsp.findAttribute(C.ACTION_FORM_BEAN);
+        ActionForm actionform = (ActionForm)jsp.findAttribute(C.ACTION_FORM_BEAN);
         
         if (actionform != null) {
             if (!readonly) {
@@ -200,7 +201,7 @@ public class ActionInputTextTag extends SimpleTagSupport {
                 if (this.size > 0)
                     retText += " size='" + String.valueOf(this.size) + "' ";
                 try {
-                    value = actionform.getFormSingleEntry(this.name).getStrValue();
+                    value = actionform.getSingle(this.name).getStrValue();
                 } catch (Exception e) {}
                 retText += " value=\"" + value + "\" "; 
                 if (!cssClass.isEmpty())
@@ -227,8 +228,8 @@ public class ActionInputTextTag extends SimpleTagSupport {
             } else {
                 retText += "<INPUT type='hidden' ";
                 retText += " name='" + this.name + "' ";
-                retText += " value='" + actionform.getFormSingleEntry(this.name).getStrValue() + "' />"; 
-                retText += "<SPAN class='input_readonly'>" + actionform.getFormSingleEntry(this.name).getStrValue() + "</SPAN>";
+                retText += " value='" + actionform.getSingle(this.name).getStrValue() + "' />"; 
+                retText += "<SPAN class='input_readonly'>" + actionform.getSingle(this.name).getStrValue() + "</SPAN>";
             }
         }
         out.println(retText);

@@ -16,8 +16,33 @@
  */
 package com.joy.mvc.restbean;
 
+/* Vector Format example
+{
+  "vector": [
+    {
+      "name": "TERM_TYPE_LIST",
+      "value": {
+        "itemcount": 6,
+        "items": [
+          {
+            "name": "0",
+            "value": "Unknown"
+          },
+          {
+            "name": "5"
+            "value": "Unknown"
+          },
+          ...
+        ]
+      }
+    }
+  ]
+}
+*/
+
 import com.joy.Joy;
 import com.joy.json.JSONArray;
+import com.joy.json.JSONException;
 import com.joy.json.JSONObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,11 +53,9 @@ import java.sql.SQLException;
  */
 public class JoyJsonVector {
     private JSONArray items;
-    private String selected;
 
     public JoyJsonVector() {
         items = new JSONArray();
-        selected = "";
     }
 
     public JSONArray getItems() {
@@ -41,14 +64,6 @@ public class JoyJsonVector {
 
     public void setItems(JSONArray items) {
         this.items = items;
-    }
-
-    public String getSelected() {
-        return selected;
-    }
-
-    public void setSelected(String selected) {
-        this.selected = selected;
     }
     
     public void addItem(JoyJsonSingle obj) {
@@ -62,12 +77,11 @@ public class JoyJsonVector {
     public JSONObject getData() {
         try {
             JSONObject finalObj = new JSONObject();
-            finalObj.put("selected", selected);
-            finalObj.put("count", items.length());
-            finalObj.put("list", items);
+            finalObj.put("itemcount", items.length());
+            finalObj.put("items", items);
             return finalObj;
             
-        } catch (Exception e) {
+        } catch (JSONException e) {
             return null;
         }
     }
@@ -77,16 +91,14 @@ public class JoyJsonVector {
      * @param rs            resultset
      * @param fieldKey      field value 
      * @param fieldLabel    field name
-     * @param selected      field value selected
      */
-    public void loadFromResultSet(ResultSet rs, String fieldKey, String fieldLabel, String selected) {
+    public void loadFromResultSet(ResultSet rs, String fieldKey, String fieldLabel) {
         try {
             // Builds the list of items
             while (rs.next()) {
                 JoyJsonSingle single = new JoyJsonSingle(rs.getString(fieldLabel), rs.getString(fieldKey));
                 this.addItem(single);
             }
-            this.selected = selected;
             
         } catch (SQLException e) {
             Joy.LOG().error(e);

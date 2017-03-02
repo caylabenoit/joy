@@ -23,11 +23,11 @@ import java.util.List;
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class JoyFormVectorEntry extends JoyFormCommonInputs {
-    private List<JoyFormSingleEntry> vector;
+public class JoyFormVector extends JoyFormCommonInputs {
+    private List<JoyFormSingle> vector;
     private String selected;
 
-    public JoyFormVectorEntry() {
+    public JoyFormVector() {
         vector = new ArrayList();
         selected = "";
         this.setInputType(JoyFormInputTypes.Vector);
@@ -41,12 +41,12 @@ public class JoyFormVectorEntry extends JoyFormCommonInputs {
         this.selected = Selected;
     }
     
-    public List<JoyFormSingleEntry> getVector() {
+    public List<JoyFormSingle> getVector() {
         return vector;
     }
     
     public Object getVectorObject(String Name) {
-        for (JoyFormSingleEntry val : this.vector) {
+        for (JoyFormSingle val : this.vector) {
             if (val.getName().equalsIgnoreCase(Name)) {
                 return val.getValue();
             }
@@ -55,7 +55,7 @@ public class JoyFormVectorEntry extends JoyFormCommonInputs {
     }
     
     public String getVectorValue(String Name) {
-        for (JoyFormSingleEntry val : this.vector) {
+        for (JoyFormSingle val : this.vector) {
             if (val.getName().equalsIgnoreCase(Name)) {
                 return val.getStrValue();
             }
@@ -64,7 +64,7 @@ public class JoyFormVectorEntry extends JoyFormCommonInputs {
     }
     
     public String getVectorID(String Name) {
-        for (JoyFormSingleEntry val : this.vector) {
+        for (JoyFormSingle val : this.vector) {
             if (val.getName().equalsIgnoreCase(Name)) {
                 return ((val.getID()==null ? val.getStrValue() : val.getID()));
             }
@@ -72,43 +72,43 @@ public class JoyFormVectorEntry extends JoyFormCommonInputs {
         return "";
     }
     
-    public void addValue(String Name, String Value) {
-        this.vector.add(new JoyFormSingleEntry(Name, Value));
+    public void addItem(String Name, String Value) {
+        this.vector.add(new JoyFormSingle(Name, Value));
     }
 
-    public void addValue(String Name, Object object) {
-        this.vector.add(new JoyFormSingleEntry(Name, object));
+    public void addItem(String Name, Object object) {
+        this.vector.add(new JoyFormSingle(Name, object));
     }
     
-    public void addValue(String Name, String ID, String Value) {
-        JoyFormSingleEntry val = new JoyFormSingleEntry( Name, Value);
+    public void addItem(String Name, String ID, String Value) {
+        JoyFormSingle val = new JoyFormSingle( Name, Value);
         val.setID(ID);
         this.vector.add(val);
     }
     
-    public void addValue(String Name, int Value) {
-        this.vector.add(new JoyFormSingleEntry(Name, String.valueOf(Value)));
+    public void addItem(String Name, int Value) {
+        this.vector.add(new JoyFormSingle(Name, String.valueOf(Value)));
     }
     
-    public void setVector(List<JoyFormSingleEntry> List) {
+    public void setVector(List<JoyFormSingle> List) {
         this.vector = List;
     }
 
-    public JoyFormVectorEntry(String Name, 
-                              List<JoyFormSingleEntry> Value) {
+    public JoyFormVector(String Name, 
+                              List<JoyFormSingle> Value) {
         super(Name, JoyFormInputTypes.Vector);
         this.setVector(Value);
         selected = "";
     }
     
-    public JoyFormVectorEntry(String Name) {
+    public JoyFormVector(String Name) {
         super(Name, JoyFormInputTypes.Vector);
         this.vector = new ArrayList();
         selected = "";
     }
     
-    public JoyFormVectorEntry(String Name, 
-                              List<JoyFormSingleEntry> Value,
+    public JoyFormVector(String Name, 
+                              List<JoyFormSingle> Value,
                               String SelectedValue) {
         super(Name, JoyFormInputTypes.Vector);
         this.setVector(Value);

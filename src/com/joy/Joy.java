@@ -492,7 +492,10 @@ public class Joy {
     public static JSONObject GET_JSON_VALUESET(String label, Object value) {
         JSONObject column = new JSONObject();
         column.put("name", label);
-        column.put("value", value);
+        if (value == null)
+            column.put("value", "<NULL>");
+        else
+            column.put("value", value);
         return column;
     }
 }

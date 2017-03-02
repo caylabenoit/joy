@@ -17,6 +17,7 @@
 package com.joy.mvc;
 
 import com.joy.Joy;
+import com.joy.bo.BOFactory;
 import com.joy.common.ActionLogReport;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,16 +34,23 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  * This class manage the treatment itself, its instance is got from the JSP page directly
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class Action extends ActionForm {
+public class Action  {
     private List m_DisplayMessages;       // List of messages to return
     private ActionLocaleMgnt m_localeBundle; 
     private String uri;
     private StringBuffer url;
     private List<FileItem> m_AttachedFiles;
     private HttpSession m_CurrentSession;
-    
     private HttpServletRequest m_CurrentRequest;
-    
+    private BOFactory m_Entities;
+
+    public BOFactory getBOFactory() {
+        return m_Entities;
+    }
+
+    public void setEntities(BOFactory m_Entities) {
+        this.m_Entities = m_Entities;
+    }
     public void endOfWork() {}
 
     public String getSessionAttr(String Name) {
@@ -113,6 +121,7 @@ public class Action extends ActionForm {
         super();
         this.m_DisplayMessages = new ArrayList();
         this.m_localeBundle = null;
+        this.m_Entities = null;
     }
     
     /**

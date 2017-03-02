@@ -18,6 +18,7 @@ package com.joy.taglibs.action;
 
 import com.joy.C;
 import com.joy.mvc.Action;
+import com.joy.mvc.ActionForm;
 import java.io.IOException;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
@@ -49,13 +50,13 @@ public class ActionHiddenTag extends SimpleTagSupport {
         String retText = "";
         
         // Get the Action object
-        Action actionform = (Action)jsp.findAttribute(C.ACTION_FORM_BEAN);
+        ActionForm actionform = (ActionForm)jsp.findAttribute(C.ACTION_FORM_BEAN);
         
         if (actionform != null) {
             retText = "<INPUT type='hidden' ";
             retText += " name='" + this.name + "' "; 
             retText += " id='" + this.name + "' "; 
-            retText += " value='" + actionform.getFormSingleEntry(this.name).getValue() + "' "; 
+            retText += " value='" + actionform.getSingle(this.name).getValue() + "' "; 
             retText += " >";
         }
         out.println(retText);

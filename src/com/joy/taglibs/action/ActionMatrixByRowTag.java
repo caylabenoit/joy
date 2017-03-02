@@ -18,7 +18,7 @@ package com.joy.taglibs.action;
 
 import com.joy.C;
 import com.joy.Joy;
-import com.joy.mvc.formbean.JoyFormVectorEntry;
+import com.joy.mvc.formbean.JoyFormVector;
 import java.io.IOException;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
@@ -53,7 +53,7 @@ public class ActionMatrixByRowTag extends SimpleTagSupport {
         JspWriter out =jsp.getOut();
         
         // get the Action object
-        JoyFormVectorEntry row = (JoyFormVectorEntry)jsp.getAttribute(C.JOTYAGLIB_ROWATTRIBUTE);
+        JoyFormVector row = (JoyFormVector)jsp.getAttribute(C.JOTYAGLIB_ROWATTRIBUTE);
         
         if (row != null) {
             String val = "";

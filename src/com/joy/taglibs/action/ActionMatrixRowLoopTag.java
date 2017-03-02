@@ -17,9 +17,9 @@
 package com.joy.taglibs.action;
 
 import com.joy.C;
-import com.joy.mvc.Action;
-import com.joy.mvc.formbean.JoyFormMatrixEntry;
-import com.joy.mvc.formbean.JoyFormVectorEntry;
+import com.joy.mvc.ActionForm;
+import com.joy.mvc.formbean.JoyFormMatrix;
+import com.joy.mvc.formbean.JoyFormVector;
 import java.io.IOException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -31,7 +31,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  */
 public class ActionMatrixRowLoopTag extends TagSupport  {
     private String name;
-    private JoyFormMatrixEntry matrix; 
+    private JoyFormMatrix matrix; 
     private int i;
     private boolean noRow;
 
@@ -50,7 +50,7 @@ public class ActionMatrixRowLoopTag extends TagSupport  {
 
     private boolean doNext () {
         if (i < matrix.getMatrix().size()) {
-            JoyFormVectorEntry vector = matrix.getMatrix().get(i);
+            JoyFormVector vector = matrix.getMatrix().get(i);
             pageContext.setAttribute(C.JOTYAGLIB_ROWATTRIBUTE, vector);
             pageContext.setAttribute(C.JOTYAGLIB_ROWINDEX, i);
             i++;
@@ -69,8 +69,8 @@ public class ActionMatrixRowLoopTag extends TagSupport  {
     @Override
     public int doStartTag() throws JspException {
         try {
-            Action ActionObject = (Action)pageContext.getRequest().getAttribute(C.ACTION_FORM_BEAN);
-            matrix = ActionObject.getFormMatrixEntry(name);
+            ActionForm ActionObject = (ActionForm)pageContext.getRequest().getAttribute(C.ACTION_FORM_BEAN);
+            matrix = ActionObject.getMatrix(name);
             if (matrix != null) {
                 if (matrix.getRowNumber() > 0) {
                     i = 0;

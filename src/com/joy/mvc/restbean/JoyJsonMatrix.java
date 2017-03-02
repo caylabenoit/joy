@@ -50,12 +50,25 @@ public class JoyJsonMatrix {
         this.rows = rows;
     }
 
+    /**
+     * Return the JSON Value with all the data
+     * @return JSON
+     */
     public JSONObject getData() {
         try {
             JSONObject finalObj = new JSONObject();
-            finalObj.put("count", rows.length());
+            finalObj.put("rowcount", rows.length());
             finalObj.put("rows", rows);
-            finalObj.put("columns", columns);
+            if (columns.length() == 0 ) {
+                // build the columns list with the first line
+                JSONObject line1 = (JSONObject) rows.get(0);
+                JSONArray vector1 = (JSONArray) line1.get("items");
+                for (Object v1 : vector1) {
+                    JSONObject item = (JSONObject)v1;
+                    columns.put(item.getString("name"));
+                }
+            }
+            finalObj.put("colnames", columns);
             return finalObj;
             
         } catch (Exception e) {

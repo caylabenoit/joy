@@ -20,6 +20,7 @@ import com.joy.C;
 import com.joy.dashboard.Dashboard;
 import com.joy.dashboard.DashboardRow;
 import com.joy.mvc.Action;
+import com.joy.mvc.ActionForm;
 import java.io.IOException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -90,8 +91,8 @@ public class DsbHTMLRowLoop extends TagSupport  {
     @Override
     public int doStartTag() throws JspException {
         try {
-            Action ActionObject = (Action)pageContext.getRequest().getAttribute(C.ACTION_FORM_BEAN);
-            myDashboard = (Dashboard)ActionObject.getFormSingleEntry(name).getValue();
+            ActionForm ActionObject = (ActionForm)pageContext.getRequest().getAttribute(C.ACTION_FORM_BEAN);
+            myDashboard = (Dashboard)ActionObject.getSingle(name).getValue();
             if (myDashboard != null) {
                 JspWriter out = pageContext.getOut();
                 out.println("<!-- Dashboard Row iteration Starts -->");

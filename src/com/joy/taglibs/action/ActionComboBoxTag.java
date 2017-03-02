@@ -19,8 +19,9 @@ package com.joy.taglibs.action;
 import com.joy.C;
 import com.joy.Joy;
 import com.joy.mvc.Action;
-import com.joy.mvc.formbean.JoyFormSingleEntry;
-import com.joy.mvc.formbean.JoyFormVectorEntry;
+import com.joy.mvc.ActionForm;
+import com.joy.mvc.formbean.JoyFormSingle;
+import com.joy.mvc.formbean.JoyFormVector;
 import java.io.IOException;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
@@ -99,8 +100,8 @@ public class ActionComboBoxTag extends SimpleTagSupport {
     public void doTag() throws JspException, IOException {
         try {
             JspContext jsp = this.getJspContext();
-            Action actionform = (Action)jsp.findAttribute(C.ACTION_FORM_BEAN);
-            JoyFormVectorEntry Vector = actionform.getFormVectorEntry(name);
+            ActionForm actionform = (ActionForm)jsp.findAttribute(C.ACTION_FORM_BEAN);
+            JoyFormVector Vector = actionform.getVector(name);
             String sCombo = "";
             JspWriter out =jsp.getOut();
 
@@ -116,7 +117,7 @@ public class ActionComboBoxTag extends SimpleTagSupport {
                     sCombo += " placeholder=\"" + this.placeholder + "\" ";                
                 sCombo += " id='" + myId + "'";
                 sCombo += ">";
-                for (JoyFormSingleEntry entry : Vector.getVector()) {
+                for (JoyFormSingle entry : Vector.getVector()) {
                     sCombo += "<OPTION";
                     sCombo += " Value='" + entry.getID() + "'";
                     if ( (Vector.getSelected().equalsIgnoreCase(entry.getID())) || (Vector.getSelected().equalsIgnoreCase(entry.getStrValue())) ) {

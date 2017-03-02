@@ -18,6 +18,7 @@ package com.joy.taglibs.action;
 
 import com.joy.C;
 import com.joy.mvc.Action;
+import com.joy.mvc.ActionForm;
 import java.io.IOException;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
@@ -59,13 +60,13 @@ public class ActionValueTag extends SimpleTagSupport {
         String retText = "";
         
         // Get the Action object
-        Action actionform = (Action)jsp.findAttribute(C.ACTION_FORM_BEAN);
+        ActionForm actionform = (ActionForm)jsp.findAttribute(C.ACTION_FORM_BEAN);
         
         if (actionform != null) {
             if (format.isEmpty())
-                retText = actionform.getFormSingleEntry(this.name).getStrValue(); 
+                retText = actionform.getSingle(this.name).getStrValue(); 
             else {
-                retText = String.format(format, actionform.getFormSingleEntry(this.name).getValue()); 
+                retText = String.format(format, actionform.getSingle(this.name).getValue()); 
             }    
         }
         out.print(retText);

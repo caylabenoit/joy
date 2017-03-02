@@ -31,6 +31,10 @@ import java.util.List;
 import static com.joy.bo.BOEntityType.boReadWrite;
 import com.joy.bo.init.BOInitRecord;
 import com.joy.common.ActionLogReport;
+import com.joy.mvc.restbean.JoyJsonMatrix;
+import com.joy.mvc.restbean.JoyJsonVector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -317,54 +321,24 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
         return name;
     }
     
-    /**
-     * Exporte la table dans un objet JSON
-     * @param rs Resultset 
-     * @return JSON content
-     */
     protected JSONObject exportResultSet(ResultSet rs)  {
+        JoyJsonMatrix matrix = new JoyJsonMatrix();
+        
         try {
-            Collection<JSONObject> rows = new ArrayList<>();
-            Collection<JSONObject> colsName = new ArrayList<>();
-            boolean firstpass = false;
-            
             while (rs.next()) {
-                Collection<JSONObject> columns = new ArrayList<>();
+                JoyJsonVector line = new JoyJsonVector();
                 for (int i=1; i <= rs.getMetaData().getColumnCount() ; i++) {
                     String colName = rs.getMetaData().getColumnName(i).toUpperCase();
                     Object val = rs.getObject(colName);
-                    if (val == null) 
-                        val = "";
-                    /*JSONObject column = new JSONObject();
-                    column.put("name", colName);
-                    column.put("value", val.toString()); */
-                    columns.add(Joy.GET_JSON_VALUESET(colName, val.toString()));
-                    
-                    if (!firstpass) {
-                        JSONObject columnName = new JSONObject();
-                        columnName.put("name", colName);
-                        colsName.add(columnName);
-                    }
+                    if (val == null) val = "";
+                    line.addItem(colName, val.toString());
                 }
-                firstpass = true;
-                JSONObject myCol = new JSONObject();
-                myCol.put("columns", columns);
-                rows.add(myCol);
+                matrix.addRow(line);
             }
+            return matrix.getData();
             
-            
-            JSONObject entity = new JSONObject();
-            entity.put("entity", this.name);
-            entity.put("data", rows);
-            entity.put("rowcount", rows.size());
-            entity.put("columncount", colsName.size());
-            entity.put("columnnames", colsName);
-            
-            Joy.LOG().info("JSON Export Successul.");
-            return entity;
-            
-        } catch (SQLException | JSONException e) {
-            Joy.LOG().error(e);
+        } catch (SQLException ex) {
+            Joy.LOG().error(ex);
         }
         return null;
     }

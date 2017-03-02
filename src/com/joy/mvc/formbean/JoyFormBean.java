@@ -32,70 +32,70 @@ public class JoyFormBean {
     }
 
     public void addVector(String Name, 
-                          List<JoyFormSingleEntry> Values,
+                          List<JoyFormSingle> Values,
                           String SelectedValue) {
-        JoyFormVectorEntry input = new JoyFormVectorEntry(Name, Values, SelectedValue);
+        JoyFormVector input = new JoyFormVector(Name, Values, SelectedValue);
         m_formAttributes.add(input);
     }
 
     public void addVector(String Name, 
-                          JoyFormVectorEntry Value) {
+                          JoyFormVector Value) {
         Value.setName(Name);
         m_formAttributes.add(Value);
     }
     
-    public void addVector(JoyFormVectorEntry Value) {
+    public void addVector(JoyFormVector Value) {
         m_formAttributes.add(Value);
     }
     
-    public void addMatrix(JoyFormMatrixEntry Value) {
+    public void addMatrix(JoyFormMatrix Value) {
         m_formAttributes.add(Value);
     }
     
     public void addSingle(String Name, 
                           String Value) {
-        JoyFormSingleEntry input = new JoyFormSingleEntry(Name, Value);
+        JoyFormSingle input = new JoyFormSingle(Name, Value);
         m_formAttributes.add(input);
     }
     
     public void addSingle(String Name, 
                           Object Value) {
-        JoyFormSingleEntry input = new JoyFormSingleEntry(Name, Value);
+        JoyFormSingle input = new JoyFormSingle(Name, Value);
         m_formAttributes.add(input);
     }
     
-    public void addSingle(JoyFormSingleEntry Value) {
+    public void addSingle(JoyFormSingle Value) {
         m_formAttributes.add(Value);
     }
     
-    public JoyFormSingleEntry getSingle(String Name) {
+    public JoyFormSingle getSingle(String Name) {
         for (JoyFormCommonInputs input : m_formAttributes) {
             if (input.getName().equalsIgnoreCase(Name) && input.getInputType() == JoyFormInputTypes.Single) {
-                JoyFormSingleEntry obj = (JoyFormSingleEntry)input;
+                JoyFormSingle obj = (JoyFormSingle)input;
                 return obj;
             }
         }
-        return new JoyFormSingleEntry();
+        return new JoyFormSingle();
     }
     
-    public JoyFormVectorEntry getVector(String Name) {
+    public JoyFormVector getVector(String Name) {
         for (JoyFormCommonInputs input : m_formAttributes) {
             if (input.getName().equalsIgnoreCase(Name) && input.getInputType() == JoyFormInputTypes.Vector) {
-                JoyFormVectorEntry obj = (JoyFormVectorEntry)input;
+                JoyFormVector obj = (JoyFormVector)input;
                 return obj;
             }
         }
-        return new JoyFormVectorEntry();
+        return new JoyFormVector();
     }
     
-    public JoyFormMatrixEntry getMatrix(String Name) {
+    public JoyFormMatrix getMatrix(String Name) {
         for (JoyFormCommonInputs input : m_formAttributes) {
             if (input.getName().equalsIgnoreCase(Name) && input.getInputType() == JoyFormInputTypes.Matrix) {
-                JoyFormMatrixEntry obj = (JoyFormMatrixEntry)input;
+                JoyFormMatrix obj = (JoyFormMatrix)input;
                 return obj;
             }
         }
-        return new JoyFormMatrixEntry();
+        return new JoyFormMatrix();
     }
     
 }

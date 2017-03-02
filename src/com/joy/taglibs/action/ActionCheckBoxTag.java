@@ -18,6 +18,7 @@ package com.joy.taglibs.action;
 
 import com.joy.C;
 import com.joy.mvc.Action;
+import com.joy.mvc.ActionForm;
 import java.io.IOException;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
@@ -62,8 +63,8 @@ public class ActionCheckBoxTag extends SimpleTagSupport {
         
         try {
             // get the Action object
-            Action actionform = (Action)jsp.findAttribute(C.ACTION_FORM_BEAN);
-            Object val = actionform.getFormSingleEntry(this.name).getValue();
+            ActionForm actionform = (ActionForm)jsp.findAttribute(C.ACTION_FORM_BEAN);
+            Object val = actionform.getSingle(this.name).getValue();
 
             if (val != null)
                 myCheckedValue = (boolean)val;

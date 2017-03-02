@@ -23,10 +23,10 @@ import java.util.List;
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class JoyFormMatrixEntry extends JoyFormCommonInputs {
-    private List<JoyFormVectorEntry> rows;
+public class JoyFormMatrix extends JoyFormCommonInputs {
+    private List<JoyFormVector> rows;
 
-    public JoyFormMatrixEntry() {
+    public JoyFormMatrix() {
         this.rows = new ArrayList();
         this.setName("DUMMY");
         this.setInputType(JoyFormInputTypes.Matrix);
@@ -39,15 +39,15 @@ public class JoyFormMatrixEntry extends JoyFormCommonInputs {
             return 0;
     }
     
-    public List<JoyFormVectorEntry> getMatrix() {
+    public List<JoyFormVector> getMatrix() {
         return this.rows;
     }
 
-    public void addRow(JoyFormVectorEntry Row) {
+    public void addRow(JoyFormVector Row) {
         this.rows.add(Row);
     }
 
-    public JoyFormMatrixEntry(String Name) {
+    public JoyFormMatrix(String Name) {
         super(Name, JoyFormInputTypes.Matrix);
     }
                                

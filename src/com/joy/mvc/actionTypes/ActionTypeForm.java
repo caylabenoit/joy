@@ -17,13 +17,13 @@
 package com.joy.mvc.actionTypes;
 
 import com.joy.C;
-import com.joy.mvc.Action;
+import com.joy.mvc.ActionForm;
 
 /**
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class ActionTypeForm extends Action {
+public class ActionTypeForm extends ActionForm {
 
     public String edit() {
         return C.ATYPE_FORM_EDIT;

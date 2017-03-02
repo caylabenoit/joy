@@ -17,11 +17,10 @@
 package com.joy.mvc;
 
 import com.joy.Joy;
-import com.joy.bo.BOFactory;
 import com.joy.mvc.formbean.JoyFormBean;
-import com.joy.mvc.formbean.JoyFormMatrixEntry;
-import com.joy.mvc.formbean.JoyFormSingleEntry;
-import com.joy.mvc.formbean.JoyFormVectorEntry;
+import com.joy.mvc.formbean.JoyFormMatrix;
+import com.joy.mvc.formbean.JoyFormSingle;
+import com.joy.mvc.formbean.JoyFormVector;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -32,54 +31,44 @@ import java.util.List;
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class ActionForm {
+public class ActionForm extends Action {
     private JoyFormBean m_FormDataBean;
-    private BOFactory m_Entities;
 
-    public BOFactory getBOFactory() {
-        return m_Entities;
-    }
-
-    public void setEntities(BOFactory m_Entities) {
-        this.m_Entities = m_Entities;
-    }
-    
     public ActionForm() {
         m_FormDataBean = new JoyFormBean();
-        this.m_Entities = null;
     }
 
-    public void addFormVectorEntry(String Name, 
-                                   JoyFormVectorEntry vector) {
+    public void addVector(String Name, 
+                                   JoyFormVector vector) {
         m_FormDataBean.addVector(Name, vector);
     }
     
-    public JoyFormVectorEntry getFormVectorEntry(String Name) {
+    public JoyFormVector getVector(String Name) {
         return m_FormDataBean.getVector(Name);
     }
     
-    public void addFormSingleEntry(String Name,  String Value) {
+    public void addSingle(String Name,  String Value) {
         m_FormDataBean.addSingle(Name, Value);
     }
     
-    public void addFormSingleEntry(String Name,  Object Value) {
+    public void addSingle(String Name,  Object Value) {
         m_FormDataBean.addSingle(Name, Value);
     }
     
-    public void addFormSingleEntry(String Name,  int Value) {
+    public void addSingle(String Name,  int Value) {
         m_FormDataBean.addSingle(Name, String.valueOf(Value));
     }
      
-    public JoyFormSingleEntry getFormSingleEntry(String Name) {
+    public JoyFormSingle getSingle(String Name) {
         return m_FormDataBean.getSingle(Name);
     }
     
-    public void addFormMatrixEntry(String Name, JoyFormMatrixEntry obj) {
+    public void addMatrix(String Name, JoyFormMatrix obj) {
         obj.setName(Name);
         m_FormDataBean.addMatrix(obj);
     }
     
-    public JoyFormMatrixEntry getFormMatrixEntry(String Name) {
+    public JoyFormMatrix getMatrix(String Name) {
         return m_FormDataBean.getMatrix(Name);
     }
     
@@ -91,7 +80,7 @@ public class ActionForm {
      */
     public boolean loadMatrix(ResultSet rs, 
                               String FormTagName) {
-        JoyFormMatrixEntry matrix = new JoyFormMatrixEntry();
+        JoyFormMatrix matrix = new JoyFormMatrix();
         List<String> FieldNames = new ArrayList();
         int i;
         boolean hasNoError = true;
@@ -105,9 +94,9 @@ public class ActionForm {
 
             // Load the matrix
             while (rs.next()) {
-                JoyFormVectorEntry columns = new JoyFormVectorEntry();
+                JoyFormVector columns = new JoyFormVector();
                 for(i=0; i < FieldNames.size(); i++){ 
-                    columns.addValue(FieldNames.get(i), rs.getObject(FieldNames.get(i)));
+                    columns.addItem(FieldNames.get(i), rs.getObject(FieldNames.get(i)));
                 }
                 matrix.addRow(columns);
             }
@@ -116,7 +105,7 @@ public class ActionForm {
             Joy.LOG().error(e);
             hasNoError = false;
         } 
-        this.addFormMatrixEntry(FormTagName, matrix );
+        this.addMatrix(FormTagName, matrix );
         return hasNoError;
     }
     
@@ -140,7 +129,7 @@ public class ActionForm {
             // Load the resultset directly as fields into the form
             if (rs.next()) {
                 for(i=0; i < FieldNames.size(); i++){ 
-                    this.addFormSingleEntry(FieldNames.get(i), rs.getObject(FieldNames.get(i)));
+                    this.addSingle(FieldNames.get(i), rs.getObject(FieldNames.get(i)));
                 }
             }
         } catch (SQLException e) {
@@ -165,12 +154,12 @@ public class ActionForm {
                               String FormTagName,
                               String SelectedFieldKeyValue) {
         boolean hasNoError = true;
-        JoyFormVectorEntry columns = new JoyFormVectorEntry();
+        JoyFormVector columns = new JoyFormVector();
         if (SelectedFieldKeyValue != null)
             columns.setSelected(String.valueOf(SelectedFieldKeyValue));
         try {
             while (rs.next()) {
-                columns.addValue(FieldKey, 
+                columns.addItem(FieldKey, 
                                  rs.getString(FieldKey), 
                                  rs.getString(FieldName));
             }
@@ -179,7 +168,7 @@ public class ActionForm {
             Joy.LOG().error(e);
             hasNoError = false;
         }
-        this.addFormVectorEntry(FormTagName, columns);
+        this.addVector(FormTagName, columns);
         return hasNoError;
     }
     

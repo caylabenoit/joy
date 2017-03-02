@@ -18,7 +18,8 @@ package com.joy.taglibs.action;
 
 import com.joy.C;
 import com.joy.mvc.Action;
-import com.joy.mvc.formbean.JoyFormSingleEntry;
+import com.joy.mvc.ActionForm;
+import com.joy.mvc.formbean.JoyFormSingle;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
@@ -40,8 +41,8 @@ public class ActionConditionTag extends TagSupport  {
     @Override
     public int doStartTag() throws JspException {
         try {
-            Action ActionObject = (Action)pageContext.getRequest().getAttribute(C.ACTION_FORM_BEAN);
-            JoyFormSingleEntry obj = ActionObject.getFormSingleEntry(name);
+            ActionForm ActionObject = (ActionForm)pageContext.getRequest().getAttribute(C.ACTION_FORM_BEAN);
+            JoyFormSingle obj = ActionObject.getSingle(name);
             
             if ((boolean)obj.getValue()) {
                 return EVAL_BODY_AGAIN;
