@@ -16,11 +16,11 @@
  */
 package com.joy.tasks;
 
-import com.joy.Joy;
-import com.joy.bo.BOFactory;
+import com.joy.JOY;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -33,7 +33,6 @@ public class JoyTask extends Thread {
     private HttpServletRequest request;     // http request
     private JoyTaskManager taskManager;     // reference to the task manager
     private String taskName;                // task name (given by the P1 parameter)
-    private BOFactory entities;            // ENTITIES
     private String taskObject;              // Task type, is equal to the first parameter of thhp query (and the joy Object tag)
     private int taskId;                     // Task ID, is given by the task manager
     private JoyTaskStatus status;           // Task status
@@ -41,9 +40,15 @@ public class JoyTask extends Thread {
     private Date startDatetime;             // time start
     private Date endDatetime;               // time end
     private List<String> trace;
+    private Logger joyLog;
 
+    public Logger getLog() {
+        return joyLog;
+    }
+    
     public JoyTask() {
         trace = new ArrayList();
+        joyLog = Logger.getLogger(this.getClass().getPackage().getName());
     }
     
     public void addTrace(String message) {
@@ -55,7 +60,7 @@ public class JoyTask extends Thread {
     }
     
     public void end() {
-        entities.End();
+
         session = null;
         request = null;
         endDatetime = new Date();
@@ -75,7 +80,7 @@ public class JoyTask extends Thread {
     }
     
     public String getStringStartDatetime() {
-        return Joy.DATE_FORMAT(startDatetime);
+        return JOY.DATE_FORMAT(startDatetime);
     }
     
     public Date getEndDatetime() {
@@ -83,7 +88,7 @@ public class JoyTask extends Thread {
     }
     
     public String getStringEndDatetime() {
-        return Joy.DATE_FORMAT(endDatetime);
+        return JOY.DATE_FORMAT(endDatetime);
     }
     
     public String getMessage() {
@@ -117,14 +122,7 @@ public class JoyTask extends Thread {
     public void setTaskId(int taskId) {
         this.taskId = taskId;
     }
-    
-    public BOFactory getEntities() {
-        return entities;
-    }
 
-    public void setEntities(BOFactory entities) {
-        this.entities = entities;
-    }
     
     public String getTaskName() {
         return taskName;

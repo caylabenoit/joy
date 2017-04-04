@@ -16,14 +16,14 @@
  */
 package com.joy.bo;
 
-import com.joy.Joy;
 import static com.joy.bo.BOFieldType.*;
+import com.joy.common.joyClassTemplate;
 
 /**
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr) CAYLA
  */
-public class BOField implements Cloneable {
+public class BOField extends joyClassTemplate implements Cloneable {
     /**
      * belongs to this table
      */
@@ -71,7 +71,7 @@ public class BOField implements Cloneable {
             myClone = super.clone();
             
         } catch(CloneNotSupportedException cnse) {
-            Joy.LOG().error(cnse);
+            getLog().severe(cnse.toString());
         }
         return myClone;
     }
@@ -148,6 +148,7 @@ public class BOField implements Cloneable {
     }
 
     public BOField(String TableName, String ColumnName, boolean Key, BOFieldType FieldType, String Label) {
+        super();
         this.name = ColumnName;
         this.table = TableName;
         this.key = Key;
@@ -159,6 +160,7 @@ public class BOField implements Cloneable {
     }
 
     public BOField() {
+        super();
         this.name = "";
         this.table = "";
         this.key = false;

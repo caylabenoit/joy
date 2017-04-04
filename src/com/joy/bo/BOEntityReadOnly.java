@@ -16,8 +16,6 @@
  */
 package com.joy.bo;
 
-import com.joy.Joy;
-import com.joy.json.JSONException;
 import com.joy.json.JSONObject;
 import com.joy.providers.JoyDBProvider;
 import java.sql.PreparedStatement;
@@ -31,16 +29,14 @@ import java.util.List;
 import static com.joy.bo.BOEntityType.boReadWrite;
 import com.joy.bo.init.BOInitRecord;
 import com.joy.common.ActionLogReport;
-import com.joy.mvc.restbean.JoyJsonMatrix;
-import com.joy.mvc.restbean.JoyJsonVector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import com.joy.api.beans.JoyJsonMatrix;
+import com.joy.api.beans.JoyJsonVector;
+import com.joy.common.joyClassTemplate;
 /**
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class BOEntityReadOnly implements Cloneable, IEntity {
+public class BOEntityReadOnly extends joyClassTemplate implements IEntity {
     
     protected static String JOY_QUERY_ALIAS = "JOYCUSTOM";
     
@@ -108,23 +104,6 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
         }
         this.dbConnection.closeResultSet(rsSource);
         return retval;
-    }
-    
-    @Override
-    public Object clone() {
-        BOEntityReadOnly myClone = null;
-        try {
-            myClone = (BOEntityReadOnly)super.clone();
-            List<BOField> listField = new ArrayList();
-            for (BOField field : fields) {
-                listField.add((BOField)field.clone());
-            }
-            myClone.fields = listField;
-            
-        } catch(CloneNotSupportedException cnse) {
-            Joy.LOG().error(cnse);
-        }
-        return myClone;
     }
     
     /**
@@ -280,7 +259,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
         this.filters = new ArrayList();
         this.distinct = false;
         this.name = "";
-        this.dateFormat = Joy.PARAMETERS().getJoyDefaultDateFormat();
+        this.dateFormat = "yyyy-mm-dd HH:mm:ss";
         this.limitRecords = -1;
         this.query = "";
         this.name = "";
@@ -298,7 +277,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
             if (field.getLabel().equalsIgnoreCase(Name) || field.getColumnName().equalsIgnoreCase(Name)) 
                 retField = field;
         if (retField == null)
-            Joy.LOG().error("Field " + Name + " not found.");
+            getLog().severe("Field " + Name + " not found.");
         return retField;
     }
 
@@ -306,7 +285,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
     public BOField field(int index) {
         BOField retField = fields.get(index);
         if (retField == null) {
-            Joy.LOG().error("Field with index " + index + " not found.");
+            getLog().severe("Field with index " + index + " not found.");
         }
         return retField;
     }
@@ -338,7 +317,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
             return matrix.getData();
             
         } catch (SQLException ex) {
-            Joy.LOG().error(ex);
+            getLog().severe(ex.toString());
         }
         return null;
     }
@@ -391,7 +370,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
                         break;
                 }
         } catch (SQLException e) {
-            Joy.LOG().error(e);
+            getLog().severe(e.toString());
         }
     }
     
@@ -404,7 +383,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
                                 BOQueryExecution query) {
         int i=1;
         for (BOField obj : query.getValues()) {
-            Joy.LOG().debug("Connection: " + dbConnection + " | SQL '?' Value order (" + i + ") replaced by [" + obj.getValue() + "]" );
+            getLog().fine("Connection: " + dbConnection + " | SQL '?' Value order (" + i + ") replaced by [" + obj.getValue() + "]" );
             setValue(ps, obj, i++);
         }
     }
@@ -498,7 +477,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
         sql += getSQLFrom(From);
         sql += getSQLWhere(myQuery, filtering);
         sql += getSQLOrderBy(sorted);
-        Joy.LOG().debug("SQL generated: " + sql);
+        getLog().fine("SQL generated: " + sql);
         myQuery.setSQL(sql);
         return myQuery;
     }
@@ -533,7 +512,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
             setQueryValues(ps, lQuery);
             return ps.executeQuery();
         } catch (SQLException ex) {
-            Joy.LOG().error(ex);
+            getLog().severe(ex.toString());
         }
         return null;
     }
@@ -559,7 +538,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
             
             return result;
         } catch (SQLException ex) {
-            Joy.LOG().error(ex);
+            getLog().severe(ex.toString());
             return -1;
         }
     }
@@ -579,7 +558,7 @@ public class BOEntityReadOnly implements Cloneable, IEntity {
             
             return exportResultSet(rs);
         } catch (SQLException ex) {
-            Joy.LOG().error(ex);
+            getLog().severe(ex.toString());
         }
         return null;
     }

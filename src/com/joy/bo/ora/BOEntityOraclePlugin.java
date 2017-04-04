@@ -16,7 +16,6 @@
  */
 package com.joy.bo.ora;
 
-import com.joy.Joy;
 import com.joy.bo.BOEntityReadWrite;
 import com.joy.bo.BOQueryExecution;
 
@@ -53,7 +52,7 @@ public class BOEntityOraclePlugin extends BOEntityReadWrite {
         
         sql += getSQLOrderBy(sorted);
 
-        Joy.LOG().debug("SQL generated: " + sql);
+        getLog().fine("SQL generated: " + sql);
         
         myQuery.setSQL(sql);
         return myQuery;

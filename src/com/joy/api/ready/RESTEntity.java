@@ -14,40 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.joy.providers;
+package com.joy.api.ready;
 
-import com.joy.common.joyClassTemplate;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import com.joy.api.utils.RESTEntityCommon;
+import com.joy.C;
+import com.joy.JOY;
 
 /**
- *
+ * Returns an antity result in JSON format with the filters in parameters (must be specified by pair).
+ * Usage : [URL]/entity/[Entity]/[criteria 1]/[Value 1]/[criteria 2]/[Value 2]/...
+ * Example : http://localhost:18080/dgm/rest/entity/[ENTITY NAME]/[PARAM NAME 1]/[PARAM VALUE 1]
+ * Note : You can use the specific PARAM NAME : ROWCOUNT which limit the number of records.
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class JoyConfigfileProvider extends joyClassTemplate {
-    
-    private Properties m_properties;
-    
-    private void init() {
+
+public class RESTEntity extends RESTEntityCommon {
+
+    @Override
+    public String restGet() {
+        String myEntity = getRestParameter(1);
         try {
-            if (m_properties == null) {
-                InputStream myProperties = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties");
-                m_properties = new Properties();
-                m_properties.load(myProperties);
-            }
-            
-        } catch (IOException ex) {
-            getLog().warning(ex.toString());
-        }
-    }
-    
-    public String get(String _name) {
-        init();
-        try {
-            return m_properties.getProperty(_name);
+            return this.getFilteredEntity(myEntity.toUpperCase(), 2).exp().toString();
         } catch (Exception e) {
-            return null;
+            getLog().severe (e.toString());
+            return C.JSON_EMPTY;
         }
     }
+    
 }

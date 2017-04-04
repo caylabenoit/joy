@@ -16,14 +16,14 @@
  */
 package com.joy.providers;
 
-import com.joy.Joy;
+import com.joy.common.joyClassTemplate;
 import java.util.List;
 
 /**
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class JoyConnectionDetail {
+public class JoyConnectionDetail extends joyClassTemplate {
     private String dataSource;
     private String user;
     private String password;
@@ -34,8 +34,12 @@ public class JoyConnectionDetail {
     public JoyConnectionDetail(String DataSource) {
         this.dataSource = DataSource;
     }
-
-    public JoyConnectionDetail(String DataSource, String User, String Password, String url, String Driver, List<JoyInitQuery> queries) {
+    
+    public JoyConnectionDetail() {
+        super();
+    }
+    
+    public void init(String DataSource, String User, String Password, String url, String Driver, List<JoyInitQuery> queries) {
         this.dataSource = DataSource;
         this.user = User;
         this.password = Password;
@@ -83,13 +87,13 @@ public class JoyConnectionDetail {
     public JoyDBProvider getDB() {
         
         // Connection to the DB, get the main Datasource name first
-        Joy.LOG().info ("Get new DB connection in the pool");
+        getLog().info ("Get new DB connection in the pool");
         JoyDBProvider DbConn = new JoyDBProvider();
         if (this.dataSource != null) {
             DbConn.initFromDataSource(this.dataSource); 
         } 
         if (!DbConn.isInitialized()) {
-            Joy.LOG().info ("DataSource unavailable or not reacheable, try a direct connection now.");
+            getLog().info("DataSource unavailable or not reacheable, try a direct connection now.");
             // try with a JDBC direct connection now
             String drivername = this.driver;
             String urlname = this.url;
@@ -97,16 +101,16 @@ public class JoyConnectionDetail {
             String pwd = this.password;
             DbConn.init(drivername, urlname, username, pwd); 
         }
-        Joy.LOG().info ("Connection opened successfully ? " + DbConn.isInitialized());
+        getLog().info("Connection opened successfully ? " + DbConn.isInitialized());
         
-        Joy.LOG().info ("Queries Initialization.");
+        getLog().info("Queries Initialization.");
         if (DbConn.isInitialized()) {
             for (JoyInitQuery  query : initqueries) {
                 if (query.getDBProvider().equalsIgnoreCase(DbConn.getDBProvider())) 
                     DbConn.executeSQL(query.getSQL());
             }
         }
-        Joy.LOG().info ("Connection initialized successfully.");
+        getLog().info("Connection initialized successfully.");
         
         return DbConn;
     }

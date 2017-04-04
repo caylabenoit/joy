@@ -16,7 +16,6 @@
  */
 package com.joy.bo.pg;
 
-import com.joy.Joy;
 import com.joy.bo.BOEntityReadWrite;
 import com.joy.bo.BOQueryExecution;
 
@@ -50,7 +49,7 @@ public class BOEntityPostgreSQLPlugin  extends BOEntityReadWrite {
         if (limitRecords > 0)
                 sql += " LIMIT " + limitRecords;
         
-        Joy.LOG().debug("SQL generated: " + sql);
+        getLog().fine("SQL generated: " + sql);
         
         myQuery.setSQL(sql);
         return myQuery;

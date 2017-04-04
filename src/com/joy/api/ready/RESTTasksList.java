@@ -14,40 +14,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.joy.providers;
+package com.joy.api.ready;
 
-import com.joy.common.joyClassTemplate;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import com.joy.JOY;
+import com.joy.api.ActionTypeREST;
 
 /**
- *
+ * Returns a JSON with all the tasks
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class JoyConfigfileProvider extends joyClassTemplate {
-    
-    private Properties m_properties;
-    
-    private void init() {
+public class RESTTasksList extends ActionTypeREST {
+
+    @Override
+    public String restGet() {
+        int limit = 0;
         try {
-            if (m_properties == null) {
-                InputStream myProperties = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties");
-                m_properties = new Properties();
-                m_properties.load(myProperties);
-            }
-            
-        } catch (IOException ex) {
-            getLog().warning(ex.toString());
-        }
-    }
-    
-    public String get(String _name) {
-        init();
+            limit = Integer.valueOf(this.getRestParameter(1));
+        } catch (Exception e) {}
+        
         try {
-            return m_properties.getProperty(_name);
+            return JOY.TASKS().getJSONTasksDesc(limit); 
         } catch (Exception e) {
-            return null;
+            getLog().severe (e.toString());
+            return "";
         }
     }
+    
 }

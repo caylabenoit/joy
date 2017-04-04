@@ -16,10 +16,9 @@
  */
 package com.joy.tasks;
 
-import com.joy.Joy;
-import com.joy.bo.BOFactory;
+import com.joy.common.state.JoyState;
+import com.joy.common.joyClassTemplate;
 import com.joy.json.JSONObject;
-import com.joy.mvc.actionTypes.ActionTypeTASK;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -30,7 +29,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class JoyTaskManager {
+public class JoyTaskManager extends joyClassTemplate {
     private List<ActionTypeTASK> tasks;     // tasks threads
     private int lastTaskId;
     public void init() {
@@ -58,10 +57,10 @@ public class JoyTaskManager {
                            String className,
                            HttpSession mySession, 
                            HttpServletRequest request,
-                           BOFactory entities) {
+                           JoyState myState) {
         // start a new task / thread
         try {
-            Joy.LOG().debug("Create new Task for " + taskName);
+            getLog().fine("Create new Task for " + taskName);
             ActionTypeTASK taskThread = (ActionTypeTASK) Class.forName(className).newInstance();
             taskThread.setRequest(request);
             if (taskObject == null)
@@ -70,16 +69,16 @@ public class JoyTaskManager {
             taskThread.setSession(mySession);
             taskThread.setTaskManager(this);
             taskThread.setTaskName(taskName);
-            taskThread.setEntities(entities);
+            taskThread.setJoyState(myState);
             taskThread.setTaskId(this.setNewId());
-            Joy.LOG().debug("Start Task id " + taskThread.getId());
+            getLog().fine("Start Task id " + taskThread.getId());
             taskThread.start();
             tasks.add(taskThread);
-            Joy.LOG().debug("Task started");
+            getLog().fine("Task started");
             
             return true;
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            Joy.LOG().fatal(e);
+            getLog().severe(e.toString());
             return false;
         }
     }
@@ -134,7 +133,7 @@ public class JoyTaskManager {
             return myList.toString();
             
         } catch (Exception e) {
-            Joy.LOG().error(e);
+            getLog().severe (e.toString());
             return "";
         }
     }
@@ -156,7 +155,7 @@ public class JoyTaskManager {
             return myList.toString();
             
         } catch (Exception e) {
-            Joy.LOG().error(e);
+            getLog().severe (e.toString());
             return "";
         }
     }

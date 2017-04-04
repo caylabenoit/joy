@@ -16,19 +16,20 @@
  */
 package com.joy.etl;
 
-import com.joy.Joy;
+import com.joy.JOY;
 import com.joy.bo.BOFactory;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import com.joy.bo.IEntity;
+import com.joy.common.joyClassTemplate;
 
 /**
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class MappingSpecification {
+public class MappingSpecification extends joyClassTemplate {
     private List<FieldMap> FieldMaps;
     private String From;
     private String To;
@@ -93,7 +94,7 @@ public class MappingSpecification {
             List<FieldMap> CheckIfExists = new ArrayList();
             boolean InsertReq = true;
 
-            Joy.LOG().debug("Map Entity " + boFrom + " to " + boTo);
+            getLog().fine("Map Entity " + boFrom + " to " + boTo);
             
             // Build the Check list field list before
             for (FieldMap field : this.FieldMaps) 
@@ -186,7 +187,7 @@ public class MappingSpecification {
             return stats;
             
         } catch (Exception e) {
-            Joy.LOG().error(e);
+            getLog().severe( "Exception=" + e);
             stats.setFatalError(true);
             return stats;
         }

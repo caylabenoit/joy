@@ -51,11 +51,6 @@ public interface IEntity {
      */
     public BOEntityType getBOType();
     /**
-     * Clone the entity
-     * @return cloned entity
-     */
-    public Object clone();
-    /**
      * Get the maximum number or record which can be returned after querying the DB
      * @return 
      */

@@ -17,7 +17,8 @@
 package com.joy.etl;
 
 import com.joy.C;
-import com.joy.Joy;
+import com.joy.JOY;
+import com.joy.common.joyClassTemplate;
 import java.util.Iterator;
 import java.util.List;
 import org.jdom2.Element;
@@ -26,7 +27,7 @@ import org.jdom2.Element;
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class MappingFactory {
+public class MappingFactory extends joyClassTemplate {
     private org.jdom2.Document m_document;
     private Element m_racine;
     
@@ -38,13 +39,13 @@ public class MappingFactory {
     public boolean init(String filename)  {
         try {
             //m_document = sxb.build(Thread.currentThread().getContextClassLoader().getResourceAsStream(filename));
-            m_document = Joy.OPEN_XML(filename);
+            m_document = JOY.OPEN_XML(filename);
             m_racine = m_document.getRootElement();
             return (m_racine != null) ;
             
         } catch (Exception ex) {
-            Joy.LOG().error( "Exception=" + ex );
-            Joy.LOG().error( "The file " + filename + " may not found !");
+            getLog().severe("Exception=" + ex );
+            getLog().severe( "The file " + filename + " may not found !");
         } 
         return false;
     }
@@ -112,7 +113,7 @@ public class MappingFactory {
                 mapping.add(map);
             }
         } catch (Exception e) {
-            Joy.LOG().error( "Exception=" + e);
+            getLog().severe( "Exception=" + e);
         }
     }
     

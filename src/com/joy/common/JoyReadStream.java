@@ -16,7 +16,6 @@
  */
 package com.joy.common;
 
-import com.joy.Joy;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -25,7 +24,7 @@ import java.io.InputStreamReader;
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class JoyReadStream implements Runnable {
+public class JoyReadStream extends joyClassTemplate implements Runnable {
     private String name;
     private InputStream is;
     private Thread thread;   
@@ -58,8 +57,8 @@ public class JoyReadStream implements Runnable {
             is.close ();  
             
         } catch (Exception ex) {
-            Joy.LOG().error("Command Returning > [" + name + "] " + cmdreturn);
-            Joy.LOG().error("Exception > " + ex);
+            getLog().severe("Command Returning > [" + name + "] " + cmdreturn);
+            getLog().severe("Exception > " + ex);
             ex.printStackTrace ();
         }
     }

@@ -17,8 +17,8 @@
 package com.joy.bo;
 
 import com.joy.C;
-import com.joy.Joy;
 import static com.joy.bo.BOEntityType.*;
+import com.joy.common.joyClassTemplate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -54,7 +54,7 @@ import org.jdom2.Element;
  * 
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class BOEntityComposite  {
+public class BOEntityComposite extends joyClassTemplate  {
     
     private String  name;
     private String  masterEntity; 
@@ -104,7 +104,7 @@ public class BOEntityComposite  {
                 IEntity query = entities.getEntity(Entity);
                 return "(" + query.getQuery() + ")";
             } catch (Exception ex) { 
-                Joy.LOG().warn(ex);
+                getLog().warning(ex.toString());
                 return  Entity; 
             }
         } else
@@ -210,12 +210,13 @@ public class BOEntityComposite  {
         try {
             generatedQuery = this.getSelect() + this.getFrom() + this.getFilter() + this.getGroup() + this.getSort();
         } catch (Exception ex) {
-            Joy.LOG().error("Impossible to generate query for Entity " + this.name + ", Error: " + ex + " | Resisual: " + generatedQuery);
+            getLog().severe("Impossible to generate query for Entity " + this.name + ", Error: " + ex + " | Resisual: " + generatedQuery);
         }
         return generatedQuery;
     }
 
     public BOEntityComposite(BOFactory Entities) {
+        super();
         this.joins = new ArrayList<>();
         this.fields = new ArrayList<>();
         this.filters = new ArrayList<>();
@@ -373,7 +374,7 @@ public class BOEntityComposite  {
             initGroups(entityXml);
             
         } catch (Exception ex) {
-            Joy.LOG().error("Entity " + this.name + " cannot be initialized, Error: " + ex);
+            getLog().severe("Entity " + this.name + " cannot be initialized, Error: " + ex);
         }
     }
     

@@ -17,7 +17,6 @@
 package com.joy.bo;
 
 import com.joy.C;
-import com.joy.Joy;
 import com.joy.json.JSONObject;
 import com.joy.common.ActionLogReport;
 import com.joy.common.ActionLogReport.enum_CRITICITY;
@@ -148,7 +147,7 @@ public class BOEntityReadWrite extends BOEntityReadOnly {
         if (records != null) {
             // vide la table si besoin
             if (removeAllBefore) {
-                Joy.LOG().info("Remove all records in table " + this.name);
+                getLog().info("Remove all records in table " + this.name);
                 this.resetKeys();
                 this.delete();
                 logs.add(new ActionLogReport("IMP1", 0, "All records successfully removed from table", enum_CRITICITY.INFO));
@@ -170,7 +169,7 @@ public class BOEntityReadWrite extends BOEntityReadOnly {
             logs.add(new ActionLogReport("IMP3", 0, i + " Record(s) inserted successfully.", enum_CRITICITY.INFO));
             
         } else {
-            Joy.LOG().error("Tables or Metadata do not match with file !");
+            getLog().severe("Tables or Metadata do not match with file !");
             logs.add(new ActionLogReport("IMP2", 0, "Tables not match with file !", enum_CRITICITY.FATAL));
         }
         return null;
@@ -193,7 +192,7 @@ public class BOEntityReadWrite extends BOEntityReadOnly {
             return true;
             
         } catch (SQLException ex) {
-            Joy.LOG().error(ex);
+            getLog().severe(ex.toString());
             return false;
         }
     }    
@@ -209,7 +208,7 @@ public class BOEntityReadWrite extends BOEntityReadOnly {
             ps.execute();
             
         } catch (SQLException ex) {
-            Joy.LOG().error(ex);
+            getLog().severe(ex.toString());
         }
     }    
     
@@ -226,11 +225,11 @@ public class BOEntityReadWrite extends BOEntityReadOnly {
             PreparedStatement ps = dbConnection.prepareSQL(lQuery.getSQL());
             setQueryValues(ps, lQuery);
             int retNb =  ps.executeUpdate();
-            Joy.LOG().debug("Number of rows altered : " + retNb);
+            getLog().fine("Number of rows altered : " + retNb);
             return retNb;
             
         } catch (SQLException ex) {
-            Joy.LOG().error(ex);
+            getLog().severe(ex.toString());
             return -1;
         }
     }
@@ -248,11 +247,11 @@ public class BOEntityReadWrite extends BOEntityReadOnly {
             PreparedStatement ps = dbConnection.prepareSQL(lQuery.getSQL());
             setQueryValues(ps, lQuery);
             int retNb =  ps.executeUpdate();
-            Joy.LOG().debug("Number of rows altered : " + retNb);
+            getLog().fine("Number of rows altered : " + retNb);
             return retNb;
             
         } catch (SQLException ex) {
-            Joy.LOG().error(ex);
+            getLog().severe(ex.toString());
             return -1;
         }
     }
@@ -287,7 +286,7 @@ public class BOEntityReadWrite extends BOEntityReadOnly {
             }
             
         } catch (Exception e) {
-            Joy.LOG().error(e);
+            getLog().severe(e.toString());
         }
     }
     
@@ -333,7 +332,7 @@ public class BOEntityReadWrite extends BOEntityReadOnly {
                 }
             
         } catch (SQLException ex) {
-            Joy.LOG().error(ex);
+            getLog().severe(ex.toString());
         }
         return -1;
     }
