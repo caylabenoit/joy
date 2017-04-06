@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Benoit CAYLA (benoit@famillecayla.fr)
+ * Copyright (C) 2017 Benoit Cayla (benoit@famillecayla.fr)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,12 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.joy.bo;
+package com.joy.bo.registry;
 
 /**
  *
- * @author Benoit CAYLA (benoit@famillecayla.fr)
+ * @author Benoit Cayla (benoit@famillecayla.fr)
  */
-public class BOEntityRegistry {
-    
+public enum BOEntityType {
+    boComposite,
+    boTable,
+    boQuery,
+    boNothing
 }

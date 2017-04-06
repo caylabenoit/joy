@@ -37,8 +37,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 public class Action extends joyClassTemplate  {
     private List m_DisplayMessages;       // List of messages to return
     private ActionLocaleMgnt m_localeBundle; 
-    private String uri;
-    private StringBuffer url;
     private List<FileItem> m_AttachedFiles;
     private JoyState state;
     
@@ -61,7 +59,7 @@ public class Action extends joyClassTemplate  {
     }
     
     public StringBuffer getURL() {
-        return url;
+        return state.getCurrentRequest().getRequestURL();
     }
     
     public boolean hasAttachedFiles() {
@@ -77,7 +75,9 @@ public class Action extends joyClassTemplate  {
     }
     
     public String getURI() {
-        return uri;
+        String tmpURI = state.getCurrentRequest().getRequestURI();
+        String[] uriParts = tmpURI.split("/");
+        return "/" + uriParts[1];
     }
     
     public void addDisplayMessageError(String Label) {
@@ -153,10 +153,6 @@ public class Action extends joyClassTemplate  {
      */
     public void init(JoyState myState) {
         this.state = myState;
-        String tmpURI = state.getCurrentRequest().getRequestURI();
-        url = state.getCurrentRequest().getRequestURL();
-        String[] uriParts = tmpURI.split("/");
-        uri = "/" + uriParts[1];
     }
     
     public void setNewArgument(String _name, Object _value) {

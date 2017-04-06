@@ -16,7 +16,6 @@
  */
 package com.joy.api.ready;
 
-import com.joy.JOY;
 import com.joy.api.ActionTypeREST;
 
 /**

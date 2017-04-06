@@ -18,6 +18,7 @@ package com.joy.tasks.filter;
 
 import com.joy.JOY;
 import com.joy.common.filter.FilterCommon;
+import com.joy.common.state.JoyState;
 import com.joy.tasks.ActionTypeTASK;
 import com.joy.json.JSONArray;
 import com.joy.json.JSONObject;
@@ -67,25 +68,24 @@ public class FilterTask extends FilterCommon {
     }
 
     @Override
-    protected void process(HttpServletRequest request,
-                           HttpServletResponse response) {
+    protected void process(JoyState state) {
         boolean hasActiveSession = false;
 
         try {
             // Session management check
-            HttpSession mySession = request.getSession();
+            HttpSession mySession = state.getCurrentRequest().getSession();
             hasActiveSession = (mySession.getAttribute("JOY_SESSION") != null);
-            if (!this.getState().getParameters().isNoLogin()) {
+            if (!state.getParameters().isNoLogin()) {
                 if (!hasActiveSession) 
                 return;
             }
 
             // Get call informations
-            String[] uriParts = request.getRequestURI().split("/");
-            ApiConfigEntry myRestCall = new ApiConfigEntry(uriParts[3], getState().getTaskConfiguration());
+            String[] uriParts = state.getCurrentRequest().getRequestURI().split("/");
+            ApiConfigEntry myRestCall = new ApiConfigEntry(uriParts[3], state.getTaskConfiguration());
             getLog().fine("TASK action requested");
             ActionTypeTASK actionTaskObject = (ActionTypeTASK) Class.forName(myRestCall.getClassName()).newInstance();
-            actionTaskObject.setJoyState(getState());
+            actionTaskObject.setJoyState(state);
             
             String myTaskName = uriParts[3];
             boolean result;
@@ -95,16 +95,16 @@ public class FilterTask extends FilterCommon {
                                          myTaskName, 
                                          myRestCall.getClassName(),
                                          mySession, 
-                                         request,
-                                         getState());
-            out = response.getWriter();
+                                         state.getCurrentRequest(),
+                                         state);
+            out = state.getCurrentResponse().getWriter();
             out.print( (result ? "{\"result\":\"Success\"}" : "{\"result\":\"Failed\"}") );
             out.close();
             
         } catch (Exception ex) {
             getLog().severe( "Exception=" + ex);
         }
-        getState().getEntities().End();
+        state.end();
             
     }
     

@@ -16,9 +16,12 @@
  */
 package com.joy.bo;
 
+import com.joy.bo.registry.BORegistry;
 import com.joy.C;
 import com.joy.JOY;
 import com.joy.bo.init.BOInitRecord;
+import com.joy.bo.registry.BOEntityType;
+import com.joy.bo.registry.BORegistryEntry;
 import com.joy.common.joyClassTemplate;
 import com.joy.providers.JoyConnectionDetail;
 import com.joy.providers.JoyDBProvider;
@@ -27,6 +30,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 import org.jdom2.Element;
 
 /**
@@ -38,24 +42,59 @@ public class BOFactory extends joyClassTemplate {
     protected JoyConnectionDetail connectionDetail;
     protected boolean initialized;
     protected List<IEntity> cacheEntities;
-    private boolean poolManagementActive;
     private List<BOPlugin> plugins;
-    private BOEntityRegistry registry;
+    private BORegistry registry;
     
     public List<IEntity> getAll() {
         return this.cacheEntities;
     }
 
+    public int cacheSize() {
+        return cacheEntities.size();
+    }
+    
+    /**
+     * Check if an entity is already cached or not
+     * @param Name Entity name
+     * @return true if entity in cache (already loaded)
+     */
+    public boolean isEntityInCache(String Name) {
+        // search in the cache first
+        for (IEntity entity : this.cacheEntities) 
+            if (entity.getLabel().equalsIgnoreCase(Name) || entity.getName().equalsIgnoreCase(Name))
+                return true;
+        // entity not loaded in the cache, load a new one
+        return false;
+    }    
+    
     /**
      * Get and return the requested entity
      * @param Name Entity name
-     * @return BOEntityReadWrite, BOView or BOEntityCustom
+     * @return IEntity
      */
     public IEntity getEntity(String Name) {
+        // search in the cache first
         for (IEntity entity : this.cacheEntities) 
-            if (entity.getLabel().equalsIgnoreCase(Name) || entity.getName().equalsIgnoreCase(Name)) {
+            if (entity.getLabel().equalsIgnoreCase(Name) || entity.getName().equalsIgnoreCase(Name))
                 return entity;
+        // entity not loaded in the cache, load a new one
+        return loadEntityFromRegistry(Name);
+    }
+    
+    /**
+     * Get and load entity from registry infos
+     * @param name Entity name
+     * @return IEntity
+     */
+    private IEntity loadEntityFromRegistry(String name) {
+        try {
+            BORegistryEntry entityReg = registry.getRegistryEntry(name);
+            if (entityReg != null) {
+                return cacheEntityFromRegistry(entityReg);
             }
+        } catch (Exception e) {
+            this.getLog().severe(e.toString());
+        }
         return null;
     }
     
@@ -66,7 +105,7 @@ public class BOFactory extends joyClassTemplate {
     public BOFactory() {
         this.cacheEntities = new ArrayList();
         this.plugins = new ArrayList();
-        this.poolManagementActive = true;
+        this.registry = new BORegistry();
     }
     
     /**
@@ -74,9 +113,8 @@ public class BOFactory extends joyClassTemplate {
      * @param entityElement
      * @return 
      */
-    private List<BOMapFieldLabel> getMappedFields(Element entityElement) {
-        List myEntities = entityElement.getChildren(C.ENTITIES_JOY_FIELDLABEL_TAG);
-        Iterator iremaps = myEntities.iterator();
+    private List<BOMapFieldLabel> getMappedFields(List fieldsRemap) {
+        Iterator iremaps = fieldsRemap.iterator();
         List<BOMapFieldLabel> retValue = new ArrayList();
         
         while(iremaps.hasNext()) {   // get all the fields remaps
@@ -87,28 +125,20 @@ public class BOFactory extends joyClassTemplate {
     }
     
     /**
-     * Initialize the tables myEntities only
-     * @param entities
-     * @param root
-     * @param db 
+     * Initialize an table entity
+     * @param entityXml
+     * @return IEntity
      */
-    private void initTables(String group,
-                            Element root, 
-                            JoyDBProvider db) {
-        List tables = root.getChildren(C.ENTITIES_JOY_TABLE_TAG);
-        Iterator i1 = tables.iterator();
-        
-        while(i1.hasNext()) {   // parcours toutes les entités/tables
-            Element entityXml = (Element)i1.next();
-
+    private IEntity initEntityTable(Element entityXml) {
+        try {
             // Get all the fields remaps
-            List<BOMapFieldLabel> remapsField = getMappedFields(entityXml); 
-            IEntity entity = getEntityPlugin(db);
-            entity.setGroup(group);
+            List<BOMapFieldLabel> remapsField = getMappedFields(entityXml.getChildren(C.ENTITIES_JOY_FIELDLABEL_TAG)); 
+            IEntity entity = getEntityPlugin(getConnection());
             entity.setName(entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE));
-            entity.setBoType(BOEntityType.boReadWrite);
-            entity.setDB(db);
-            db.getMetadataFromDB(entity, null, remapsField); 
+            entity.setBoType(BOEntityRWType.boReadWrite);
+            
+            entity.setDB(getConnection());
+            getConnection().getMetadataFromDB(entity, null, remapsField); 
             
             // Get all the INIT values if any
             List<Element> inits = entityXml.getChildren("joy-init-record");
@@ -125,61 +155,187 @@ public class BOFactory extends joyClassTemplate {
             String label = (entityXml.getAttributeValue(C.ENTITIES_LABEL_ATTRIBUTE) == null ? "" : entityXml.getAttributeValue(C.ENTITIES_LABEL_ATTRIBUTE));
             label = (!label.isEmpty() ? label : entity.getName());
             entity.setLabel(label);
-
-            // Set and add BO
-            cacheEntities.add(entity);
-            if (entity.isInitialized())
-                getLog().fine("Table " + entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE) + " Added successfully");
-            else
-                getLog().severe("Table " + entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE) + " has not been Added successfully !!!");
+            
+            return entity;
+        } catch (Exception e) {
+            this.getLog().severe(e.toString());
+            return null;
         }
     }
-    
+
     /**
-     * Get the SQL myEntities
-     * @param entities
-     * @param root 
+     * Initialize an Query entity
+     * @param db
+     * @param entityXml
+     * @return 
      */
-    private void initQueries(String group,
-                            Element root, 
-                            JoyDBProvider db) {
-        List eltentities = root.getChildren(C.ENTITIES_JOY_QUERY_TAG);
-        Iterator i1 = eltentities.iterator();
-        while(i1.hasNext()) {   // parcours toutes les queries
-            Element entityXml = (Element)i1.next();
+    private IEntity initEntityQuery(Element entityXml) {
+
+        try {
             String queryContent = "";
             
             // get the DB engine specific query if exists
-            Element childDBSpecific = entityXml.getChild(db.getDBProvider().toUpperCase());
+            Element childDBSpecific = entityXml.getChild(getConnection().getDBProvider().toUpperCase());
             if (childDBSpecific != null) 
                 queryContent = childDBSpecific.getText().replace("\n", "");
             else
                 queryContent = entityXml.getText().replace("\n", "");
 
             // get all the fields remaps
-            List<BOMapFieldLabel> remapsField = getMappedFields(entityXml); 
-            IEntity entity = getEntityPlugin(db);
-            entity.setGroup(group);
+            List<BOMapFieldLabel> remapsField = getMappedFields(entityXml.getChildren(C.ENTITIES_JOY_FIELDLABEL_TAG)); 
+            IEntity entity = getEntityPlugin(getConnection());
             entity.setName(entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE));
-            entity.setBoType(BOEntityType.boReadOnly);
+            entity.setBoType(BOEntityRWType.boReadOnly);
             entity.setQuery(queryContent);
-            entity.setDB(db);
-            db.getMetadataFromDB(entity, queryContent, remapsField);
+            entity.setDB(getConnection());
+            getConnection().getMetadataFromDB(entity, queryContent, remapsField);
             
             // Label assignment
             String label = (entityXml.getAttributeValue(C.ENTITIES_LABEL_ATTRIBUTE) == null ? "" : entityXml.getAttributeValue(C.ENTITIES_LABEL_ATTRIBUTE));
             label = (!label.isEmpty() ? label : entity.getName());
             entity.setLabel(label);
+            
+            return entity;
+        } catch (Exception e) {
+            this.getLog().severe(e.toString());
+            return null;
+        }
+    }    
 
-            // Set and add BO
-            cacheEntities.add(entity);
-            if (entity.isInitialized())
-                getLog().info("Custom Entity " + entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE) + " Added successfully");
-            else
-                getLog().severe("Custom Entity " + entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE) + " has not been Added successfully !!!");
+    /**
+     * Initialize an Query entity
+     * @param entityXml
+     * @return 
+     */
+    private IEntity initEntityComposite(Element entityXml) {
+
+        try {
+            // Build the Composite query
+            BOEntityComposite myEntityFactory = new BOEntityComposite(this);
+            myEntityFactory.init(entityXml);
+            
+            // Get all the fields remaps
+            List<BOMapFieldLabel> remapsField = getMappedFields(entityXml.getChildren(C.ENTITIES_JOY_FIELDLABEL_TAG)); 
+            //IEntity entity = new BOEntityReadWrite();
+            IEntity entity = getEntityPlugin(getConnection());
+            entity.setName(entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE));
+            entity.setBoType(BOEntityRWType.boReadOnly);
+            String myQuery =  myEntityFactory.getQuery();
+            getConnection().getMetadataFromDB(entity, myQuery, remapsField);
+            entity.setQuery(myQuery);
+            entity.setDB(getConnection());
+            getLog().info("Composite Entity SQL Query :" + myQuery);
+
+            // Label assignment
+            String label = (entityXml.getAttributeValue(C.ENTITIES_LABEL_ATTRIBUTE) == null ? "" : entityXml.getAttributeValue(C.ENTITIES_LABEL_ATTRIBUTE));
+            label = (!label.isEmpty() ? label : entity.getName());
+            entity.setLabel(label);
+            
+            return entity;
+        } catch (Exception e) {
+            this.getLog().severe(e.toString());
+            return null;
+        }
+    }        
+    
+    /**
+     * Load and cache the entity
+     * @param regEntry       Registry entry
+     * @param db             DB connection   
+     */
+    private IEntity cacheEntityFromRegistry(BORegistryEntry regEntry) {
+
+        try {
+            if (isEntityInCache(regEntry.getName()))
+                return this.getEntity(regEntry.getName());
+            
+            getLog().log(Level.FINE, "Add new Entity {0}", regEntry.getName());
+            
+            // Retrieve the xml configuration
+            Element entityXml = getXmlEntityConfig(regEntry);
+            
+            // Check the dependencies first ...
+            cacheAllDependendies(regEntry, entityXml);
+            
+            // Cache the entity
+            if (entityXml != null) {
+                IEntity entity = null;
+                switch (regEntry.getEntityType()) {
+                    case boTable : entity = initEntityTable(entityXml); break;
+                    case boQuery : entity = initEntityQuery(entityXml); break;
+                    case boComposite : entity = initEntityComposite(entityXml); break;
+                }
+                if (entity != null) {
+                    cacheEntities.add(entity);
+                    if (entity.isInitialized())
+                        getLog().log(Level.FINE, "Entity {0} Added successfully", entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE));
+                    else
+                        getLog().log(Level.SEVERE, "Entity {0} has not been Added successfully !!!", entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE));
+                    return entity;
+                }
+            }
+            
+        } catch (Exception e) {
+            this.getLog().severe(e.toString());
+        }
+        return null;
+    }    
+    
+    /**
+     * 
+     * @param regEntry
+     * @param entityXml 
+     */
+    private void cacheAllDependendies(BORegistryEntry regEntry, 
+                                      Element entityXml) {
+        if (regEntry.getEntityType() == BOEntityType.boComposite) {
+            try {
+                // 1st level <joy-entity>
+                List<Element> entity1stLevels = entityXml.getChildren(C.ENTITIES_JOY_ENTITY_TAG);
+                for (Element entity1st : entity1stLevels) {
+                    BORegistryEntry entity1stReg = registry.getRegistryEntry(entity1st.getText());
+                    this.cacheEntityFromRegistry(entity1stReg);
+                }
+            } catch (Exception e) {
+                getLog().log(Level.WARNING, "Error while caching main entity dependency for {0}", regEntry.getName());
+            }
+            
+            try {
+                // 2nd level (after <joy-join>
+                List<Element> entity2ndLevels = entityXml.getChildren(C.ENTITIES_COMPOSITE_JOIN);
+                for (Element entity2nd : entity2ndLevels) {
+                    Element entity2ndElt = entity2nd.getChild(C.ENTITIES_JOY_ENTITY_TAG);
+                    this.cacheEntityFromRegistry(registry.getRegistryEntry(entity2ndElt.getText()));
+                }
+            } catch (Exception e) {
+                getLog().log(Level.WARNING, "Error while caching joined entity dependency for {0}", regEntry.getName());
+            }
         }
     }
-
+    
+    /**
+     * Retrieve the xml configuration of the entity into its configuration file
+     * @param regEntry
+     * @return 
+     */
+    private Element getXmlEntityConfig(BORegistryEntry regEntry) {
+        
+        try {
+            org.jdom2.Document document;
+            document = JOY.OPEN_XML(regEntry.getEntityFile());
+            
+            List<Element> entities = document.getRootElement().getChildren(C.ENTITIES_JOY_ENTITY_TAG);
+            for (Element entityXml : entities) 
+                if (entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE).equalsIgnoreCase(regEntry.getName())) 
+                    return entityXml;
+            this.getLog().log(Level.WARNING, "Entity {0} not retrieved, it may have an entity registry configuration error.", regEntry.getName());
+            
+        } catch (Exception e) {
+            this.getLog().severe(e.toString());
+        }
+        return null;
+    }
+    
     /**
      * Instantiate the good DB plugin
      * @param db DB connection
@@ -200,62 +356,16 @@ public class BOFactory extends joyClassTemplate {
         }
         return (retEntity == null ? new BOEntityReadWrite() : retEntity);
     }
-    
-    /**
-     * Initialize all the Composite queries
-     * @param entities
-     * @param root 
-     */
-    private void initComposites(String group,
-                                Element root, 
-                                JoyDBProvider db) {
-        List eltentities = root.getChildren(C.ENTITIES_JOY_COMPOSITE_TAG);
-        Iterator i1 = eltentities.iterator();
-        
-        while(i1.hasNext()) {   // parcours toutes les composites
-            Element entityXml = (Element)i1.next();
-            String EntityName = entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE);
-            
-            // Build the Composite query
-            BOEntityComposite myEntityFactory = new BOEntityComposite(this);
-            myEntityFactory.init(entityXml);
-            
-            // Get all the fields remaps
-            List<BOMapFieldLabel> remapsField = getMappedFields(entityXml); 
-            //IEntity entity = new BOEntityReadWrite();
-            IEntity entity = getEntityPlugin(db);
-            entity.setGroup(group);
-            entity.setName(entityXml.getAttributeValue(C.ENTITIES_NAME_ATTRIBUTE));
-            entity.setBoType(BOEntityType.boReadOnly);
-            String myQuery =  myEntityFactory.getQuery();
-            db.getMetadataFromDB(entity, myQuery, remapsField);
-            entity.setQuery(myQuery);
-            entity.setDB(db);
-            getLog().info("Composite Entity SQL Query :" + myQuery);
-            
-            // Label assignment
-            String label = (entityXml.getAttributeValue(C.ENTITIES_LABEL_ATTRIBUTE) == null ? "" : entityXml.getAttributeValue(C.ENTITIES_LABEL_ATTRIBUTE));
-            label = (!label.isEmpty() ? label : entity.getName());
-            entity.setLabel(label);
 
-            // Set and add BO
-            cacheEntities.add(entity);
-            if (entity.isInitialized())
-                getLog().info("Composite Entity " + EntityName + " Added successfully");
-            else
-                getLog().severe("Composite Entity " + EntityName + " has not been Added successfully !!!");
-        }
-    }
-    
     /**
-     * Initialize all the myEntities
+     * Initialize the entity factory
      * @param FileConfigEntity
      * @return 
      */
     public boolean init(String FileConfigEntity) {
         try {
             org.jdom2.Document document;
-            getLog().info("Open Global Entity configuration file: " + FileConfigEntity);
+            getLog().log(Level.INFO, "Open Global Entity configuration file: {0}", FileConfigEntity);
             document = JOY.OPEN_XML(FileConfigEntity);
             Element root = document.getRootElement();
 
@@ -274,12 +384,7 @@ public class BOFactory extends joyClassTemplate {
                                                     root.getChild(C.ENTITIES_JOY_JDBC_URL).getText(),
                                                     root.getChild(C.ENTITIES_JOY_JDBC_DRIVER).getText(),
                                                     queries);
-            this.dbConnection = connectionDetail.getDB();
-            
-            // Gather tables, views and queries from all the configuration files
-            Element fileList = root.getChild(C.ENTITIES_JOY_FILES);
-            if (fileList == null) return true;
-            List eltfiles = fileList.getChildren(C.ENTITIES_JOY_FILE);
+            this.setConnection(connectionDetail.getDB());
             
             // Collect plugin list
             List<Element> pluginList = root.getChild("joy-db-plugins").getChildren("joy-db-plugin");
@@ -287,24 +392,11 @@ public class BOFactory extends joyClassTemplate {
                 this.plugins.add(new BOPlugin(plugin.getAttributeValue("name"), plugin.getText()));
             }
             
-            // Initialize the ENTITIES by loading the different files
-            Iterator ilist = eltfiles.iterator();
-            while(ilist.hasNext()) {   // parcours toutes les queries
-                Element fileRoot = (Element)ilist.next();
-                String filename = fileRoot.getText();
-                String group = fileRoot.getAttributeValue("group");
-                getLog().info("Open Entity configuration file: " + filename + " for the group: " + group);
-                Element rootfile = JOY.OPEN_XML(filename).getRootElement();
-                // Get the Tables myEntities only
-                initTables(group, rootfile, this.dbConnection);
-                // Get the Custom Query myEntities only
-                initQueries(group, rootfile, this.dbConnection);
-                // Build the composites queries
-                initComposites(group, rootfile, this.dbConnection);
-            }
+            // load registry
+            registry.loadXML(FileConfigEntity);
             
             initialized = true;
-            getLog().info("Entities and Queries have been configured.");
+            getLog().fine("BO Factory has been initialized.");
             
         } catch (Exception e) {
             getLog().severe(e.toString());
@@ -315,23 +407,24 @@ public class BOFactory extends joyClassTemplate {
         return true;
     }
     
-    public void End() {
-        if (poolManagementActive) {
-            getLog().info("Close Connection [" + dbConnection + "]");
-            if (dbConnection != null)
-                dbConnection.end();
-        }
+    /**
+     * Close the connection
+     */
+    public void end() {
+        getLog().log(Level.INFO, "Close Connection [{0}]", dbConnection);
+        if (getConnection() != null)
+            getConnection().end();
     }
     
-    public void setDB(JoyDBProvider db) {
+    public void setConnection(JoyDBProvider db) {
         dbConnection = db;
     }
     
-    public JoyDBProvider getDB() {
+    public JoyDBProvider getConnection() {
         return dbConnection;
     }
 
     public void closeResultSet(ResultSet rs) {
-        getDB().closeResultSet(rs);
+        getConnection().closeResultSet(rs);
     }
 }

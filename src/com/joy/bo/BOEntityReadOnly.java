@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import static com.joy.bo.BOEntityType.boReadWrite;
+import static com.joy.bo.BOEntityRWType.boReadWrite;
 import com.joy.bo.init.BOInitRecord;
 import com.joy.common.ActionLogReport;
 import com.joy.api.beans.JoyJsonMatrix;
@@ -49,9 +49,8 @@ public class BOEntityReadOnly extends joyClassTemplate implements IEntity {
     protected List<String> sortedFields;    // sorted field list
     protected List<String> filters;         // Filters (where clause) list
     protected JoyDBProvider dbConnection;   // DB connection
-    protected BOEntityType boType;          // type of entity : table or query
+    protected BOEntityRWType boType;          // type of entity : table or query
     protected int limitRecords;             // limit the number of record collected
-    protected String group;                 // Entity group
     
     @Override
     public String getQuery() {
@@ -61,21 +60,13 @@ public class BOEntityReadOnly extends joyClassTemplate implements IEntity {
             return "SELECT * FROM " + this.name;   
     }
 
-    public String getGroup() {
-        return group;
-    }
-
-    public void setGroup(String group) {
-        this.group = group;
-    }
-
     @Override
     public void setName(String name) {
         this.name = name;
     }
 
     @Override
-    public void setBoType(BOEntityType boType) {
+    public void setBoType(BOEntityRWType boType) {
         this.boType = boType;
     }
 
@@ -116,7 +107,7 @@ public class BOEntityReadOnly extends joyClassTemplate implements IEntity {
     }
     
     @Override
-    public BOEntityType getBOType() {
+    public BOEntityRWType getBOType() {
         return boType;
     }
 

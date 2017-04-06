@@ -18,26 +18,30 @@ package com.joy.common.state;
 
 import com.joy.C;
 import com.joy.JOY;
-import com.joy.tasks.JoyTaskManager;
 import com.joy.bo.BOFactory;
 import com.joy.common.JoyParameterFactory;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author benoit
  */
-public class JoyState extends JoyStateConfig {
-    private JoyParameterFactory parameters;          // Global PARAMETERS from xml file
-    private List<BOFactory> bofactories;     // Data ENTITIES      // LOG
-    private JoyTaskManager taskManager;
-    private HttpServletRequest currentRequest;
+public class JoyState extends JoyStateMinimum {
+    private JoyParameterFactory parameters;          // Application parameters
+    private List<BOFactory> bofactories;             // Datas
+    private long startTime;
     
-    public HttpServletRequest getCurrentRequest() {
-        return currentRequest;
+    public void start() {
+        startTime = System.currentTimeMillis();
+    }
+    
+    public long getDuration() {
+        return System.currentTimeMillis() - startTime;
     }
     
     public JoyState() {
@@ -60,30 +64,26 @@ public class JoyState extends JoyStateConfig {
         return bofactories;
     }
     
-    public JoyTaskManager getTaskManager() {
-        return taskManager;
-    }
-    
-    public boolean init(ServletContext sce, HttpServletRequest _request) {
+    @Override
+    public boolean init(ServletContext sce, HttpServletRequest _request, HttpServletResponse _response) {
         boolean entityInit = false;
         boolean logParam;
 
-        this.currentRequest = _request;
-        getLog().info("********************************************************************");
-        getLog().finest("Log initialized");
+        this.start();
+        super.init (sce, _request, _response);
 
         // 1 - Get the appdir parameter first
         parameters = new JoyParameterFactory();
         String appdir = sce.getInitParameter(C.APPDIR_PARAMETER);
         if (appdir == null) appdir = "";
         parameters.setApplicationFolder(appdir);
-        getLog().info("Application directory = " + (appdir.isEmpty() ? "Not defined" : appdir));
+        getLog().log(Level.FINE, "Application directory = {0}", appdir.isEmpty() ? "Not defined" : appdir);
 
         // 2 - Initialisation des parametres
         String paramFile = parameters.getConfigFolder() + sce.getInitParameter("joy-parameters");
-        getLog().info("Initialize joy parameters with parameter file : " + paramFile);
+        getLog().log(Level.FINE, "Initialize joy parameters with parameter file : {0}", paramFile);
         logParam = parameters.init(paramFile);
-        getLog().info("Joy Parameters Initialization : " + (logParam ? "OK" : "KO"));
+        getLog().log(Level.FINE, "Joy Parameters Initialization : {0}", logParam ? "OK" : "KO");
 
         // 3 - Initialisation des entités & DB
         bofactories = new ArrayList();
@@ -94,14 +94,13 @@ public class JoyState extends JoyStateConfig {
             bofactories.add(entities);
             entityInit = entities.isInitialized();
         }
-        getLog().info("Entities Initialization : " + (entityInit ? "OK" : "KO"));
+        getLog().log(Level.FINE, "Entities Initialization : {0}", entityInit ? "OK" : "KO");
 
         // 5 - Taks Manager Initalization
         JOY.INIT();
         getLog().info("Task Manager Initialized");
         
         getLog().info("Joy RestFul state initialized successfully :-)");
-        getLog().info("********************************************************************");
 
         return (entityInit && logParam);
     }
@@ -109,9 +108,9 @@ public class JoyState extends JoyStateConfig {
     public void end() {
         for (BOFactory factory : bofactories) {
             try {
-                factory.End();
+                factory.end();
             } catch (Exception e) {
-                getLog().warning("Impossible to close the connection: " + e);
+                getLog().warning("JoyState.end()> Impossible to close the connection: " + e);
             }
         }
     }

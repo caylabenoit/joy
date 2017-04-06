@@ -21,8 +21,10 @@ import static com.joy.C.RESTFUL_ALREADY_EXIST;
 import static com.joy.C.RESTFUL_NOT_FOUND;
 import static com.joy.C.RESTFUL_NO_CONTENT;
 import com.joy.api.ActionTypeREST;
+import com.joy.common.state.JoyState;
 import com.joy.json.JSONArray;
 import com.joy.json.JSONObject;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
 import javax.servlet.ServletOutputStream;
@@ -87,78 +89,80 @@ public class FilterAPI extends FilterCommon
      * Manage a REST call request
      * http://localhost:18180/GovManagementTool/action?object=[tag] / objecttype=rest
      * http://localhost:18180/GovManagementTool/rest/[tag]/P1/P2/P3/...
-     * @param request
-     * @param response
+     * @param state
      */
     @Override
-    protected void process(HttpServletRequest request,
-                           HttpServletResponse response) {
+    protected void process(JoyState state) {
 
         try {
             // Get call informations
-            String[] uriParts = request.getRequestURI().split("/");
-            ApiConfigEntry myRestCall = new ApiConfigEntry(uriParts[3], getState().getRestConfiguration());
+            String[] uriParts = state.getCurrentRequest().getRequestURI().split("/");
+            ApiConfigEntry myRestCall = new ApiConfigEntry(uriParts[3], state.getRestConfiguration());
             String resultREST = "";
             
-            getState().getLog().log(Level.INFO, "REST action requested");
+            state.getLog().log(Level.INFO, "REST action requested");
             ActionTypeREST actionRestObject = (ActionTypeREST) Class.forName(myRestCall.getClassName()).newInstance();
-            actionRestObject.init(getState());
+            actionRestObject.init(state);
             
-            switch (request.getMethod()) {
+            switch (state.getCurrentRequest().getMethod()) {
                 case "PUT": // Update-Replace
                     resultREST = actionRestObject.restPut(); 
-                    response.setStatus(SC_OK);
+                    state.getCurrentResponse().setStatus(SC_OK);
                     if (resultREST.equalsIgnoreCase(RESTFUL_NOT_FOUND))
-                        response.setStatus(SC_NOT_FOUND);
+                        state.getCurrentResponse().setStatus(SC_NOT_FOUND);
                     else if (resultREST.equalsIgnoreCase(RESTFUL_NO_CONTENT))
-                        response.setStatus(SC_NO_CONTENT);
+                        state.getCurrentResponse().setStatus(SC_NO_CONTENT);
                     break;
                     
                 case "DELETE": // Delete
                     resultREST = actionRestObject.restDelete(); 
-                    response.setStatus(SC_OK);
+                    state.getCurrentResponse().setStatus(SC_OK);
                     if (resultREST.equalsIgnoreCase(RESTFUL_NOT_FOUND))
-                        response.setStatus(SC_NOT_FOUND);
+                        state.getCurrentResponse().setStatus(SC_NOT_FOUND);
                     break;
                     
                 case "POST": // Create
                     resultREST = actionRestObject.restPost(); 
-                    response.setStatus(SC_OK);
+                    state.getCurrentResponse().setStatus(SC_OK);
                     if (resultREST.equalsIgnoreCase(RESTFUL_NOT_FOUND))
-                        response.setStatus(SC_NOT_FOUND);
+                        state.getCurrentResponse().setStatus(SC_NOT_FOUND);
                     else if (resultREST.equalsIgnoreCase(RESTFUL_ALREADY_EXIST))
-                        response.setStatus(SC_CONFLICT);
+                        state.getCurrentResponse().setStatus(SC_CONFLICT);
                     break;
                     
                 case "GET": // Get-read default
                 default:
                     resultREST = actionRestObject.restGet();
-                    response.setStatus(SC_OK);
+                    state.getCurrentResponse().setStatus(SC_OK);
                     if (resultREST.equalsIgnoreCase(RESTFUL_NOT_FOUND))
-                        response.setStatus(SC_NOT_FOUND);
+                        state.getCurrentResponse().setStatus(SC_NOT_FOUND);
             }
 
-            response.setContentType (myRestCall.getMime());
+            state.getCurrentResponse().setContentType (myRestCall.getMime());
             if (myRestCall.getMime().equalsIgnoreCase("unknown/unknown")) {
                 // Force a file download
-                response.setHeader ("Content-Disposition", "attachment; filename=\"\"");
-                ServletOutputStream outs = response.getOutputStream();
+                state.getCurrentResponse().setHeader ("Content-Disposition", "attachment; filename=\"\"");
+                ServletOutputStream outs = state.getCurrentResponse().getOutputStream();
                 outs.print(resultREST);
                 outs.flush();
                 outs.close();
                 
             } else {
                 // Return classic flow (in json)
-                PrintWriter out = response.getWriter();
+                PrintWriter out = state.getCurrentResponse().getWriter();
                 out.print( resultREST );
                 out.close();
             }
-            actionRestObject.endOfWork();
             
-        } catch (Exception ex) {
-            getState().getLog().log(Level.SEVERE, "IOException=" + ex);
+        } catch (IOException | ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
+            getLog().log(Level.SEVERE, "FilterAPI.process> IOException={0}", ex);
         }
-        getState().getEntities().End();
+        
+        try {
+            state.end();
+        } catch (Exception ex) {
+            getLog().log(Level.WARNING, "FilterAPI.process (Closing Joy State)> Exception={0}", ex);
+        }
     }
     
 }

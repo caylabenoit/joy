@@ -18,7 +18,6 @@ package com.joy.api.ready;
 
 import com.joy.api.utils.RESTEntityCommon;
 import com.joy.C;
-import com.joy.JOY;
 
 /**
  * Returns an antity result in JSON format with the filters in parameters (must be specified by pair).

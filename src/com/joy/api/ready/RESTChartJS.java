@@ -80,7 +80,6 @@ public class RESTChartJS extends RESTEntityCommon {
                              rs.getFloat(3));
             }
             getBOFactory().closeResultSet(rs);
-            //return chartbar.getChartData();
             return chartbar.getJsonData().toString();
             
         } catch (SQLException e) {
@@ -110,13 +109,13 @@ public class RESTChartJS extends RESTEntityCommon {
         try {
             while (rs.next())
                 chart.add(rs.getString(1), "data", rs.getFloat(2));
-            this.getBOFactory().getDB().closeResultSet(rs);
+            this.getBOFactory().getConnection().closeResultSet(rs);
             //return chart.getChartData();
             return chart.getJsonData().toString();
             
         } catch (Exception ex) {
             getLog().severe (ex.toString());
-            this.getBOFactory().getDB().closeResultSet(rs);
+            this.getBOFactory().getConnection().closeResultSet(rs);
         }
         return "";
     }

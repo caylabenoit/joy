@@ -17,7 +17,7 @@
 package com.joy.bo;
 
 import com.joy.C;
-import static com.joy.bo.BOEntityType.*;
+import static com.joy.bo.BOEntityRWType.*;
 import com.joy.common.joyClassTemplate;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -28,7 +28,7 @@ import org.jdom2.Element;
  * Build a dynamic query considering an XML description like this :
  * 
  * Sample :
- * <joy-composite name = "Composite name" distinct="yes/no">
+ * <joy-entity name = "Composite name" distinct="yes/no">
  *   <joy-entity alias="[Left Table Alias]" as="[As in Select/To rename the selected field]">...</joy-entity>
  * 
  *   <joy-field alias="[Table Alias for selected field]">[Left IEntity]</joy-field>
@@ -50,7 +50,7 @@ import org.jdom2.Element;
  * 
  *   <joy-group alias="[Table Alias for grouped field]">[Group Field]</joy-group>
  * 
- * </joy-composite>
+ * </joy-entity>
  * 
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */

@@ -378,7 +378,6 @@ public class JOY {
             while ((line = reader.readLine()) != null) {
                 out.append(line);
             }
-            SYSTEM_LOG(out.toString());   //Prints the string content read from input stream
             reader.close();
             return out.toString();
 

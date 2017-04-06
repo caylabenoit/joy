@@ -44,12 +44,12 @@ public interface IEntity {
      * Set or change Entity type
      * @param boType ReadOnly or ReadWrite
      */
-    public void setBoType(BOEntityType boType);
+    public void setBoType(BOEntityRWType boType);
     /**
      * return the entity type
      * @return ReadOnly or ReadWrite
      */
-    public BOEntityType getBOType();
+    public BOEntityRWType getBOType();
     /**
      * Get the maximum number or record which can be returned after querying the DB
      * @return 
@@ -119,7 +119,4 @@ public interface IEntity {
     // Read specific (query) interface
     public void setQuery(String Query);
     public String getQuery();
-    // Group management
-    public String getGroup();
-    public void setGroup(String group);
 }

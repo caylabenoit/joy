@@ -18,21 +18,31 @@ package com.joy.common.state;
 
 import com.joy.JOY;
 import com.joy.api.ActionLocaleMgnt;
-import com.joy.bo.BOFactory;
 import com.joy.common.joyClassTemplate;
 import com.joy.json.JSONObject;
-import com.joy.providers.JoyDBProvider;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * This class persists the global informations needed for all the application life
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class JoyStateConfig extends joyClassTemplate {
+public class JoyStateMinimum extends joyClassTemplate {
     private ActionLocaleMgnt messageBundle; // Configuration des fichiers de traduction     
-    private BOFactory entities;
     private JSONObject restConfiguration;
     private JSONObject taskConfiguration;
+    private HttpServletRequest currentRequest;
+    private HttpServletResponse currentResponse;
 
+    public HttpServletResponse getCurrentResponse() {
+        return currentResponse;
+    }
+    
+    public HttpServletRequest getCurrentRequest() {
+        return currentRequest;
+    }
+    
     public JSONObject getTaskConfiguration() {
         return taskConfiguration;
     }
@@ -57,30 +67,14 @@ public class JoyStateConfig extends joyClassTemplate {
         this.messageBundle = MessageBundle;
     }
 
-    public BOFactory getEntities() {
-        return entities;
-    }
-
-    public void setEntities(BOFactory Entities) {
-        this.entities = Entities;
-    }
-
-    public JoyStateConfig() {
+    public JoyStateMinimum() {
         super();
         messageBundle = new ActionLocaleMgnt();
-        entities = null;
     }
     
-    /**
-     * display check informations in the logs
-     */
-    public void checks() {
-        JoyDBProvider connectionCheck = null;
-        if (entities != null)
-            connectionCheck = entities.getDB();
-        getLog().fine("ActionConfig initialized: " + messageBundle +
-                        ", MessageBundle initialized: " + messageBundle +
-                        ", Entities initialized: " + entities +
-                        ", DB Connection initialized: " + connectionCheck);
+    public boolean init(ServletContext sce, HttpServletRequest _request, HttpServletResponse _response) {
+        this.currentRequest = _request;
+        this.currentResponse = _response;
+        return true;
     }
 }

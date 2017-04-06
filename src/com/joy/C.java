@@ -92,12 +92,8 @@ public class C {
     public static final String ENTITIES_JOY_JDBC_DRIVER ="joy-jdbc-driver";
     public static final String ENTITIES_JOY_DATASOURCE_TAG ="joy-datasource";
     public static final String ENTITYFIELD_COUNT_FIELD ="NEWID";
-    public static final String ENTITIES_JOY_FILES ="joy-entity-files";
-    public static final String ENTITIES_JOY_FILE ="joy-entity-file";
-    public static final String ENTITIES_JOY_TABLE_TAG ="joy-table";
     public static final String ENTITIES_JOY_FIELDLABEL_TAG ="joy-field-label";
-    public static final String ENTITIES_JOY_QUERY_TAG ="joy-customquery";
-    public static final String ENTITIES_JOY_COMPOSITE_TAG ="joy-composite";
+    public static final String ENTITIES_JOY_ENTITY_TAG ="joy-entity";
     public static final String ENTITIES_NAME_ATTRIBUTE ="name";
     public static final String ENTITIES_LABEL_ATTRIBUTE ="label";
     // Composite objects

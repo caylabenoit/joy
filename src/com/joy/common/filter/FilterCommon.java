@@ -18,7 +18,6 @@ package com.joy.common.filter;
 
 import com.joy.common.state.JoyState;
 import com.joy.common.joyClassTemplate;
-import java.io.IOException;
 import java.util.logging.Level;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -35,15 +34,6 @@ import javax.servlet.http.HttpServletResponse;
  * @author Benoit Cayla (benoit@famillecayla.fr)
  */
 public class FilterCommon extends joyClassTemplate implements Filter {
-    private JoyState joyState;
-
-    public FilterCommon() {
-        joyState = null;
-    }
-
-    public JoyState getState() {
-        return joyState;
-    }
     
     @Override
     public void init(FilterConfig fc) throws ServletException {}
@@ -56,45 +46,45 @@ public class FilterCommon extends joyClassTemplate implements Filter {
                          ServletResponse response, 
                          FilterChain chain)
     {
+        JoyState joyState = null;
+        
         try {
             HttpServletRequest _request = (HttpServletRequest)request;
             HttpServletResponse _response = (HttpServletResponse)response;
             
             // Initialization
-            joyState = joyInitialize(request.getServletContext(), _request);
-            joyState.checks();
-            joyState.getLog().log(Level.FINE,  "New HTTP Request initialization, URL=" + _request.getRequestURL() + " | QueryString=" + _request.getQueryString());
+            joyState = joyInitialize(request.getServletContext(), _request, _response);
+            joyState.getLog().log(Level.FINEST, "New HTTP Request initialization, URL={0} | QueryString={1}", new Object[]{_request.getRequestURL(), _request.getQueryString()});
         
             // Request
-            process(_request, _response);
-            
-            // Finalize
-            joyFinalize();
-            
+            process(joyState);
+
         } catch (Exception t) {
-            // Finalize
-            joyFinalize();
-            try {
-                chain.doFilter(request, response);
-            } catch (IOException | ServletException  ex) {}
+            this.getLog().log(Level.WARNING, "FilterCommon.doFilter|Exception> {0}", t.toString());
         } 
         
-
+        joyFinalize(joyState);
+        joyState = null;
     }
     
-    protected void process(HttpServletRequest request, HttpServletResponse response) {}
+    protected void process(JoyState state) {}
     
     /**
      * Check Initialization features
      * @param sce servlet context
+     * @param request
+     * @param response
      * @return 
      */
     protected JoyState joyInitialize(ServletContext sce, 
-                                     HttpServletRequest request) {
+                                     HttpServletRequest request,
+                                     HttpServletResponse response) {
         
+        getLog().fine("------ [JOY] Start Request Treatment ------");
+
         // Initialisation du framework
         JoyState srvConfig = new JoyState();
-        srvConfig.init(sce,request);
+        srvConfig.init(sce,request,response);
         
         // Rest configuration
         if (srvConfig.getRestConfiguration() == null)
@@ -106,7 +96,7 @@ public class FilterCommon extends joyClassTemplate implements Filter {
         
         // Initialisation des fichiers de traduction
         if (!srvConfig.getMessageBundle().isInitilized()) {
-            getLog().fine("Initialize locales language and country.");
+            getLog().fine("[JOY] Initialize locales language and country.");
             srvConfig.getMessageBundle().setCountry(srvConfig.getParameters().getDefaultLocalCountry());
             srvConfig.getMessageBundle().setLanguage(srvConfig.getParameters().getDefaultLocalLanguage());
             srvConfig.getMessageBundle().init(srvConfig.getParameters().getJoyBundledMessageFile());
@@ -114,8 +104,14 @@ public class FilterCommon extends joyClassTemplate implements Filter {
         return srvConfig;
     }
     
-    protected void joyFinalize() {
-        getState().end();
+    protected void joyFinalize(JoyState state) {
+        try {
+            getLog().fine("------ [JOY] End Of Request Treatment ------");
+            getLog().log(Level.FINE, "[JOY] Number of Entities cached : {0}", state.getBOFactory().cacheSize());
+            getLog().log(Level.FINE, "[JOY] Treatment duration : {0} ms", state.getDuration());
+            if (state != null)
+                state.end();
+        } catch (Exception e) {}
     }
     
 }

@@ -26,7 +26,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import static com.joy.bo.BOEntityType.boReadWrite;
+import static com.joy.bo.BOEntityRWType.boReadWrite;
 import static com.joy.bo.BOFieldType.fieldInteger;
 import com.joy.bo.init.BOInitField;
 import com.joy.bo.init.BOInitRecord;
