@@ -23,8 +23,6 @@ import com.joy.tasks.ActionTypeTASK;
 import com.joy.json.JSONArray;
 import com.joy.json.JSONObject;
 import java.io.PrintWriter;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -72,30 +70,23 @@ public class FilterTask extends FilterCommon {
         boolean hasActiveSession = false;
 
         try {
-            // Session management check
-            HttpSession mySession = state.getCurrentRequest().getSession();
-            hasActiveSession = (mySession.getAttribute("JOY_SESSION") != null);
-            if (!state.getParameters().isNoLogin()) {
+            if (!state.getAppParameters().isNoLogin()) {
                 if (!hasActiveSession) 
                 return;
             }
 
             // Get call informations
-            String[] uriParts = state.getCurrentRequest().getRequestURI().split("/");
-            ApiConfigEntry myRestCall = new ApiConfigEntry(uriParts[3], state.getTaskConfiguration());
+            ApiConfigEntry myRestCall = new ApiConfigEntry(state.getAPIRequest().getMainAction(), state.getTaskConfiguration());
             getLog().fine("TASK action requested");
             ActionTypeTASK actionTaskObject = (ActionTypeTASK) Class.forName(myRestCall.getClassName()).newInstance();
             actionTaskObject.setJoyState(state);
             
-            String myTaskName = uriParts[3];
+            String myTaskName = state.getAPIRequest().getMainAction();
             boolean result;
             PrintWriter out = null;
             // create a new task
-            result = JOY.TASKS().newTask(myTaskName,
-                                         myTaskName, 
+            result = JOY.TASKS().newTask(myTaskName, 
                                          myRestCall.getClassName(),
-                                         mySession, 
-                                         state.getCurrentRequest(),
                                          state);
             out = state.getCurrentResponse().getWriter();
             out.print( (result ? "{\"result\":\"Success\"}" : "{\"result\":\"Failed\"}") );

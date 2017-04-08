@@ -28,29 +28,29 @@ import org.jdom2.Element;
  * Build a dynamic query considering an XML description like this :
  * 
  * Sample :
- * <joy-entity name = "Composite name" distinct="yes/no">
- *   <joy-entity alias="[Left Table Alias]" as="[As in Select/To rename the selected field]">...</joy-entity>
+ * &gt;joy-entity name = "Composite name" distinct="yes/no"&lt;
+ *   &gt;joy-entity alias="[Left Table Alias]" as="[As in Select/To rename the selected field]"&lt;...&gt;/joy-entity&lt;
  * 
- *   <joy-field alias="[Table Alias for selected field]">[Left IEntity]</joy-field>
- *   <joy-field ...></joy-field>
+ *   &gt;joy-field alias="[Table Alias for selected field]"&lt;[Left IEntity]&gt;/joy-field&lt;
+ *   &gt;joy-field ...&lt;&gt;/joy-field&lt;
  * 
- *   <joy-join type="INNER/LEFT/RIGHT [Single JOIN by default]">
- *       <joy-entity alias="[Right Table Alias]">[Right IEntity]</joy-entity>
- *       <joy-join-key master="[Left field Key]" slave="[Right field Key]" />
- *   </joy-join>
- *   <joy-join type="...">
+ *   &gt;joy-join type="INNER/LEFT/RIGHT [Single JOIN by default]"&lt;
+ *       &gt;joy-entity alias="[Right Table Alias]"&lt;[Right IEntity]&gt;/joy-entity&lt;
+ *       &gt;joy-join-key master="[Left field Key]" slave="[Right field Key]" /&lt;
+ *   &gt;/joy-join&lt;
+ *   &gt;joy-join type="..."&lt;
  *       ...
- *   </joy-join>
+ *   &gt;/joy-join&lt;
  * 
- *   <joy-filter alias="[Table Alias for filter field]" field="[Filter field]" operator="&lt;&gt;[Or anything else]">[Filter]</joy-filter>
- *   <joy-filter>...</joy-filter>
+ *   &gt;joy-filter alias="[Table Alias for filter field]" field="[Filter field]" operator="&lt;&gt;[Or anything else]"&lt;[Filter]&gt;/joy-filter&lt;
+ *   &gt;joy-filter&lt;...&gt;/joy-filter&lt;
  * 
- *   <joy-sort alias="[Alias Sort field]" field="[Sort field]" desc="[no/yes]" />
- *   <joy-sort ... />
+ *   &gt;joy-sort alias="[Alias Sort field]" field="[Sort field]" desc="[no/yes]" /&lt;
+ *   &gt;joy-sort ... /&lt;
  * 
- *   <joy-group alias="[Table Alias for grouped field]">[Group Field]</joy-group>
+ *   &gt;joy-group alias="[Table Alias for grouped field]"&lt;[Group Field]&gt;/joy-group&lt;
  * 
- * </joy-entity>
+ * &gt;/joy-entity&lt;
  * 
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */

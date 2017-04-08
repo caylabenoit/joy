@@ -14,11 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.joy.common;
+package com.joy.common.parameters;
 
 import com.joy.C;
 import com.joy.JOY;
-import com.joy.common.JoyParameter.ParameterType;
+import com.joy.common.parameters.JoyParameter.ParameterType;
+import com.joy.common.joyClassTemplate;
 import com.joy.etl.MappingSignature;
 import com.joy.json.JSONObject;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ import org.jdom2.Element;
 public class JoyParameterFactory extends joyClassTemplate {
     private String applicationFolder;
     private boolean initialized;
-    private String defaultURLPattern;
+    private String apiStartPath;
     private String bundledMessageFile;
     private String defaultDateFormat;
     private boolean noLogin;
@@ -99,7 +100,7 @@ public class JoyParameterFactory extends joyClassTemplate {
     public JoyParameterFactory() {
         initialized = false;
         noLogin = false;
-        defaultURLPattern="";
+        apiStartPath="";
         applicationParameters = new ArrayList();
         entitiesConfigList = new ArrayList();
         sessionTimeoutMin = 10;
@@ -122,18 +123,9 @@ public class JoyParameterFactory extends joyClassTemplate {
         return bundledMessageFile;
     }
     
-    public String getJoyDefaultURLPattern() {
-        return defaultURLPattern;
+    public String getAPIStartPath() {
+        return apiStartPath;
     }
-    
-    public String getJoyDefaultActionName() {
-        // just remove the first /
-        if (defaultURLPattern.substring(0, 1).equalsIgnoreCase("/"))
-            return defaultURLPattern.substring(1, defaultURLPattern.length());
-        else
-            return defaultURLPattern;
-    }
-    
     
     public List<String> getEntities() {
         return entitiesConfigList;
@@ -156,8 +148,8 @@ public class JoyParameterFactory extends joyClassTemplate {
             getLog().fine("Get the fixed Joy framework parameters");
             
             // Get the Joy mandatory PARAMETERS
-            defaultURLPattern = racine.getChildText(C.PARAMETERS_TAG_URLPATTERN);
-            getLog().fine("Default URL pattern: " + defaultURLPattern);
+            apiStartPath = racine.getChildText(C.PARAMETERS_TAG_API_START_PATH);
+            getLog().fine("Default API URL start path: " + apiStartPath);
             
             noLogin =  racine.getChildText(C.PARAMETERS_NO_LOGIN).equalsIgnoreCase(C.YES);
             getLog().fine("No login: " + racine.getChildText(C.PARAMETERS_NO_LOGIN));
@@ -261,7 +253,7 @@ public class JoyParameterFactory extends joyClassTemplate {
         paramsObj.put("country", this.getDefaultLocalCountry());
         paramsObj.put("lang", this.getDefaultLocalLanguage());
         paramsObj.put("dateformat", this.getJoyDefaultDateFormat());
-        paramsObj.put("urlpattern", this.getJoyDefaultURLPattern());
+        paramsObj.put("api", this.getAPIStartPath());
         paramsObj.put("version", this.getVersion());
         
         // Other parameters

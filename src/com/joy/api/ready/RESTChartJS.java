@@ -16,7 +16,6 @@
  */
 package com.joy.api.ready;
 
-import com.joy.JOY;
 import com.joy.charts.chartjs.ChartWithDataset;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,7 +30,7 @@ import com.joy.api.utils.RESTEntityCommon;
  *   SDS for One dataset only
  *   MDS for many datasets
  * P2: Entity name
- * P3 ... PX : Query parameters --> par pair : (Name, Value)
+ * P3 ... PX : Query parameters per pair : (Name, Value)
  *
  * Entity must return these columns/fields (in the good order) :
  * For SDS query 
@@ -47,7 +46,7 @@ public class RESTChartJS extends RESTEntityCommon {
     @Override
     public String restGet() {
         
-        switch (this.getRestParameter(1).toUpperCase()) {
+        switch (this.getCurrentRequest().getAction(2).toUpperCase()) {
             case "SDS": // Single DataSet
                 return getSingleDatasetData();
             case "MDS": // Multiple DataSets
@@ -68,12 +67,12 @@ public class RESTChartJS extends RESTEntityCommon {
      */
     private String getMultipleDatasetsData() {
         try {
-            IEntity entity = this.getFilteredEntity(this.getRestParameter(2), 3); //this.getBOFactory().getEntity(this.getStrArgumentValue("P2").toUpperCase());
+            IEntity entity = this.getFilteredEntity(this.getCurrentRequest().getAction(1)); 
             if (entity == null) return "";
             ResultSet rs = entity.select();
 
-            ChartWithDataset chartbar = new ChartWithDataset(this.getState().getParameters().getParameter("ChartsColors").getList(), 
-                                                             this.getState().getParameters().getParameter("transparency").getValue().toString());   
+            ChartWithDataset chartbar = new ChartWithDataset(this.getState().getAppParameters().getParameter("ChartsColors").getList(), 
+                                                             this.getState().getAppParameters().getParameter("transparency").getValue().toString());   
             while (rs.next()) {
                 chartbar.add(rs.getString(1), 
                              rs.getString(2), 
@@ -97,12 +96,10 @@ public class RESTChartJS extends RESTEntityCommon {
      * @return JSON for chart.js
      */
     private String getSingleDatasetData() {
-        if (this.getRestParameter(2).isEmpty())
-            return "";
-        
-        ChartWithDataset chart = new ChartWithDataset(this.getState().getParameters().getParameter("ChartsColors").getList(), 
-                                                      this.getState().getParameters().getParameter("transparency").getValue().toString());
-        IEntity entity = this.getFilteredEntity(this.getRestParameter(2), 3);
+
+        ChartWithDataset chart = new ChartWithDataset(this.getState().getAppParameters().getParameter("ChartsColors").getList(), 
+                                                      this.getState().getAppParameters().getParameter("transparency").getValue().toString());
+        IEntity entity = this.getFilteredEntity(this.getCurrentRequest().getAction(1));
         if (entity == null) return "";
         ResultSet rs = entity.select();
         

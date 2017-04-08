@@ -22,6 +22,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import com.joy.bo.IEntity;
+import java.sql.SQLException;
 
 /**
  *
@@ -48,7 +49,7 @@ public class RESTJoyCheck extends ActionTypeREST {
             rs = entity.select();
             empty = (!rs.next());
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             detail.put("Status", "KO");
             detail.put("Entity", Table);
             detail.put("Message", "The entity/Table may not exist, " + ex.toString());
@@ -88,7 +89,7 @@ public class RESTJoyCheck extends ActionTypeREST {
     private Collection<JSONObject> CheckEntities() {
         Collection<JSONObject> checkEntities = new ArrayList<>();
 
-        for (IEntity entity : this.getBOFactory().getAll()) {
+        for (IEntity entity : this.getBOFactory().getCachedEntities()) {
             entity.reset();
             JSONObject retEntity = new JSONObject();
             JSONObject detail = new JSONObject();
@@ -111,7 +112,8 @@ public class RESTJoyCheck extends ActionTypeREST {
     @Override
     public String restGet() {
         JSONObject retObj = new JSONObject();
-
+        
+        this.getState().getBOFactory().cacheAllRegistry();
         retObj.put("TableCheck", CheckTables());
         retObj.put("EntityCheck", CheckEntities());
         

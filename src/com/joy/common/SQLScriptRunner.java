@@ -82,8 +82,8 @@ public class SQLScriptRunner {
     /**
      * Runs an SQL script (read in using the Reader parameter)
      * @param reader the source of the script
-     * @throws java.io.IOException
-     * @throws java.sql.SQLException
+     * @throws java.io.IOException IOException
+     * @throws java.sql.SQLException SQLException
      */
     public void runScript(Reader reader) throws IOException, SQLException {
         try {

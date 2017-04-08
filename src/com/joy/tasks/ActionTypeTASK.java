@@ -19,7 +19,7 @@ package com.joy.tasks;
 import com.joy.common.state.JoyState;
 
 /**
- *
+ * Task action
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
 public class ActionTypeTASK extends JoyTask {

@@ -19,96 +19,36 @@ package com.joy.api.utils;
 import com.joy.bo.BOFieldType;
 import com.joy.bo.IEntity;
 import com.joy.api.ActionTypeREST;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class manages the arguments pairs into a rest call
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
 public class RESTEntityCommon extends ActionTypeREST {
-    protected List<PairParameter> Pairs;
-    
+
     public RESTEntityCommon() {
         super();
-        Pairs = new ArrayList();
-    }
-    
-    protected class PairParameter {
-        private String Name;
-        private String Value;
-
-        public PairParameter(String Name, String Value) {
-            this.Name = Name;
-            this.Value = Value;
-        }
-
-        public String getName() {
-            return Name;
-        }
-
-        public void setName(String Name) {
-            this.Name = Name;
-        }
-
-        public String getValue() {
-            return Value;
-        }
-
-        public void setValue(String Value) {
-            this.Value = Value;
-        }
-    }
-    
-    public int getPairsCount(int Index) {
-        return Pairs.size();
-    }
-    
-    public PairParameter getPair(int Index) {
-        try {
-            return Pairs.get(Index);
-        } catch (Exception e) { return null; }
-    }
-
-    protected boolean CollectPairs(int firstParameterIndex) {
-        int i = firstParameterIndex; // begins from the 3rd parameter
-        boolean hasPair = true;
-        
-        try {
-            while (hasPair) {
-                String argName = getRestParameter(i++); //this.getStrArgumentValue("P" + i++);
-                String argValue = getRestParameter(i++); //this.getStrArgumentValue("P" + i++);
-                hasPair = (!argName.isEmpty() &&  !argValue.isEmpty());
-                if (hasPair) {
-                    Pairs.add(new PairParameter(argName, argValue));
-                } 
-            }
-            return true;
-            
-        } catch (Exception e) {
-            return false;
-        }
     }
     
     /**
-     * return a filtered entity object
-     * @param entityName    entity name
-     * @param firstParameterIndex index of the first parameter (not the entity name)
+     * Return a filtered entity object
+     * The URL must have the entity name just after api (ex. http://.../api/[entity name]/...
+     * Parameters are used to filter the entity
      * @return JSON Term's list
      */
-    protected IEntity getFilteredEntity(String entityName, 
-                                        int firstParameterIndex) {
+    protected IEntity getFilteredEntity(String entityName) {
+        
         try {
             IEntity entity = this.getBOFactory().getEntity(entityName);
 
             // Manage Criterias for entity
-            this.CollectPairs(firstParameterIndex);
-            for (int i=0; i< this.getPairsCount(i); i++) {
-                String ColName = this.getPair(i).getName().toUpperCase();
+            for (int i=0; i< this.getCurrentRequest().getParameters().size(); i++) {
+                String ColName = this.getCurrentRequest().getParameter(i).getName();
+                
                 if (ColName.equalsIgnoreCase("ROWCOUNT")) {
                     // Limit recors if specific field ROWCOUNT filled and > 0
                     try { 
-                        int limit = Integer.valueOf(this.getPair(i).getValue());
+                        int limit = Integer.valueOf(this.getCurrentRequest().getParameter(i).getValue());
                         if (limit > 0)
                             entity.setLimitRecords(limit);
                     } catch (NumberFormatException e) {}
@@ -121,14 +61,14 @@ public class RESTEntityCommon extends ActionTypeREST {
                         case fieldInteger: 
                             int ii = 0;
                             try {
-                                ii= Integer.valueOf(this.getPair(i).getValue());
+                                ii= Integer.valueOf(this.getCurrentRequest().getParameter(i).getValue());
                             } catch (NumberFormatException e) { }
                             entity.field(ColName).setKeyValue(ii);
                             break;
                         case fieldFloat:
                             float j = 0;
                             try {
-                                j= Float.valueOf(this.getPair(i).getValue());
+                                j= Float.valueOf(this.getCurrentRequest().getParameter(i).getValue());
                             } catch (NumberFormatException e) { }
                             entity.field(ColName).setKeyValue(j);
                             break;
@@ -136,7 +76,7 @@ public class RESTEntityCommon extends ActionTypeREST {
                         case fieldDate:
                         case fieldString: 
                         default: 
-                            entity.field(ColName).setKeyValue(this.getPair(i).getValue());
+                            entity.field(ColName).setKeyValue(this.getCurrentRequest().getParameter(i).getValue());
                     }
                 }
             }

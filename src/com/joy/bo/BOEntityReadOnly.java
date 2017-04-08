@@ -82,7 +82,7 @@ public class BOEntityReadOnly extends joyClassTemplate implements IEntity {
     
     /**
      * Check i a record already exists in the entity
-     * Take in account the Keys & key values
+     * Take in account the Keys and key values
      * @return true if record exists
      */
     public boolean checkIfExists() {
@@ -368,7 +368,7 @@ public class BOEntityReadOnly extends joyClassTemplate implements IEntity {
     /**
      * Set all the myQuery values into the PreparedStatement (? replacement)
      * @param ps JDBC PreparedStatement
-     * @param query Query & values container
+     * @param query Query and values container
      */
     protected void setQueryValues(PreparedStatement ps, 
                                 BOQueryExecution query) {

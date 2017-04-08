@@ -32,15 +32,10 @@ public class JoyStateMinimum extends joyClassTemplate {
     private ActionLocaleMgnt messageBundle; // Configuration des fichiers de traduction     
     private JSONObject restConfiguration;
     private JSONObject taskConfiguration;
-    private HttpServletRequest currentRequest;
     private HttpServletResponse currentResponse;
-
+    
     public HttpServletResponse getCurrentResponse() {
         return currentResponse;
-    }
-    
-    public HttpServletRequest getCurrentRequest() {
-        return currentRequest;
     }
     
     public JSONObject getTaskConfiguration() {
@@ -73,7 +68,6 @@ public class JoyStateMinimum extends joyClassTemplate {
     }
     
     public boolean init(ServletContext sce, HttpServletRequest _request, HttpServletResponse _response) {
-        this.currentRequest = _request;
         this.currentResponse = _response;
         return true;
     }

@@ -306,7 +306,7 @@ public class JOY {
     }
     
     /**
-     * Format a date --> string (format=dd/MM/yyyy HH:mm:ss). 
+     * Format a date to a string (format=dd/MM/yyyy HH:mm:ss). 
      * Take the Joy format (in PARAMETERS.xml) or by default "dd/MM/yyyy HH:mm:ss"
      * @param myDate date to format
      * @return formatted date in string

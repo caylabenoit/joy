@@ -28,8 +28,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import static javax.servlet.http.HttpServletResponse.SC_CONFLICT;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
@@ -96,15 +94,14 @@ public class FilterAPI extends FilterCommon
 
         try {
             // Get call informations
-            String[] uriParts = state.getCurrentRequest().getRequestURI().split("/");
-            ApiConfigEntry myRestCall = new ApiConfigEntry(uriParts[3], state.getRestConfiguration());
+            ApiConfigEntry myRestCall = new ApiConfigEntry(state.getAPIRequest().getMainAction(), state.getRestConfiguration());
             String resultREST = "";
             
             state.getLog().log(Level.INFO, "REST action requested");
             ActionTypeREST actionRestObject = (ActionTypeREST) Class.forName(myRestCall.getClassName()).newInstance();
             actionRestObject.init(state);
             
-            switch (state.getCurrentRequest().getMethod()) {
+            switch (state.getAPIRequest().getHttpMethod()) {
                 case "PUT": // Update-Replace
                     resultREST = actionRestObject.restPut(); 
                     state.getCurrentResponse().setStatus(SC_OK);

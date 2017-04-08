@@ -117,7 +117,7 @@ public class C {
     ///////////////////////////////////////
     // XML Configuration tags Parameters
     ///////////////////////////////////////    
-    public static final String PARAMETERS_TAG_URLPATTERN = "default-url-pattern";
+    public static final String PARAMETERS_TAG_API_START_PATH = "api-start-path";
     public static final String PARAMETERS_TAG_BUNDLEMSG = "bundle-message";
     public static final String PARAMETERS_TAG_DATEFORMAT = "default-dateformat";
     public static final String PARAMETERS_TAG_VERSION = "joy-version";

@@ -18,8 +18,9 @@ package com.joy.common.state;
 
 import com.joy.C;
 import com.joy.JOY;
+import com.joy.api.JoyApiRequest;
 import com.joy.bo.BOFactory;
-import com.joy.common.JoyParameterFactory;
+import com.joy.common.parameters.JoyParameterFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -35,6 +36,11 @@ public class JoyState extends JoyStateMinimum {
     private JoyParameterFactory parameters;          // Application parameters
     private List<BOFactory> bofactories;             // Datas
     private long startTime;
+    private JoyApiRequest request;
+    
+    public JoyApiRequest getAPIRequest() {
+        return request;
+    }
     
     public void start() {
         startTime = System.currentTimeMillis();
@@ -48,7 +54,7 @@ public class JoyState extends JoyStateMinimum {
         super();
     }
 
-    public JoyParameterFactory getParameters() {
+    public JoyParameterFactory getAppParameters() {
         return parameters;
     }
 
@@ -65,7 +71,9 @@ public class JoyState extends JoyStateMinimum {
     }
     
     @Override
-    public boolean init(ServletContext sce, HttpServletRequest _request, HttpServletResponse _response) {
+    public boolean init(ServletContext sce, 
+                        HttpServletRequest _request, 
+                        HttpServletResponse _response) {
         boolean entityInit = false;
         boolean logParam;
 
@@ -78,13 +86,15 @@ public class JoyState extends JoyStateMinimum {
         if (appdir == null) appdir = "";
         parameters.setApplicationFolder(appdir);
         getLog().log(Level.FINE, "Application directory = {0}", appdir.isEmpty() ? "Not defined" : appdir);
-
+                
         // 2 - Initialisation des parametres
         String paramFile = parameters.getConfigFolder() + sce.getInitParameter("joy-parameters");
         getLog().log(Level.FINE, "Initialize joy parameters with parameter file : {0}", paramFile);
         logParam = parameters.init(paramFile);
         getLog().log(Level.FINE, "Joy Parameters Initialization : {0}", logParam ? "OK" : "KO");
-
+        
+        // 2bis - parse the request to get parameters & api infos
+        request = new JoyApiRequest(_request, this.getAppParameters().getAPIStartPath());
         // 3 - Initialisation des entités & DB
         bofactories = new ArrayList();
         for (String entitiesName : parameters.getEntities()) {

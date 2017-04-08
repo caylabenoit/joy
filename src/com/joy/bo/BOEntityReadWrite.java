@@ -235,8 +235,8 @@ public class BOEntityReadWrite extends BOEntityReadOnly {
     }
     
     /**
-     * Launch an update considering the values set and all the key fields & data are used for Where conditions
-     * @return nb of rows affected / should be >0 if no errors ! <0 if errors
+     * Launch an update considering the values set and all the key fields and data are used for Where conditions
+     * @return nb of rows affected / should be sup to 0 if no errors ! inf to 0 if errors
      */
     @Override
     public int update()  {

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.joy.common;
+package com.joy.common.parameters;
 
 import java.util.List;
 
@@ -73,7 +73,7 @@ public class JoyParameter {
     /**
      * Return the goo parameter in the list or itself
      * @param Name parameter name requested
-     * @return 
+     * @return Parameters informations
      */
     public JoyParameter get(String Name) {
         if (this.type == ParameterType.LIST) {

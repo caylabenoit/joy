@@ -97,9 +97,9 @@ public class FilterCommon extends joyClassTemplate implements Filter {
         // Initialisation des fichiers de traduction
         if (!srvConfig.getMessageBundle().isInitilized()) {
             getLog().fine("[JOY] Initialize locales language and country.");
-            srvConfig.getMessageBundle().setCountry(srvConfig.getParameters().getDefaultLocalCountry());
-            srvConfig.getMessageBundle().setLanguage(srvConfig.getParameters().getDefaultLocalLanguage());
-            srvConfig.getMessageBundle().init(srvConfig.getParameters().getJoyBundledMessageFile());
+            srvConfig.getMessageBundle().setCountry(srvConfig.getAppParameters().getDefaultLocalCountry());
+            srvConfig.getMessageBundle().setLanguage(srvConfig.getAppParameters().getDefaultLocalLanguage());
+            srvConfig.getMessageBundle().init(srvConfig.getAppParameters().getJoyBundledMessageFile());
         }
         return srvConfig;
     }

@@ -38,17 +38,43 @@ import org.jdom2.Element;
  * @author Benoit CAYLA (benoit@famillecayla.fr) 
  */
 public class BOFactory extends joyClassTemplate {
+
+    /**
+     * DB Connection
+     */
     protected JoyDBProvider dbConnection;
+
+    /**
+     * Connection details (not the connection but all the infos to connect)
+     */
     protected JoyConnectionDetail connectionDetail;
+
+    /**
+     * Factory initialized ?
+     */
     protected boolean initialized;
+
+    /**
+     * Entities in the cache
+     */
     protected List<IEntity> cacheEntities;
-    private List<BOPlugin> plugins;
-    private BORegistry registry;
     
-    public List<IEntity> getAll() {
+    private final List<BOPlugin> plugins;
+    
+    private final BORegistry registry;
+    
+    /**
+     * returns all the cached entities
+     * @return
+     */
+    public List<IEntity> getCachedEntities() {
         return this.cacheEntities;
     }
 
+    /**
+     * return the number of entities in the cache
+     * @return
+     */
     public int cacheSize() {
         return cacheEntities.size();
     }
@@ -98,10 +124,17 @@ public class BOFactory extends joyClassTemplate {
         return null;
     }
     
+    /**
+     * return true if the Factory has been successfully initialized
+     * @return 
+     */
     public boolean isInitialized() {
         return this.initialized;
     }
 
+    /**
+     * factory initialization/constructor
+     */
     public BOFactory() {
         this.cacheEntities = new ArrayList();
         this.plugins = new ArrayList();
@@ -282,7 +315,7 @@ public class BOFactory extends joyClassTemplate {
     }    
     
     /**
-     * 
+     * recursively cache all the dependencies of the entity
      * @param regEntry
      * @param entityXml 
      */
@@ -416,15 +449,36 @@ public class BOFactory extends joyClassTemplate {
             getConnection().end();
     }
     
+    /**
+     * Set the DB connection
+     * @param db 
+     */
     public void setConnection(JoyDBProvider db) {
         dbConnection = db;
     }
     
+    /**
+     * returns the DB connection
+     * @return 
+     */
     public JoyDBProvider getConnection() {
         return dbConnection;
     }
 
+    /**
+     * Close a recordset
+     * @param rs  recordset
+     */
     public void closeResultSet(ResultSet rs) {
         getConnection().closeResultSet(rs);
+    }
+    
+    /**
+     * Cache all the entities in the registry
+     */
+    public void cacheAllRegistry() {
+        for (BORegistryEntry regEntry : registry.getAllEntries()) {
+            cacheEntityFromRegistry(regEntry);
+        }
     }
 }

@@ -16,7 +16,6 @@
  */
 package com.joy.bo.registry;
 
-import com.joy.C;
 import com.joy.JOY;
 import com.joy.common.joyClassTemplate;
 import com.joy.json.JSONArray;
@@ -35,6 +34,10 @@ public class BORegistry extends joyClassTemplate {
     public BORegistry() {
         super();
         registry = new ArrayList();
+    }
+    
+    public List<BORegistryEntry> getAllEntries() {
+        return registry;
     }
     
     public boolean loadXML(String regFile) {
@@ -56,28 +59,6 @@ public class BORegistry extends joyClassTemplate {
             return false;
         }
     }
-    
-    public boolean loadJSON(String regFile) {
-        JSONObject jsonReg = null;
-        try {
-            // read the registry config file
-            jsonReg = new JSONObject(JOY.FILE_TO_STRING(regFile));
-            
-            // Populate the registry in the cache
-            JSONArray entities = jsonReg.getJSONArray("entities");
-            for (int j=0; j < entities.length(); j++) {
-                registry.add(new BORegistryEntry(entities.getJSONObject(j)));
-            }
-            
-            return true;
-        } catch (Exception e) {
-            this.getLog().severe(e.toString());
-            registry = null;
-            return false;
-        }
-    }
-    
-    
     
     public BORegistryEntry getRegistryEntry(String name) {
         for (int i=0; i < registry.size(); i++) {

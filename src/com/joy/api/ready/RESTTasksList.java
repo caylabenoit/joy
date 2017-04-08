@@ -29,8 +29,8 @@ public class RESTTasksList extends ActionTypeREST {
     public String restGet() {
         int limit = 0;
         try {
-            limit = Integer.valueOf(this.getRestParameter(1));
-        } catch (Exception e) {}
+            limit = Integer.valueOf(this.getCurrentRequest().getAction(0));
+        } catch (NumberFormatException e) {}
         
         try {
             return JOY.TASKS().getJSONTasksDesc(limit); 

@@ -31,9 +31,8 @@ public class RESTEntity extends RESTEntityCommon {
 
     @Override
     public String restGet() {
-        String myEntity = getRestParameter(1);
         try {
-            return this.getFilteredEntity(myEntity.toUpperCase(), 2).exp().toString();
+            return this.getFilteredEntity(this.getCurrentRequest().getAction(1)).exp().toString();
         } catch (Exception e) {
             getLog().severe (e.toString());
             return C.JSON_EMPTY;

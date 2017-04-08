@@ -16,7 +16,7 @@
  */
 package com.joy.charts.chartjs;
 
-import com.joy.common.JoyParameter;
+import com.joy.common.parameters.JoyParameter;
 import com.joy.json.JSONArray;
 import com.joy.json.JSONObject;
 import java.util.ArrayList;

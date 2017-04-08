@@ -1,0 +1,44 @@
+Joy Restful API description here 
+--------------------------------
+
+API global calls
+GET [URL]/api/[...]
+
+--------------------------------
+Entity access:
+--------------------------------
+Get entity matrix with filters
+    GET [URL]/api/entity/[entity name]?filter1=value1&filter2=value2
+Get entity matrix with filters and row count limitation
+    GET [URL]/api/entity/[entity name]?filter1=value1&filter2=value2&rowcount=value3
+
+Idem for entitydump
+    GET [URL]/api/entitydump/[entity name]?filter1=value1&filter2=value2
+    GET [URL]/api/entitydump/[entity name]?filter1=value1&filter2=value2&rowcount=value3
+
+--------------------------------
+Chart.js contents:
+--------------------------------
+Get filtered entity data for single dataset
+    GET [URL]/api/charts/[entity name]/sds?filter1=value1&filter2=value2
+Get filtered entity data for multiple dataset
+    GET [URL]/api/charts/[entity name]/mds?filter1=value1&filter2=value2
+Get filtered entity data for single dataset and row limitation
+    GET [URL]/api/charts/[entity name]/sds?filter1=value1&filter2=value2&rowcount=value3
+Get filtered entity data for multiple dataset and row limitation
+    GET [URL]/api/charts/[entity name]/mds?filter1=value1&filter2=value2&rowcount=value3
+
+--------------------------------
+Checks:
+--------------------------------
+GET [URL]/api/checks
+
+--------------------------------
+Parameters:
+--------------------------------
+GET [URL]/api/parameters
+
+--------------------------------
+Tasks list:
+--------------------------------
+GET [URL]/api/taskslist

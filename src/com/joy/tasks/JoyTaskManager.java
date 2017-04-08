@@ -44,29 +44,20 @@ public class JoyTaskManager extends joyClassTemplate {
     
     /**
      * Create a new task
-     * @param taskObject
      * @param taskName
      * @param className
-     * @param mySession
-     * @param request
-     * @param entities
+     * @param myState
      * @return 
      */
-    public boolean newTask(String taskObject,
-                           String taskName,
+    public boolean newTask(String taskName,
                            String className,
-                           HttpSession mySession, 
-                           HttpServletRequest request,
                            JoyState myState) {
         // start a new task / thread
         try {
             getLog().fine("Create new Task for " + taskName);
             ActionTypeTASK taskThread = (ActionTypeTASK) Class.forName(className).newInstance();
-            taskThread.setRequest(request);
-            if (taskObject == null)
-                taskObject = "No Task Name";
-            taskThread.setTaskObject(taskObject);
-            taskThread.setSession(mySession);
+            if (taskName == null)
+                taskName = "No Task Name";
             taskThread.setTaskManager(this);
             taskThread.setTaskName(taskName);
             taskThread.setJoyState(myState);

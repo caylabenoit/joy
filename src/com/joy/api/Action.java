@@ -18,13 +18,11 @@ package com.joy.api;
 
 import com.joy.common.state.JoyState;
 import com.joy.bo.BOFactory;
-import com.joy.common.ActionLogReport;
 import com.joy.common.joyClassTemplate;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -35,7 +33,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
 public class Action extends joyClassTemplate  {
-    private List m_DisplayMessages;       // List of messages to return
     private ActionLocaleMgnt m_localeBundle; 
     private List<FileItem> m_AttachedFiles;
     private JoyState state;
@@ -52,14 +49,8 @@ public class Action extends joyClassTemplate  {
         return state;
     }
     
-    public void endOfWork() {}
-    
-    public HttpServletRequest getCurrentRequest() {
-        return state.getCurrentRequest();
-    }
-    
-    public StringBuffer getURL() {
-        return state.getCurrentRequest().getRequestURL();
+    public JoyApiRequest getCurrentRequest() {
+        return state.getAPIRequest();
     }
     
     public boolean hasAttachedFiles() {
@@ -73,18 +64,8 @@ public class Action extends joyClassTemplate  {
     public InputStream attachedFile(int Index) throws IOException {
         return m_AttachedFiles.get(Index).getInputStream();
     }
-    
-    public String getURI() {
-        String tmpURI = state.getCurrentRequest().getRequestURI();
-        String[] uriParts = tmpURI.split("/");
-        return "/" + uriParts[1];
-    }
-    
-    public void addDisplayMessageError(String Label) {
-        m_DisplayMessages.add(new ActionLogReport(Label, 0, getMsg(Label), ActionLogReport.enum_CRITICITY.ERROR));
-    }
-    
-    private String getMsg(String Label) {
+
+    private String getMessageEntry(String Label) {
         String msg;
         try {
             msg = m_localeBundle.getMessage(Label);
@@ -92,28 +73,12 @@ public class Action extends joyClassTemplate  {
         return msg;
     }
     
-    public void addDisplayMessageInfo(String Label) {
-        m_DisplayMessages.add(new ActionLogReport(Label, 0, getMsg(Label), ActionLogReport.enum_CRITICITY.INFO));
-    }
-    
-    public List<ActionLogReport> getAllDisplayMessages() {
-        return m_DisplayMessages;
-    }
-    
     public void setMessageBundle(ActionLocaleMgnt loc) {
         m_localeBundle = loc;
-    }
-
-    public String getMessage (String _Label) {
-        if (m_localeBundle != null)
-            return m_localeBundle.getMessage(_Label);
-        else
-            return null;
     }
     
     public Action() {
         super();
-        this.m_DisplayMessages = new ArrayList();
         this.m_localeBundle = null;
         this.state = null;
     }
@@ -148,48 +113,12 @@ public class Action extends joyClassTemplate  {
     }
     
     /**
-     * Set all the request PARAMETERS & attributes to the Action object
-     * @param CurrentRequest 
+     * Set all the request PARAMETERS and attributes to the Action object 
+     * @param myState
      */
     public void init(JoyState myState) {
         this.state = myState;
     }
     
-    public void setNewArgument(String _name, Object _value) {
-        state.getCurrentRequest().setAttribute(_name, _value);
-    }
     
-    private Object getArgumentValue(String _name) {
-        Object retObj = null;
-        
-        // try first to get a parameter
-        try {
-            retObj = this.state.getCurrentRequest().getParameter(_name);
-        } catch (Exception e) {
-            retObj = null;
-        }       
-        
-        // else .. try first to get an attribute
-        if (retObj == null) {
-            try {
-                retObj = this.state.getCurrentRequest().getAttribute(_name);
-            } catch (Exception e) {
-                retObj = null;
-            }    
-        }
-        return (retObj == null ? "" : retObj);
-    }
-    
-    public String getStrArgumentValue(String _name) {
-        return getArgumentValue(_name).toString();
-    }
-    
-    public int getIntArgumentValue(String _name) {
-        String val = getArgumentValue(_name).toString();
-        try {
-            return Integer.parseInt(val); 
-        } catch (Exception e) {
-            return 0;
-        }
-    }
 }

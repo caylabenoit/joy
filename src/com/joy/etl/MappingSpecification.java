@@ -79,7 +79,7 @@ public class MappingSpecification extends joyClassTemplate {
     /**
      * Process the mapping
      * @param entities DB connection
-     * @param forceParams exception & PARAMETERS to force
+     * @param forceParams exception and PARAMETERS to force
      * @return 
      */
     public StatMap process(BOFactory entities, Object... forceParams) {
