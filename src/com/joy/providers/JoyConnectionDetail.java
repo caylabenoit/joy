@@ -18,6 +18,7 @@ package com.joy.providers;
 
 import com.joy.common.joyClassTemplate;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  *
@@ -101,7 +102,7 @@ public class JoyConnectionDetail extends joyClassTemplate {
             String pwd = this.password;
             DbConn.init(drivername, urlname, username, pwd); 
         }
-        getLog().info("Connection opened successfully ? " + DbConn.isInitialized());
+        getLog().log(Level.INFO, "Connection opened successfully ? {0}", DbConn.isInitialized());
         
         getLog().info("Queries Initialization.");
         if (DbConn.isInitialized()) {

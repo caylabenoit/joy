@@ -16,6 +16,7 @@
  */
 package com.joy.common.filter;
 
+import com.joy.C;
 import com.joy.common.state.JoyState;
 import com.joy.common.joyClassTemplate;
 import java.util.logging.Level;
@@ -80,7 +81,7 @@ public class FilterCommon extends joyClassTemplate implements Filter {
                                      HttpServletRequest request,
                                      HttpServletResponse response) {
         
-        getLog().fine("------ [JOY] Start Request Treatment ------");
+        getLog().log(Level.FINE, "------ [JOY v{0}] Start Request Treatment ------", C.JOY_VERSION);
 
         // Initialisation du framework
         JoyState srvConfig = new JoyState();
@@ -106,7 +107,7 @@ public class FilterCommon extends joyClassTemplate implements Filter {
     
     protected void joyFinalize(JoyState state) {
         try {
-            getLog().fine("------ [JOY] End Of Request Treatment ------");
+            getLog().log(Level.FINE, "------ [JOY v{0}]  End Of Request Treatment ------", C.JOY_VERSION);
             getLog().log(Level.FINE, "[JOY] Number of Entities cached : {0}", state.getBOFactory().cacheSize());
             getLog().log(Level.FINE, "[JOY] Treatment duration : {0} ms", state.getDuration());
             if (state != null)

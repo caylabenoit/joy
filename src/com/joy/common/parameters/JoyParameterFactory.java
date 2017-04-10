@@ -46,7 +46,17 @@ public class JoyParameterFactory extends joyClassTemplate {
     private String defaultLocalCountry;
     private String defaultLocalLanguage;
     private String applicationName;
+    private List<JoyParameterFileMenu> menuFiles;
+    private String naviFile;
 
+    public List<JoyParameterFileMenu> getMenuFiles() {
+        return menuFiles;
+    }
+
+    public String getNaviFile() {
+        return naviFile;
+    }
+    
     public boolean isNoLogin() {
         return noLogin;
     }
@@ -105,6 +115,7 @@ public class JoyParameterFactory extends joyClassTemplate {
         entitiesConfigList = new ArrayList();
         sessionTimeoutMin = 10;
         mappingConfigList = new ArrayList();
+        menuFiles = new ArrayList();
     }
 
     public boolean isInitialized() {
@@ -171,6 +182,9 @@ public class JoyParameterFactory extends joyClassTemplate {
             
             defaultLocalLanguage = racine.getChildText(C.PARAMETERS_TAG_LOCALE_LANG);
             getLog().fine("Locale Language: " + defaultLocalLanguage);
+
+            naviFile = racine.getChildText("joy-navi");
+            getLog().fine("Navigation Configuration file: " + naviFile);
             
             try {
                 sessionTimeoutMin = Integer.valueOf(racine.getChildText(C.PARAMETERS_TAG_SESSION_TIMEOUT));
@@ -179,7 +193,7 @@ public class JoyParameterFactory extends joyClassTemplate {
             }
             getLog().fine("Session Timeout: " + sessionTimeoutMin + " Minute(s)");
             
-            // Get all the ENTITIES
+            // Get all the Entity factories
             List entities = racine.getChild(C.PARAMETERS_TAG_ENTITIES).getChildren(C.PARAMETERS_TAG_ENTITY);
             if (entities != null) {
                 Iterator entityIt = entities.iterator();
@@ -203,6 +217,14 @@ public class JoyParameterFactory extends joyClassTemplate {
                     mappingConfigList.add(signature);
                     getLog().fine("Add mapping " + signature.getName() + " which refers to " + signature.getConfigFile() + "  in the Joy scope");
                 }
+            }
+
+            // Get all the Menus
+            List menus = racine.getChild("joy-menus").getChildren("joy-menu");
+            for (Object menu : menus) {
+                Element item = (Element)menu;
+                this.menuFiles.add(new JoyParameterFileMenu(item.getAttributeValue("name"), item.getText()));
+                getLog().fine("Add menu " + item.getText() + "  in the Joy scope");
             }
             
             // Optional Application PARAMETERS

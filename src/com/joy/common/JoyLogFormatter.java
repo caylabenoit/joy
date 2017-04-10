@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.logging.*;
 
 /**
- *
+ * Modify the java log rendering
  * @author Benoit Cayla (benoit@famillecayla.fr)
  */
 public class JoyLogFormatter extends Formatter {

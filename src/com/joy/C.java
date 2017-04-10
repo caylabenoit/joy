@@ -21,6 +21,7 @@ package com.joy;
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
 public class C {
+    public static final String JOY_VERSION = "2.0.0.0";
     
     public static final String YES = "yes";
     public static final String NO = "no";
