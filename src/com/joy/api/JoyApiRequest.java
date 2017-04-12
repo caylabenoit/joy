@@ -58,7 +58,8 @@ public class JoyApiRequest extends joyClassTemplate {
             Enumeration<String> params = _request.getParameterNames();
             while (params.hasMoreElements()) {
                 String param = params.nextElement();
-                parameters.add(new JoyApiRequestParameter(param, _request.getParameter(param)));
+                if (!param.equalsIgnoreCase("?"))
+                    parameters.add(new JoyApiRequestParameter(param, _request.getParameter(param)));
             }
             Enumeration<String> attrs = _request.getAttributeNames();
             while (attrs.hasMoreElements()) {

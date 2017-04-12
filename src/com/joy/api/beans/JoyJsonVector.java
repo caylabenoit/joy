@@ -40,7 +40,6 @@ package com.joy.api.beans;
 }
 */
 
-import com.joy.JOY;
 import com.joy.common.joyClassTemplate;
 import com.joy.json.JSONArray;
 import com.joy.json.JSONException;
