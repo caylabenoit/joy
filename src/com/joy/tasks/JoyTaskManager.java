@@ -17,7 +17,7 @@
 package com.joy.tasks;
 
 import com.joy.common.state.JoyState;
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 import com.joy.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,7 +29,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class JoyTaskManager extends joyClassTemplate {
+public class JoyTaskManager extends JoyClassTemplate {
     private List<ActionTypeTASK> tasks;     // tasks threads
     private int lastTaskId;
     public void init() {

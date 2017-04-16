@@ -22,14 +22,14 @@ import java.util.logging.Logger;
  *
  * @author Benoit Cayla (benoit@famillecayla.fr)
  */
-public class joyClassTemplate {
+public class JoyClassTemplate {
     private Logger joyLog;
 
     public Logger getLog() {
         return joyLog;
     }
 
-    public joyClassTemplate() {
+    public JoyClassTemplate() {
         joyLog = Logger.getLogger(this.getClass().getPackage().getName());
     }
     

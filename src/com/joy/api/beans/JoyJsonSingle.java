@@ -17,14 +17,14 @@
 package com.joy.api.beans;
 
 import com.joy.JOY;
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 import com.joy.json.JSONObject;
 
 /**
  *
  * @author benoit
  */
-public class JoyJsonSingle extends joyClassTemplate {
+public class JoyJsonSingle extends JoyClassTemplate {
     private String name;
     private Object value;
 

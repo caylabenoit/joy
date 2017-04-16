@@ -37,6 +37,7 @@ package com.joy.api;
 import static com.joy.C.*;
 import com.joy.JOY;
 import com.joy.api.beans.JoyJsonMatrix;
+import com.joy.api.beans.JoyJsonPOSTReturn;
 import com.joy.api.beans.JoyJsonSingle;
 import com.joy.api.beans.JoyJsonVector;
 import com.joy.bo.IEntity;
@@ -144,7 +145,7 @@ public class ActionTypeREST extends Action {
         finalObject.put("vector", vectors);
         finalObject.put("matrix", matrixes);
         finalObject.put("other", others);
-        finalObject.put("parameters", getState().getAppParameters().getJson());
+        //finalObject.put("parameters", getState().getAppParameters().getJson());
         return finalObject;
     }
     
@@ -199,7 +200,7 @@ public class ActionTypeREST extends Action {
         return true;
     }
     
-    public boolean addMatrix(String jsonVectorName, IEntity entity) {
+    public boolean addMatrix(String jsonMatrixName, IEntity entity) {
         try {
             ResultSet rs = entity.select();
             
@@ -207,7 +208,7 @@ public class ActionTypeREST extends Action {
             matrix.loadFromResultSet(rs);
             this.getBOFactory().closeResultSet(rs);
             
-            return this.addMatrix(jsonVectorName, matrix);
+            return this.addMatrix(jsonMatrixName, matrix);
             
         } catch (Exception e) {
             getLog().severe(e.toString());
@@ -219,7 +220,7 @@ public class ActionTypeREST extends Action {
      * return Not found status
      * @return Not found status
      */
-    protected String setStatusNotFound() {
+    protected String getStatusNotFound() {
         return RESTFUL_NOT_FOUND;
     }
     
@@ -227,7 +228,7 @@ public class ActionTypeREST extends Action {
      * return already exists status
      * @return already exists status
      */
-    protected String setStatusAlreadyExist() {
+    protected String getStatusAlreadyExist() {
         return RESTFUL_ALREADY_EXIST;
     }
     
@@ -235,8 +236,16 @@ public class ActionTypeREST extends Action {
      * return No Content status
      * @return No Content status
      */
-    protected String setStatusNoContent() {
+    protected String getStatusNoContent() {
         return RESTFUL_NO_CONTENT;
+    }
+    
+    /**
+     * return No Content status
+     * @return No Content status
+     */
+    protected String getStatusOk() {
+        return RESTFUL_OK;
     }
     
     /**
@@ -246,39 +255,31 @@ public class ActionTypeREST extends Action {
      *      any other content (like ID) means OK
      */
     public String restGet() { 
-        return this.setStatusNotFound();
+        return getStatusOk();
     }
     
-    /**
-     * Update replace
-     * @return 
-     *      RESTFUL_NOT_FOUND if not found
-     *      RESTFUL_NO_CONTENT if no content to return
-     *      any other content (like ID) means OK
-     */
-    public String restPut() { 
-        return this.setStatusNotFound();
-    }
     
     /**
      * Create 	
+     * @param retPOST
      * @return 
      *      RESTFUL_NOT_FOUND if not found
      *      RESTFUL_ALREADY_EXIST id already exist
      *      any other content (like ID) means OK
      */
-    public String restPost() { 
-        return this.setStatusNotFound();
+    public String restPost(JoyJsonPOSTReturn retPOST) { 
+        return getStatusOk();
     }
     
     /**
      * Delete
+     * @param retDELETE
      * @return 
      *      RESTFUL_NOT_FOUND ID not found
      *      any other content (like ID) means OK
      */
-    public String restDelete() { 
-        return this.setStatusNotFound();
+    public String restDelete(JoyJsonPOSTReturn retDELETE) { 
+        return getStatusOk();
     }
 
 }

@@ -110,7 +110,7 @@ public interface IEntity {
     public JSONObject exp();
     // Write interfaces
     public Collection<ActionLogReport> imp(JSONObject data, boolean removeAllBefore);
-    public boolean delete();
+    public int delete();
     public void truncate();
     public int insert();
     public int update();

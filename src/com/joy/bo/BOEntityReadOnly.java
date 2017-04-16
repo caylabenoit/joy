@@ -31,12 +31,12 @@ import com.joy.bo.init.BOInitRecord;
 import com.joy.common.ActionLogReport;
 import com.joy.api.beans.JoyJsonMatrix;
 import com.joy.api.beans.JoyJsonVector;
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 /**
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class BOEntityReadOnly extends joyClassTemplate implements IEntity {
+public class BOEntityReadOnly extends JoyClassTemplate implements IEntity {
     
     protected static String JOY_QUERY_ALIAS = "JOYCUSTOM";
     
@@ -579,8 +579,8 @@ public class BOEntityReadOnly extends joyClassTemplate implements IEntity {
     }
 
     @Override
-    public boolean delete() {
-        return false;
+    public int delete() {
+        return 0;
     }
 
     @Override

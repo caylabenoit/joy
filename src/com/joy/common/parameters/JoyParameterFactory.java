@@ -19,7 +19,7 @@ package com.joy.common.parameters;
 import com.joy.C;
 import com.joy.JOY;
 import com.joy.common.parameters.JoyParameter.ParameterType;
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 import com.joy.etl.MappingSignature;
 import com.joy.json.JSONObject;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ import org.jdom2.Element;
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class JoyParameterFactory extends joyClassTemplate {
+public class JoyParameterFactory extends JoyClassTemplate {
     private String applicationFolder;
     private boolean initialized;
     private String apiStartPath;

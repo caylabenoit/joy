@@ -16,7 +16,7 @@
  */
 package com.joy.api;
 
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author Benoit Cayla (benoit@famillecayla.fr)
  */
-public class JoyApiRequest extends joyClassTemplate {
+public class JoyApiRequest extends JoyClassTemplate {
     private List<String> actions;
     private List<JoyApiRequestParameter> parameters;
     private String httpMethod;

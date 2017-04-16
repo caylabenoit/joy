@@ -18,7 +18,7 @@ package com.joy.etl;
 
 import com.joy.C;
 import com.joy.JOY;
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 import java.util.Iterator;
 import java.util.List;
 import org.jdom2.Element;
@@ -27,7 +27,7 @@ import org.jdom2.Element;
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class MappingFactory extends joyClassTemplate {
+public class MappingFactory extends JoyClassTemplate {
     private org.jdom2.Document m_document;
     private Element m_racine;
     

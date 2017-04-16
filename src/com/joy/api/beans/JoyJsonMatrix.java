@@ -16,8 +16,7 @@
  */
 package com.joy.api.beans;
 
-import com.joy.JOY;
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 import com.joy.json.JSONArray;
 import com.joy.json.JSONObject;
 import java.sql.ResultSet;
@@ -30,7 +29,7 @@ import java.util.List;
  *
  * @author benoit
  */
-public class JoyJsonMatrix extends joyClassTemplate {
+public class JoyJsonMatrix extends JoyClassTemplate {
     private JSONArray rows;
     private JSONArray columns;
     

@@ -17,13 +17,13 @@
 package com.joy.bo;
 
 import static com.joy.bo.BOFieldType.*;
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 
 /**
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr) CAYLA
  */
-public class BOField extends joyClassTemplate implements Cloneable {
+public class BOField extends JoyClassTemplate implements Cloneable {
     /**
      * belongs to this table
      */

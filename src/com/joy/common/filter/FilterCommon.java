@@ -18,7 +18,7 @@ package com.joy.common.filter;
 
 import com.joy.C;
 import com.joy.common.state.JoyState;
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 import java.util.logging.Level;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Benoit Cayla (benoit@famillecayla.fr)
  */
-public class FilterCommon extends joyClassTemplate implements Filter {
+public class FilterCommon extends JoyClassTemplate implements Filter {
     
     @Override
     public void init(FilterConfig fc) throws ServletException {}

@@ -191,10 +191,11 @@ public class C {
     public static final String JOYMENU_TAG_BUTTON = "joy-button";
     public static final String JOYMENUATTR_SHORTCUT = "shortcut";
     
-    // Nothing in Dynatree
+    // Nothing
     public static final String JSON_EMPTY = "{\"title\": \"Nothing\"}";
     
     public static final String RESTFUL_NOT_FOUND = "JOY_RESTFUL_NOT_FOUND";
     public static final String RESTFUL_ALREADY_EXIST = "JOY_RESTFUL_ALREADY_EXIST";
     public static final String RESTFUL_NO_CONTENT = "JOY_RESTFUL_NO_CONTENT";
+    public static final String RESTFUL_OK = "JOY_RESTFUL_OK";
 }

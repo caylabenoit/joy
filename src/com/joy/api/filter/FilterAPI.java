@@ -16,11 +16,17 @@
  */
 package com.joy.api.filter;
 
-import com.joy.common.filter.FilterCommon;
+
 import static com.joy.C.RESTFUL_ALREADY_EXIST;
 import static com.joy.C.RESTFUL_NOT_FOUND;
 import static com.joy.C.RESTFUL_NO_CONTENT;
+import static com.joy.C.RESTFUL_OK;
+
+import com.joy.common.filter.FilterCommon;
 import com.joy.api.ActionTypeREST;
+import com.joy.api.beans.JoyJsonPOSTReturn;
+import static com.joy.api.beans.JoyJsonPOSTReturn.JoyEnumPOSTUpSertCodes.delete;
+import static com.joy.api.beans.JoyJsonPOSTReturn.JoyEnumPOSTUpSertCodes.upsert;
 import com.joy.common.state.JoyState;
 import com.joy.json.JSONArray;
 import com.joy.json.JSONObject;
@@ -102,29 +108,28 @@ public class FilterAPI extends FilterCommon
             actionRestObject.init(state);
             
             switch (state.getAPIRequest().getHttpMethod()) {
-                case "PUT": // Update-Replace
-                    resultREST = actionRestObject.restPut(); 
-                    state.getCurrentResponse().setStatus(SC_OK);
-                    if (resultREST.equalsIgnoreCase(RESTFUL_NOT_FOUND))
-                        state.getCurrentResponse().setStatus(SC_NOT_FOUND);
-                    else if (resultREST.equalsIgnoreCase(RESTFUL_NO_CONTENT))
-                        state.getCurrentResponse().setStatus(SC_NO_CONTENT);
-                    break;
-                    
                 case "DELETE": // Delete
-                    resultREST = actionRestObject.restDelete(); 
+                    JoyJsonPOSTReturn retDELETE = new JoyJsonPOSTReturn();
+                    retDELETE.setUpdateType(delete);
+                    resultREST = actionRestObject.restDelete(retDELETE); 
                     state.getCurrentResponse().setStatus(SC_OK);
                     if (resultREST.equalsIgnoreCase(RESTFUL_NOT_FOUND))
                         state.getCurrentResponse().setStatus(SC_NOT_FOUND);
+                    resultREST = retDELETE.getJsonReturn().toString();
                     break;
                     
-                case "POST": // Create
-                    resultREST = actionRestObject.restPost(); 
-                    state.getCurrentResponse().setStatus(SC_OK);
-                    if (resultREST.equalsIgnoreCase(RESTFUL_NOT_FOUND))
-                        state.getCurrentResponse().setStatus(SC_NOT_FOUND);
-                    else if (resultREST.equalsIgnoreCase(RESTFUL_ALREADY_EXIST))
-                        state.getCurrentResponse().setStatus(SC_CONFLICT);
+                case "POST": // Create or update
+                    JoyJsonPOSTReturn retPOST = new JoyJsonPOSTReturn();
+                    resultREST = actionRestObject.restPost(retPOST); 
+                    retPOST.setUpdateType(upsert);
+                    switch (resultREST) {
+                        case RESTFUL_NOT_FOUND: state.getCurrentResponse().setStatus(SC_NOT_FOUND); break;
+                        case RESTFUL_ALREADY_EXIST: state.getCurrentResponse().setStatus(SC_CONFLICT); break;
+                        case RESTFUL_NO_CONTENT: state.getCurrentResponse().setStatus(SC_NO_CONTENT);break;
+                        case RESTFUL_OK:
+                        default: state.getCurrentResponse().setStatus(SC_OK);
+                    }
+                    resultREST = retPOST.getJsonReturn().toString();
                     break;
                     
                 case "GET": // Get-read default

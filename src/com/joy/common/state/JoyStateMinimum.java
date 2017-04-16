@@ -18,7 +18,7 @@ package com.joy.common.state;
 
 import com.joy.JOY;
 import com.joy.api.ActionLocaleMgnt;
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 import com.joy.json.JSONObject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
  * This class persists the global informations needed for all the application life
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class JoyStateMinimum extends joyClassTemplate {
+public class JoyStateMinimum extends JoyClassTemplate {
     private ActionLocaleMgnt messageBundle; // Configuration des fichiers de traduction     
     private JSONObject restConfiguration;
     private JSONObject taskConfiguration;

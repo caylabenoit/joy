@@ -40,7 +40,7 @@ package com.joy.api.beans;
 }
 */
 
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 import com.joy.json.JSONArray;
 import com.joy.json.JSONException;
 import com.joy.json.JSONObject;
@@ -51,7 +51,7 @@ import java.sql.SQLException;
  *
  * @author benoit
  */
-public class JoyJsonVector extends joyClassTemplate {
+public class JoyJsonVector extends JoyClassTemplate {
     private JSONArray items;
 
     public JoyJsonVector() {

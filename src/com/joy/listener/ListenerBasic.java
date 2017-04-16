@@ -16,7 +16,7 @@
  */
 package com.joy.listener;
 
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -25,7 +25,7 @@ import javax.servlet.ServletContextListener;
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class ListenerBasic extends joyClassTemplate implements ServletContextListener {
+public class ListenerBasic extends JoyClassTemplate implements ServletContextListener {
 
     public String getContextParamFromWebXml(ServletContext context, String ParamName) {
         try {

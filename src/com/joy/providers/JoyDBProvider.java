@@ -36,13 +36,13 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import com.joy.bo.IEntity;
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 
 /**
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class JoyDBProvider extends joyClassTemplate {
+public class JoyDBProvider extends JoyClassTemplate {
     private Connection dbConnection;
     
     

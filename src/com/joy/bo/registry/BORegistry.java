@@ -17,7 +17,7 @@
 package com.joy.bo.registry;
 
 import com.joy.JOY;
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 import com.joy.json.JSONArray;
 import com.joy.json.JSONObject;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import org.jdom2.Element;
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class BORegistry extends joyClassTemplate {
+public class BORegistry extends JoyClassTemplate {
     public List<BORegistryEntry> registry;
     
     public BORegistry() {

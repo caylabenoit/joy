@@ -16,7 +16,7 @@
  */
 package com.joy.providers;
 
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -25,7 +25,7 @@ import java.util.Properties;
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class JoyConfigfileProvider extends joyClassTemplate {
+public class JoyConfigfileProvider extends JoyClassTemplate {
     
     private Properties m_properties;
     

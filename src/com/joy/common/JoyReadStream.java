@@ -24,7 +24,7 @@ import java.io.InputStreamReader;
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class JoyReadStream extends joyClassTemplate implements Runnable {
+public class JoyReadStream extends JoyClassTemplate implements Runnable {
     private String name;
     private InputStream is;
     private Thread thread;   

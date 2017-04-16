@@ -178,22 +178,23 @@ public class BOEntityReadWrite extends BOEntityReadOnly {
     /**
      * Supprime toutes les données de la table avec condition
      * la condition where est déterminée avec les éléments/field clés/key
-     * @return true si pas de pb
+     * @return nb of rows removed
      */
     @Override
-    public boolean delete()  {
-        if (this.boType != boReadWrite) return false;
+    public int delete()  {
+        if (this.boType != boReadWrite) return 0;
         try {
             BOQueryExecution lQuery = this.getSQLDelete(true);
             
             PreparedStatement ps = dbConnection.prepareSQL(lQuery.getSQL());
             setQueryValues(ps, lQuery);
-            ps.executeUpdate();
-            return true;
+            int retNb =  ps.executeUpdate();
+            getLog().fine("Number of rows deleted : " + retNb);
+            return retNb;
             
         } catch (SQLException ex) {
             getLog().severe(ex.toString());
-            return false;
+            return 0;
         }
     }    
 

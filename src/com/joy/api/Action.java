@@ -18,7 +18,7 @@ package com.joy.api;
 
 import com.joy.common.state.JoyState;
 import com.joy.bo.BOFactory;
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -32,7 +32,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  * This class manage the treatment itself, its instance is got from the JSP page directly
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class Action extends joyClassTemplate  {
+public class Action extends JoyClassTemplate  {
     private ActionLocaleMgnt m_localeBundle; 
     private List<FileItem> m_AttachedFiles;
     private JoyState state;

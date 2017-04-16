@@ -16,7 +16,7 @@
  */
 package com.joy.providers;
 
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -24,7 +24,7 @@ import java.util.logging.Level;
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class JoyConnectionDetail extends joyClassTemplate {
+public class JoyConnectionDetail extends JoyClassTemplate {
     private String dataSource;
     private String user;
     private String password;

@@ -18,7 +18,7 @@ package com.joy.bo;
 
 import com.joy.C;
 import static com.joy.bo.BOEntityRWType.*;
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -54,7 +54,7 @@ import org.jdom2.Element;
  * 
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class BOEntityComposite extends joyClassTemplate  {
+public class BOEntityComposite extends JoyClassTemplate  {
     
     private String  name;
     private String  masterEntity; 

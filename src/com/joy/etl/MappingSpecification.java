@@ -23,13 +23,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import com.joy.bo.IEntity;
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 
 /**
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
-public class MappingSpecification extends joyClassTemplate {
+public class MappingSpecification extends JoyClassTemplate {
     private List<FieldMap> FieldMaps;
     private String From;
     private String To;

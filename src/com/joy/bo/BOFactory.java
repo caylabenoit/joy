@@ -22,7 +22,7 @@ import com.joy.JOY;
 import com.joy.bo.init.BOInitRecord;
 import com.joy.bo.registry.BOEntityType;
 import com.joy.bo.registry.BORegistryEntry;
-import com.joy.common.joyClassTemplate;
+import com.joy.common.JoyClassTemplate;
 import com.joy.providers.JoyConnectionDetail;
 import com.joy.providers.JoyDBProvider;
 import com.joy.providers.JoyInitQuery;
@@ -37,7 +37,7 @@ import org.jdom2.Element;
  *
  * @author Benoit CAYLA (benoit@famillecayla.fr) 
  */
-public class BOFactory extends joyClassTemplate {
+public class BOFactory extends JoyClassTemplate {
 
     /**
      * DB Connection
