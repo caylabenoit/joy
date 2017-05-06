@@ -53,6 +53,10 @@ public class FilterCommon extends JoyClassTemplate implements Filter {
             HttpServletRequest _request = (HttpServletRequest)request;
             HttpServletResponse _response = (HttpServletResponse)response;
             
+            // Check authorization here
+            String headerAuth = _request.getHeader("Authorization");
+            this.getLog().log(Level.WARNING, "Authorization header> {0}", headerAuth);
+            
             // Initialization
             joyState = joyInitialize(request.getServletContext(), _request, _response);
             joyState.getLog().log(Level.FINEST, "New HTTP Request initialization, URL={0} | QueryString={1}", new Object[]{_request.getRequestURL(), _request.getQueryString()});
