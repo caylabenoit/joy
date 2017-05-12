@@ -28,8 +28,6 @@ import com.joy.api.beans.JoyJsonPOSTReturn;
 import static com.joy.api.beans.JoyJsonPOSTReturn.JoyEnumPOSTUpSertCodes.delete;
 import static com.joy.api.beans.JoyJsonPOSTReturn.JoyEnumPOSTUpSertCodes.upsert;
 import com.joy.common.state.JoyState;
-import com.joy.json.JSONArray;
-import com.joy.json.JSONObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
@@ -38,6 +36,7 @@ import static javax.servlet.http.HttpServletResponse.SC_CONFLICT;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 
 /**
  * REST HTTP filter
@@ -45,49 +44,6 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
  */
 public class FilterAPI extends FilterCommon
 {
-    
-    protected class ApiConfigEntry {
-        private String name;
-        private String className;
-        private String mime;
-
-        public ApiConfigEntry(String name, JSONObject json) {
-            JSONArray services = json.getJSONArray("services");
-            for (Object tag : services) {
-                JSONObject item = (JSONObject)tag;
-                if (name.equalsIgnoreCase(item.getString("name"))) {
-                    this.className = item.getString("class");
-                    this.name = item.getString("name");
-                    this.mime = item.getString("mime");
-                    return;
-                }
-            }
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getClassName() {
-            return className;
-        }
-
-        public void setClassName(String className) {
-            this.className = className;
-        }
-
-        public String getMime() {
-            return mime;
-        }
-
-        public void setMime(String mime) {
-            this.mime = mime;
-        }
-    }
 
    /**
      * Manage a REST call request
@@ -102,6 +58,14 @@ public class FilterAPI extends FilterCommon
             // Get call informations
             ApiConfigEntry myRestCall = new ApiConfigEntry(state.getAPIRequest().getMainAction(), state.getRestConfiguration());
             String resultREST = "";
+            
+            if (myRestCall.isSecure()) {
+                if (!checkToken(state.getHttpAuthToken())) {
+                    getLog().log(Level.SEVERE, "Authentication failed");
+                    state.getCurrentResponse().setStatus(SC_UNAUTHORIZED);
+                    return;
+                }
+            }
             
             state.getLog().log(Level.INFO, "REST action requested");
             ActionTypeREST actionRestObject = (ActionTypeREST) Class.forName(myRestCall.getClassName()).newInstance();

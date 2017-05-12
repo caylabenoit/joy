@@ -21,7 +21,7 @@ package com.joy;
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
 public class C {
-    public static final String JOY_VERSION = "2.0.0.0";
+    public static final String JOY_VERSION = "2.0.0.1";
     
     public static final String YES = "yes";
     public static final String NO = "no";
@@ -85,6 +85,7 @@ public class C {
     ///////////////////////////////////////
     // XML Configuration tags for entities
     ///////////////////////////////////////
+    
     // DB Connection tags
     public static final String ENTITIES_JOY_QUERY_INIT ="joy-query-init";
     public static final String ENTITIES_JOY_JDBC_USER ="joy-jdbc-user";
@@ -198,4 +199,18 @@ public class C {
     public static final String RESTFUL_ALREADY_EXIST = "JOY_RESTFUL_ALREADY_EXIST";
     public static final String RESTFUL_NO_CONTENT = "JOY_RESTFUL_NO_CONTENT";
     public static final String RESTFUL_OK = "JOY_RESTFUL_OK";
+    
+    ///////////
+    // Authentication
+    ///////////
+    public static final String DEFAULT_USER = "Anonymous";
+    public static final String TOKEN_USER_TAG = "user";
+    public static final String REQ_PARAM_USER_TAG = TOKEN_USER_TAG;
+    public static final String REQ_PARAM_PWD_TAG = "password";
+    public static final String TOKEN_STATUS_TAG = "status";
+    public static final String TOKEN_TOKEN_TAG = "token";
+    public static final int TOKEN_STATUS_KO = 0;
+    public static final int TOKEN_STATUS_OK = 1;
+    public static final String TOKEN_EMPTY = "";
+    
 }

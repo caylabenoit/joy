@@ -37,6 +37,15 @@ public class JoyState extends JoyStateMinimum {
     private List<BOFactory> bofactories;             // Datas
     private long startTime;
     private JoyApiRequest request;
+    private String httpAuthToken;
+
+    public String getHttpAuthToken() {
+        return httpAuthToken;
+    }
+
+    public void setHttpAuthToken(String httpAuthToken) {
+        this.httpAuthToken = httpAuthToken;
+    }
     
     public JoyApiRequest getAPIRequest() {
         return request;

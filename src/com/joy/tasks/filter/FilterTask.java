@@ -20,50 +20,15 @@ import com.joy.JOY;
 import com.joy.common.filter.FilterCommon;
 import com.joy.common.state.JoyState;
 import com.joy.tasks.ActionTypeTASK;
-import com.joy.json.JSONArray;
-import com.joy.json.JSONObject;
 import java.io.PrintWriter;
-import javax.servlet.http.HttpSession;
+import java.util.logging.Level;
+import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 
 /**
  *
  * @author Benoit Cayla (benoit@famillecayla.fr)
  */
 public class FilterTask extends FilterCommon {
-
-    protected class ApiConfigEntry {
-        private String name;
-        private String className;
-
-        public ApiConfigEntry(String name, JSONObject json) {
-            JSONArray services = json.getJSONArray("services");
-            for (Object tag : services) {
-                JSONObject item = (JSONObject)tag;
-                if (name.equalsIgnoreCase(item.getString("name"))) {
-                    this.className = item.getString("class");
-                    this.name = item.getString("name");
-                    return;
-                }
-            }
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getClassName() {
-            return className;
-        }
-
-        public void setClassName(String className) {
-            this.className = className;
-        }
-
-    }
 
     @Override
     protected void process(JoyState state) {
@@ -76,9 +41,17 @@ public class FilterTask extends FilterCommon {
             }
 
             // Get call informations
-            ApiConfigEntry myRestCall = new ApiConfigEntry(state.getAPIRequest().getMainAction(), state.getTaskConfiguration());
+            taskConfigEntry myTaskCall = new taskConfigEntry(state.getAPIRequest().getMainAction(), state.getTaskConfiguration());
+            if (myTaskCall.isSecure()) {
+                if (!checkToken(state.getHttpAuthToken())) {
+                    getLog().log(Level.SEVERE, "Authentication failed");
+                    state.getCurrentResponse().setStatus(SC_UNAUTHORIZED);
+                    return;
+                }
+            }
+            
             getLog().fine("TASK action requested");
-            ActionTypeTASK actionTaskObject = (ActionTypeTASK) Class.forName(myRestCall.getClassName()).newInstance();
+            ActionTypeTASK actionTaskObject = (ActionTypeTASK) Class.forName(myTaskCall.getClassName()).newInstance();
             actionTaskObject.setJoyState(state);
             
             String myTaskName = state.getAPIRequest().getMainAction();
@@ -86,7 +59,7 @@ public class FilterTask extends FilterCommon {
             PrintWriter out = null;
             // create a new task
             result = JOY.TASKS().newTask(myTaskName, 
-                                         myRestCall.getClassName(),
+                                         myTaskCall.getClassName(),
                                          state);
             out = state.getCurrentResponse().getWriter();
             out.print( (result ? "{\"result\":\"Success\"}" : "{\"result\":\"Failed\"}") );

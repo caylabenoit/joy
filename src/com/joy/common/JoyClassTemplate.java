@@ -16,6 +16,7 @@
  */
 package com.joy.common;
 
+
 import java.util.logging.Logger;
 
 /**
@@ -23,7 +24,8 @@ import java.util.logging.Logger;
  * @author Benoit Cayla (benoit@famillecayla.fr)
  */
 public class JoyClassTemplate {
-    private Logger joyLog;
+    private final Logger joyLog;
+    
 
     public Logger getLog() {
         return joyLog;
@@ -32,5 +34,5 @@ public class JoyClassTemplate {
     public JoyClassTemplate() {
         joyLog = Logger.getLogger(this.getClass().getPackage().getName());
     }
-    
+
 }

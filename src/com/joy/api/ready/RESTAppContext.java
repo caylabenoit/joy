@@ -17,6 +17,7 @@
 package com.joy.api.ready;
 
 import com.joy.JOY;
+import com.joy.auth.JoyAuthToken;
 import com.joy.json.JSONObject;
 import com.joy.json.JSONArray;
 import com.joy.common.parameters.JoyParameterFileMenu;
@@ -47,9 +48,11 @@ public class RESTAppContext extends RESTParameters {
         all.put("navi", navi);
         
         // Session
-        JSONArray session = new JSONArray();
-        session.put(JOY.GET_JSON_VALUESET("user", "benoit"));
-        session.put(JOY.GET_JSON_VALUESET("connected", "yes"));
+        JSONObject session = new JSONObject();
+        JoyAuthToken myToken = new JoyAuthToken(this.getState().getHttpAuthToken());
+        session.put("user", myToken.getUser());
+        session.put("status", myToken.getStatus());
+        session.put("token", myToken.getToken());
         all.put("session", session);
 
         return all.toString();
