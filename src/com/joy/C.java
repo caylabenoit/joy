@@ -204,8 +204,8 @@ public class C {
     // Authentication
     ///////////
     public static final String DEFAULT_USER = "Anonymous";
-    public static final String TOKEN_USER_TAG = "user";
-    public static final String REQ_PARAM_USER_TAG = TOKEN_USER_TAG;
+    public static final String TOKEN_PKEY_TAG = "publickey";
+    public static final String REQ_PARAM_USER_TAG = "user";
     public static final String REQ_PARAM_PWD_TAG = "password";
     public static final String TOKEN_STATUS_TAG = "status";
     public static final String TOKEN_TOKEN_TAG = "token";

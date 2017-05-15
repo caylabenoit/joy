@@ -37,40 +37,29 @@ public class FilterAuthenticate extends FilterCommon {
      * @param request input http request
      * @return string to encrypt
      */
-    protected String buildTokenContent(JoyApiRequest request) {
-        return C.DEFAULT_USER;
-    }
-    
-    /**
-     * Returns the user name
-     * TO OVERRIDE
-     * @param request input http request
-     * @return user name
-     */
-    protected String getUser(JoyApiRequest request) {
+    protected String getPublicKey(JoyApiRequest request) {
         return C.DEFAULT_USER;
     }
     
     @Override
     protected void process(JoyState state) {
-        String connectedUser = C.DEFAULT_USER;
+        String defaultPublicKey = C.DEFAULT_USER;
         String token = C.TOKEN_EMPTY;
         JSONObject global = new JSONObject();
         
         try {
             if (checkLogin(state.getAPIRequest())) {
-                connectedUser = getUser(state.getAPIRequest());
-                token = this.encrypt(buildTokenContent(state.getAPIRequest()));
+                defaultPublicKey = getPublicKey(state.getAPIRequest());
+                JoyAuthToken myToken = new JoyAuthToken(getPublicKey(state.getAPIRequest()));
+                token = myToken.buildAuthCookie();
                 global.put(C.TOKEN_STATUS_TAG, C.TOKEN_STATUS_OK);
             } else {
                 token = C.TOKEN_EMPTY;
                 global.put(C.TOKEN_STATUS_TAG, C.TOKEN_STATUS_KO); // si no login
             }
-            global.put(C.TOKEN_USER_TAG, connectedUser);
             global.put(C.TOKEN_TOKEN_TAG, token);
             
         } catch (Exception e) {
-            global.put(C.TOKEN_USER_TAG, C.DEFAULT_USER);
             global.put(C.TOKEN_TOKEN_TAG, C.TOKEN_EMPTY);
             global.put(C.TOKEN_STATUS_TAG, C.TOKEN_STATUS_KO); // si no login
             getLog().log(Level.SEVERE, "FilterAuthenticate.process> Exception={0}", e);

@@ -16,8 +16,9 @@
  */
 package com.joy.api.ready;
 
+import com.joy.C;
 import com.joy.JOY;
-import com.joy.auth.JoyAuthToken;
+import com.joy.auth.JoyAuthCookie;
 import com.joy.json.JSONObject;
 import com.joy.json.JSONArray;
 import com.joy.common.parameters.JoyParameterFileMenu;
@@ -49,10 +50,10 @@ public class RESTAppContext extends RESTParameters {
         
         // Session
         JSONObject session = new JSONObject();
-        JoyAuthToken myToken = new JoyAuthToken(this.getState().getHttpAuthToken());
-        session.put("user", myToken.getUser());
-        session.put("status", myToken.getStatus());
-        session.put("token", myToken.getToken());
+        JoyAuthCookie myToken = new JoyAuthCookie(this.getState().getHttpAuthToken());
+        session.put(C.TOKEN_PKEY_TAG, myToken.getPublicKey());
+        session.put(C.TOKEN_TOKEN_TAG, myToken.getCryptedToken());
+        session.put(C.TOKEN_STATUS_TAG, !myToken.getCryptedToken().isEmpty());
         all.put("session", session);
 
         return all.toString();

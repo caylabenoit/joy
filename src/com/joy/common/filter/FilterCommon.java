@@ -17,6 +17,7 @@
 package com.joy.common.filter;
 
 import com.joy.C;
+import com.joy.auth.JoyAuthCookie;
 import com.joy.auth.JoyAuthToken;
 import com.joy.common.state.JoyState;
 import com.joy.common.JoyClassTemplate;
@@ -79,15 +80,20 @@ public class FilterCommon extends JoyClassTemplate implements Filter {
     }
     
     /**
-     * Check the session token validity, by default only the user name is inside
+     * Check the session token validity, by checking
+     *  1) if the public key is equal to the encrypted public key
+     *  2) if the time into the encrpyted data is not out
      * @param token value
      * @return true if token is valid
      */
-    protected boolean checkToken(String token) {
+    protected boolean checkToken(String cookie) {
         try {
-            JoyAuthToken myToken = new JoyAuthToken(token);
-            String decrypteddata = this.decrypt(myToken.getToken());
-            return myToken.getUser().equals(decrypteddata);
+            JoyAuthToken myCookie = new JoyAuthToken();
+            return myCookie.checkAuthCookie(cookie);
+            
+            //JoyAuthCookie myToken = new JoyAuthCookie(token);
+            //String decrypteddata = this.decrypt(myToken.getCryptedToken());
+            //return myToken.getPublicKey().equals(decrypteddata);
             
         } catch (Exception ex) {
             this.getLog().log(Level.WARNING, "checkToken|Exception> {0}", ex.toString());
