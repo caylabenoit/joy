@@ -26,6 +26,7 @@ public class C {
     public static final String YES = "yes";
     public static final String NO = "no";
     public static final String ID = "id";
+    public static final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy HH:mm:ss";
     
     // Application folders
     public static final String APPDIR_PARAMETER = "joy-appdir";
@@ -212,5 +213,7 @@ public class C {
     public static final int TOKEN_STATUS_KO = 0;
     public static final int TOKEN_STATUS_OK = 1;
     public static final String TOKEN_EMPTY = "";
-    
+    public static final String AUTH_ALGO = "AES";
+    public static final String AUTH_PRIVATEKEY = "Z8LSq0wWwB5v+6YJzurcP463H3F12iZh74fDj4S74oUH4EONkiKb2FmiWUbtFh97GG/c/lbDE47mvw6j94yXxKHOpoqu6zpLKMKPcOoSppcVWb2q34qENBJkudXUh4MWcreondLmLL2UyydtFKuU9Sa5VgY/CzGaVGJABK2ZR94=";
+    public static final int AUTH_TIMEOUT = 10;
 }

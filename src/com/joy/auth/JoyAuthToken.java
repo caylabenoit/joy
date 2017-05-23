@@ -38,22 +38,21 @@ import javax.xml.bind.DatatypeConverter;
 public class JoyAuthToken extends JoyClassTemplate {
     private String publicKey;
     private Date dateSession;
+    private String privateKey;
+    private int timeoutInMinutes;
     
-    private final String ALGO = "AES";
-    private  final String keyStr = "Z8LSq0wWwB5v+6YJzurcP463H3F12iZh74fDj4S74oUH4EONkiKb2FmiWUbtFh97GG/c/lbDE47mvw6j94yXxKHOpoqu6zpLKMKPcOoSppcVWb2q34qENBJkudXUh4MWcreondLmLL2UyydtFKuU9Sa5VgY/CzGaVGJABK2ZR94=";
-
     private Key generateKey() throws Exception {
-        byte[] keyValue = keyStr.getBytes("UTF-8");
+        byte[] keyValue = this.privateKey.getBytes("UTF-8");
         MessageDigest sha = MessageDigest.getInstance("SHA-1");
         keyValue = sha.digest(keyValue);
         keyValue = Arrays.copyOf(keyValue, 16); // use only first 128 bit       
-        Key key = new SecretKeySpec(keyValue, ALGO);
+        Key key = new SecretKeySpec(keyValue, C.AUTH_ALGO);
         return key;
     }
 
     protected String encrypt(String Data) throws Exception {
         Key key = generateKey();
-        Cipher c = Cipher.getInstance(ALGO);
+        Cipher c = Cipher.getInstance(C.AUTH_ALGO);
         c.init(Cipher.ENCRYPT_MODE, key);
         byte[] encVal = c.doFinal(Data.getBytes());
         String encryptedValue = DatatypeConverter.printBase64Binary(encVal);
@@ -62,7 +61,7 @@ public class JoyAuthToken extends JoyClassTemplate {
 
     protected String decrypt(String encryptedData) throws Exception {
         Key key = generateKey();
-        Cipher c = Cipher.getInstance(ALGO);
+        Cipher c = Cipher.getInstance(C.AUTH_ALGO);
         c.init(Cipher.DECRYPT_MODE, key);       
         byte[] decordedValue = DatatypeConverter.parseBase64Binary(encryptedData);
         byte[] decValue = c.doFinal(decordedValue);
@@ -77,6 +76,14 @@ public class JoyAuthToken extends JoyClassTemplate {
     public void setPublicKey(String _p) {
         publicKey = _p;
     }
+
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
+    }
+
+    public void setTimeoutInMinutes(int timeoutInMinutes) {
+        this.timeoutInMinutes = timeoutInMinutes;
+    }
     
     public Date getDateSession() {
         return dateSession;
@@ -85,16 +92,13 @@ public class JoyAuthToken extends JoyClassTemplate {
     public JoyAuthToken() {
         this.publicKey = "";
         this.dateSession = getCurrentDate();
-    }
-    
-    public JoyAuthToken(String publicKey) {
-        this.publicKey = publicKey;
-        this.dateSession = getCurrentDate();
+        this.privateKey = C.AUTH_PRIVATEKEY;
+        this.timeoutInMinutes = C.AUTH_TIMEOUT;
     }
     
     private String getStrCurrentDate() {
         Calendar cal = Calendar.getInstance();
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat(C.DEFAULT_DATE_FORMAT);
         return dateFormat.format(cal.getTime());
     }
     
@@ -105,7 +109,7 @@ public class JoyAuthToken extends JoyClassTemplate {
     
     public Date getDateFromToken(String myDate) {
         try {
-            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            DateFormat dateFormat = new SimpleDateFormat(C.DEFAULT_DATE_FORMAT);
             return dateFormat.parse(myDate);
         } catch (ParseException ex) {
             return null;
@@ -156,7 +160,7 @@ public class JoyAuthToken extends JoyClassTemplate {
         }
         
         // Check timeout afterwards
-        Date curDateLimit = addMinutesToDate(20, _date);
+        Date curDateLimit = addMinutesToDate(this.timeoutInMinutes, _date);
         if (curDateLimit.before(getCurrentDate())) {
             // timeout !
             getLog().log(Level.SEVERE, "Authentication failed, Timeout for this token uses");

@@ -43,7 +43,7 @@ public class FilterTask extends FilterCommon {
             // Get call informations
             taskConfigEntry myTaskCall = new taskConfigEntry(state.getAPIRequest().getMainAction(), state.getTaskConfiguration());
             if (myTaskCall.isSecure()) {
-                if (!checkToken(state.getHttpAuthToken())) {
+                if (!checkToken(state)) {
                     getLog().log(Level.SEVERE, "Authentication failed");
                     state.getCurrentResponse().setStatus(SC_UNAUTHORIZED);
                     return;

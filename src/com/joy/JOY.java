@@ -251,7 +251,7 @@ public class JOY {
      * @return current date
      */
     public static String CURRENT_STR_DATE() {
-        return CURRENT_STR_DATE("dd/MM/yyyy HH:mm:ss");
+        return CURRENT_STR_DATE(C.DEFAULT_DATE_FORMAT);
     }
     
     /** 

@@ -60,7 +60,7 @@ public class FilterAPI extends FilterCommon
             String resultREST = "";
             
             if (myRestCall.isSecure()) {
-                if (!checkToken(state.getHttpAuthToken())) {
+                if (!checkToken(state)) {
                     getLog().log(Level.SEVERE, "Authentication failed");
                     state.getCurrentResponse().setStatus(SC_UNAUTHORIZED);
                     return;

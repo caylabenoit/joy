@@ -48,9 +48,14 @@ public class JoyParameterFactory extends JoyClassTemplate {
     private String applicationName;
     private List<JoyParameterFileMenu> menuFiles;
     private String naviFile;
-
+    private String authPrivateKey;
+    
     public List<JoyParameterFileMenu> getMenuFiles() {
         return menuFiles;
+    }
+
+    public String getAuthPrivateKey() {
+        return (authPrivateKey == null ? C.AUTH_PRIVATEKEY : authPrivateKey);
     }
 
     public String getNaviFile() {
@@ -185,6 +190,9 @@ public class JoyParameterFactory extends JoyClassTemplate {
 
             naviFile = racine.getChildText("joy-navi");
             getLog().fine("Navigation Configuration file: " + naviFile);
+            
+            authPrivateKey = racine.getChildText("auth-private-key");
+            getLog().fine("Application Private key: " + authPrivateKey);
             
             try {
                 sessionTimeoutMin = Integer.valueOf(racine.getChildText(C.PARAMETERS_TAG_SESSION_TIMEOUT));

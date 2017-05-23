@@ -50,9 +50,12 @@ public class FilterAuthenticate extends FilterCommon {
         try {
             if (checkLogin(state.getAPIRequest())) {
                 defaultPublicKey = getPublicKey(state.getAPIRequest());
-                JoyAuthToken myToken = new JoyAuthToken(getPublicKey(state.getAPIRequest()));
+                JoyAuthToken myToken = new JoyAuthToken();
+                myToken.setPublicKey(getPublicKey(state.getAPIRequest()));
+                myToken.setPrivateKey(state.getAppParameters().getAuthPrivateKey());
                 token = myToken.buildAuthCookie();
                 global.put(C.TOKEN_STATUS_TAG, C.TOKEN_STATUS_OK);
+                
             } else {
                 token = C.TOKEN_EMPTY;
                 global.put(C.TOKEN_STATUS_TAG, C.TOKEN_STATUS_KO); // si no login

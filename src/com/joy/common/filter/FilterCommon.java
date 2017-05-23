@@ -17,7 +17,6 @@
 package com.joy.common.filter;
 
 import com.joy.C;
-import com.joy.auth.JoyAuthCookie;
 import com.joy.auth.JoyAuthToken;
 import com.joy.common.state.JoyState;
 import com.joy.common.JoyClassTemplate;
@@ -31,11 +30,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.crypto.*;
-import javax.crypto.spec.SecretKeySpec;
-import java.security.*;
-import java.util.Arrays;
-import javax.xml.bind.DatatypeConverter;
+
 
 /**
  *
@@ -83,17 +78,15 @@ public class FilterCommon extends JoyClassTemplate implements Filter {
      * Check the session token validity, by checking
      *  1) if the public key is equal to the encrypted public key
      *  2) if the time into the encrpyted data is not out
-     * @param token value
+     * @param state state with value browser cookie into Authentication header
      * @return true if token is valid
      */
-    protected boolean checkToken(String cookie) {
+    protected boolean checkToken(JoyState state) {
         try {
             JoyAuthToken myCookie = new JoyAuthToken();
-            return myCookie.checkAuthCookie(cookie);
-            
-            //JoyAuthCookie myToken = new JoyAuthCookie(token);
-            //String decrypteddata = this.decrypt(myToken.getCryptedToken());
-            //return myToken.getPublicKey().equals(decrypteddata);
+            myCookie.setPrivateKey(state.getAppParameters().getAuthPrivateKey());
+            myCookie.setTimeoutInMinutes(state.getAppParameters().getSessionItemout());
+            return myCookie.checkAuthCookie(state.getHttpAuthToken());
             
         } catch (Exception ex) {
             this.getLog().log(Level.WARNING, "checkToken|Exception> {0}", ex.toString());
@@ -119,6 +112,7 @@ public class FilterCommon extends JoyClassTemplate implements Filter {
         // Initialisation du framework
         JoyState srvConfig = new JoyState();
         srvConfig.init(sce,request,response);
+        
         // Token
         srvConfig.setHttpAuthToken(request.getHeader("Authorization"));
         
@@ -150,35 +144,4 @@ public class FilterCommon extends JoyClassTemplate implements Filter {
         } catch (Exception e) {}
     }
     
-    private final String ALGO = "AES";
-    private  final String keyStr = "Z8LSq0wWwB5v+6YJzurcP463H3F12iZh74fDj4S74oUH4EONkiKb2FmiWUbtFh97GG/c/lbDE47mvw6j94yXxKHOpoqu6zpLKMKPcOoSppcVWb2q34qENBJkudXUh4MWcreondLmLL2UyydtFKuU9Sa5VgY/CzGaVGJABK2ZR94=";
-
-    private Key generateKey() throws Exception {
-        byte[] keyValue = keyStr.getBytes("UTF-8");
-        MessageDigest sha = MessageDigest.getInstance("SHA-1");
-        keyValue = sha.digest(keyValue);
-        keyValue = Arrays.copyOf(keyValue, 16); // use only first 128 bit       
-        Key key = new SecretKeySpec(keyValue, ALGO);
-        return key;
-    }
-
-    public String encrypt(String Data) throws Exception {
-        Key key = generateKey();
-        Cipher c = Cipher.getInstance(ALGO);
-        c.init(Cipher.ENCRYPT_MODE, key);
-        byte[] encVal = c.doFinal(Data.getBytes());
-        String encryptedValue = DatatypeConverter.printBase64Binary(encVal);
-        return encryptedValue;
-    }
-
-    public String decrypt(String encryptedData) throws Exception {
-        Key key = generateKey();
-        Cipher c = Cipher.getInstance(ALGO);
-        c.init(Cipher.DECRYPT_MODE, key);       
-        byte[] decordedValue = DatatypeConverter.parseBase64Binary(encryptedData);
-        byte[] decValue = c.doFinal(decordedValue);
-        String decryptedValue = new String(decValue);
-        return decryptedValue;
-    }
-
 }
