@@ -30,18 +30,37 @@ public class BOCompositeJoin {
     private boolean slaveIsAQuery;
     private String joinType;
 
+    /**
+     *
+     * @return
+     */
     public boolean isSlaveAQuery() {
         return slaveIsAQuery;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getSlaveEntityAlias() {
         return slaveEntityAlias;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getJoinType() {
         return joinType;
     }
 
+    /**
+     *
+     * @param RightEntity
+     * @param JoinType
+     * @param RightIsAQuery
+     * @param RightEntityAlias
+     */
     public BOCompositeJoin(String RightEntity, String JoinType, boolean RightIsAQuery, String RightEntityAlias) {
         this.slaveEntity = RightEntity;
         this.joinType = JoinType;
@@ -50,18 +69,35 @@ public class BOCompositeJoin {
         keys = new ArrayList<>();
     }
 
+    /**
+     *
+     * @return
+     */
     public List<BOCompositeJoinKeys> getKeys() {
         return keys;
     }
 
+    /**
+     *
+     * @param leftField
+     * @param rightField
+     */
     public void addKeys(String leftField, String rightField) {
         keys.add(new BOCompositeJoinKeys(leftField, rightField));
     }
 
+    /**
+     *
+     * @return
+     */
     public String getSlaveEntity() {
         return slaveEntity;
     }
 
+    /**
+     *
+     * @param RightEntity
+     */
     public void setSlaveEntity(String RightEntity) {
         this.slaveEntity = RightEntity;
     }

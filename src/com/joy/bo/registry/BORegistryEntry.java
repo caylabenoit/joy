@@ -28,6 +28,10 @@ public class BORegistryEntry {
     private String entityFile;
     private BOEntityType entityType;
 
+    /**
+     *
+     * @param myEntity
+     */
     public BORegistryEntry(JSONObject myEntity) {
         try {
             name = myEntity.getString("name");
@@ -41,6 +45,10 @@ public class BORegistryEntry {
         } catch (Exception e) {}
     }
 
+    /**
+     *
+     * @param myEntity
+     */
     public BORegistryEntry(Element myEntity) {
         try {
             name = myEntity.getAttributeValue("name");
@@ -54,14 +62,26 @@ public class BORegistryEntry {
         } catch (Exception e) {}
     }
     
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getEntityFile() {
         return entityFile;
     }
 
+    /**
+     *
+     * @return
+     */
     public BOEntityType getEntityType() {
         return entityType;
     }

@@ -25,10 +25,18 @@ import com.joy.common.state.JoyState;
 public class ActionTypeTASK extends JoyTask {
     private JoyState state;
 
+    /**
+     *
+     * @return
+     */
     public JoyState getJoyState() {
         return state;
     }
 
+    /**
+     *
+     * @param state
+     */
     public void setJoyState(JoyState state) {
         this.state = state;
     }

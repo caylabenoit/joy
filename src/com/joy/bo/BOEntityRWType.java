@@ -21,6 +21,14 @@ package com.joy.bo;
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
 public enum BOEntityRWType {
+
+    /**
+     *
+     */
     boReadWrite,
+
+    /**
+     *
+     */
     boReadOnly
 }

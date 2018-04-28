@@ -24,22 +24,43 @@ public class BOMapFieldLabel {
     private String name;
     private String label;
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @param Name
+     */
     public void setName(String Name) {
         this.name = Name;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getLabel() {
         return label;
     }
 
+    /**
+     *
+     * @param Label
+     */
     public void setLabel(String Label) {
         this.label = Label;
     }
 
+    /**
+     *
+     * @param Name
+     * @param Label
+     */
     public BOMapFieldLabel(String Name, String Label) {
         this.name = Name;
         this.label = Label;

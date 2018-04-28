@@ -70,26 +70,58 @@ public class BOEntityComposite extends JoyClassTemplate  {
     private boolean             distinct;
     private final BOFactory    entities;
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
     
+    /**
+     *
+     * @param join
+     */
     public void addJoin(BOCompositeJoin join) {
         joins.add(join);
     }
     
+    /**
+     *
+     * @param name
+     * @param alias
+     * @param as
+     */
     public void addField(String name, String alias, String as) {
         fields.add(new BOCompositeField(name, alias, as));
     }
     
+    /**
+     *
+     * @param Alias
+     * @param Name
+     * @param Operator
+     * @param Value
+     */
     public void addFilter(String Alias, String Name, String Operator, String Value) {
         filters.add(new BOCompositeFilter(Alias, Name, Operator, Value));
     }
     
+    /**
+     *
+     * @param Alias
+     * @param Name
+     * @param desc
+     */
     public void addSort(String Alias, String Name, boolean desc) {
         sorts.add(new BOCompositeSorter(Name, Alias, desc));
     }
     
+    /**
+     *
+     * @param Alias
+     * @param Name
+     */
     public void addGroup(String Alias, String Name) {
         groups.add(new BOCompositeField(Name, Alias, null));
     }
@@ -215,6 +247,10 @@ public class BOEntityComposite extends JoyClassTemplate  {
         return generatedQuery;
     }
 
+    /**
+     *
+     * @param Entities
+     */
     public BOEntityComposite(BOFactory Entities) {
         super();
         this.joins = new ArrayList<>();

@@ -164,6 +164,7 @@ public class JSONArray implements Iterable<Object> {
     /**
      * Construct a JSONArray from an array
      *
+     * @param array
      * @throws JSONException
      *             If not an array.
      */
@@ -250,6 +251,7 @@ public class JSONArray implements Iterable<Object> {
     /**
     * Get the enum value associated with an index.
     * 
+     * @param <E>
     * @param clazz
     *            The type of enum to retrieve.
     * @param index
@@ -559,6 +561,7 @@ public class JSONArray implements Iterable<Object> {
     /**
      * Get the enum value associated with a key.
      * 
+     * @param <E>
      * @param clazz
      *            The type of enum to retrieve.
      * @param index
@@ -572,6 +575,7 @@ public class JSONArray implements Iterable<Object> {
     /**
      * Get the enum value associated with a key.
      * 
+     * @param <E>
      * @param clazz
      *            The type of enum to retrieve.
      * @param index
@@ -1071,6 +1075,7 @@ public class JSONArray implements Iterable<Object> {
      * <p>
      * Warning: This method assumes that the data structure is acyclical.
      *
+     * @param writer
      * @return The writer.
      * @throws JSONException
      */

@@ -37,6 +37,10 @@ public class BOCompositeField {
         this.as = (as == null ? "" : as);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getSelectField() {
         return (this.alias.isEmpty() ? this.name :  this.alias + "." + this.name) + 
                (this.as.isEmpty() ? "" : " AS " + this.as);

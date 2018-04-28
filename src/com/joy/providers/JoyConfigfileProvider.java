@@ -42,6 +42,11 @@ public class JoyConfigfileProvider extends JoyClassTemplate {
         }
     }
     
+    /**
+     *
+     * @param _name
+     * @return
+     */
     public String get(String _name) {
         init();
         try {

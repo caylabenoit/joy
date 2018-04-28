@@ -32,6 +32,10 @@ import java.sql.SQLException;
  */
 
 public class RESTJoyCheck extends ActionTypeREST {
+
+    /**
+     *
+     */
     public static int UNKNOWN_VALUE = 0;
     /*
     * Vérifie si la ligne UNKNOWN (id = 0) existe bien dans toutes les tables

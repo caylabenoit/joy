@@ -27,6 +27,12 @@ import javax.servlet.ServletContextListener;
  */
 public class ListenerBasic extends JoyClassTemplate implements ServletContextListener {
 
+    /**
+     *
+     * @param context
+     * @param ParamName
+     * @return
+     */
     public String getContextParamFromWebXml(ServletContext context, String ParamName) {
         try {
             return context.getInitParameter(ParamName);
@@ -36,6 +42,10 @@ public class ListenerBasic extends JoyClassTemplate implements ServletContextLis
         }
     }
     
+    /**
+     *
+     * @param sce
+     */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         joyInit(sce);
@@ -43,6 +53,10 @@ public class ListenerBasic extends JoyClassTemplate implements ServletContextLis
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     *
+     * @param sce
+     */
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         end(sce);
@@ -58,7 +72,15 @@ public class ListenerBasic extends JoyClassTemplate implements ServletContextLis
         
     }
     
+    /**
+     *
+     * @param sce
+     */
     public void init(ServletContextEvent sce) {}
     
+    /**
+     *
+     * @param sce
+     */
     public void end(ServletContextEvent sce) {}
 }

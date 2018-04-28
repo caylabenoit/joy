@@ -21,14 +21,44 @@ package com.joy.common;
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
 public class ActionLogReport {
+
+    /**
+     *
+     */
     static public enum enum_CRITICITY {
-        ERROR, INFO, WARNING, FATAL
+
+        /**
+         *
+         */
+        ERROR,
+
+        /**
+         *
+         */
+        INFO,
+
+        /**
+         *
+         */
+        WARNING,
+
+        /**
+         *
+         */
+        FATAL
     }
     private String label;
     private int code;
     private String description;
     private enum_CRITICITY criticity;
 
+    /**
+     *
+     * @param Label
+     * @param Code
+     * @param Description
+     * @param Criticity
+     */
     public ActionLogReport(String Label, int Code, String Description, enum_CRITICITY Criticity) {
         this.label = Label;
         this.code = Code;
@@ -36,6 +66,10 @@ public class ActionLogReport {
         this.criticity = Criticity;
     }
 
+    /**
+     *
+     * @param Label
+     */
     public ActionLogReport(String Label) {
         this.label = Label;
         this.code = 0;
@@ -43,6 +77,9 @@ public class ActionLogReport {
         this.criticity = criticity;
     }
     
+    /**
+     *
+     */
     public ActionLogReport() {
         this.label = "";
         this.code = 0;
@@ -50,34 +87,66 @@ public class ActionLogReport {
         this.criticity = enum_CRITICITY.INFO;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getLabel() {
         return label;
     }
 
+    /**
+     *
+     * @param Label
+     */
     public void setLabel(String Label) {
         this.label = Label;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getCode() {
         return code;
     }
 
+    /**
+     *
+     * @param Code
+     */
     public void setCode(int Code) {
         this.code = Code;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     *
+     * @param Description
+     */
     public void setDescription(String Description) {
         this.description = Description;
     }
 
+    /**
+     *
+     * @return
+     */
     public enum_CRITICITY getCriticity() {
         return criticity;
     }
 
+    /**
+     *
+     * @param Criticity
+     */
     public void setCriticity(enum_CRITICITY Criticity) {
         this.criticity = Criticity;
     }

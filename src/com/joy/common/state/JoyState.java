@@ -39,46 +39,92 @@ public class JoyState extends JoyStateMinimum {
     private JoyApiRequest request;
     private String httpAuthToken;
 
+    /**
+     *
+     * @return
+     */
     public String getHttpAuthToken() {
         return httpAuthToken;
     }
 
+    /**
+     *
+     * @param httpAuthToken
+     */
     public void setHttpAuthToken(String httpAuthToken) {
         this.httpAuthToken = httpAuthToken;
     }
     
+    /**
+     *
+     * @return
+     */
     public JoyApiRequest getAPIRequest() {
         return request;
     }
     
+    /**
+     *
+     */
     public void start() {
         startTime = System.currentTimeMillis();
     }
     
+    /**
+     *
+     * @return
+     */
     public long getDuration() {
         return System.currentTimeMillis() - startTime;
     }
     
+    /**
+     *
+     */
     public JoyState() {
         super();
     }
 
+    /**
+     *
+     * @return
+     */
     public JoyParameterFactory getAppParameters() {
         return parameters;
     }
 
+    /**
+     *
+     * @param index
+     * @return
+     */
     public BOFactory getBOFactory(int index) {
         return bofactories.get(index);
     }
     
+    /**
+     *
+     * @return
+     */
     public BOFactory getBOFactory() {
         return bofactories.get(0);
     }
     
+    /**
+     *
+     * @return
+     */
     public List<BOFactory> getBOFactories() {
         return bofactories;
     }
     
+    /**
+     *
+     * @param sce
+     * @param _request
+     * @param _response
+     * @return
+     */
     @Override
     public boolean init(ServletContext sce, 
                         HttpServletRequest _request, 
@@ -124,6 +170,9 @@ public class JoyState extends JoyStateMinimum {
         return (entityInit && logParam);
     }
     
+    /**
+     *
+     */
     public void end() {
         for (BOFactory factory : bofactories) {
             try {

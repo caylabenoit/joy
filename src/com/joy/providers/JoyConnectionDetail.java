@@ -32,14 +32,30 @@ public class JoyConnectionDetail extends JoyClassTemplate {
     private String driver;
     private List<JoyInitQuery> initqueries;
     
+    /**
+     *
+     * @param DataSource
+     */
     public JoyConnectionDetail(String DataSource) {
         this.dataSource = DataSource;
     }
     
+    /**
+     *
+     */
     public JoyConnectionDetail() {
         super();
     }
     
+    /**
+     *
+     * @param DataSource
+     * @param User
+     * @param Password
+     * @param url
+     * @param Driver
+     * @param queries
+     */
     public void init(String DataSource, String User, String Password, String url, String Driver, List<JoyInitQuery> queries) {
         this.dataSource = DataSource;
         this.user = User;
@@ -49,42 +65,82 @@ public class JoyConnectionDetail extends JoyClassTemplate {
         initqueries = queries;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getDataSource() {
         return dataSource;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getUser() {
         return user;
     }
 
+    /**
+     *
+     * @param User
+     */
     public void setUser(String User) {
         this.user = User;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     *
+     * @param Password
+     */
     public void setPassword(String Password) {
         this.password = Password;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     *
+     * @param url
+     */
     public void setUrl(String url) {
         this.url = url;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getDriver() {
         return driver;
     }
 
+    /**
+     *
+     * @param Driver
+     */
     public void setDriver(String Driver) {
         this.driver = Driver;
     }
     
+    /**
+     *
+     * @return
+     */
     public JoyDBProvider getDB() {
         
         // Connection to the DB, get the main Datasource name first

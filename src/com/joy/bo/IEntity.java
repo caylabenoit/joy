@@ -85,38 +85,196 @@ public interface IEntity {
      * @return true if records exists
      */
     public boolean hasRecord();
+
+    /**
+     *
+     * @param args
+     */
     public void useOnlyTheseFields(String... args);
+
+    /**
+     *
+     * @param args
+     */
     public void doNotUseTheseFields(String... args);
+
+    /**
+     *
+     * @param args
+     */
     public void useTheseFields(String... args);
+
+    /**
+     *
+     */
     public void useNoFields();
+
+    /**
+     *
+     */
     public void reset();    // reset all the contextuals parametrisation
+
+    /**
+     *
+     */
     public void resetFilters();
+
+    /**
+     *
+     */
     public void resetKeys();
+
+    /**
+     *
+     */
     public void resetSorts();
+
+    /**
+     *
+     */
     public void resetValues();
+
+    /**
+     *
+     */
     public void insertDefaultRecords(); // insert into the entity the default records
+
+    /**
+     *
+     * @param record
+     */
     public void addDefaultRecord(BOInitRecord record);  // add a new default record
+
+    /**
+     *
+     * @param con
+     */
     public void setDB(JoyDBProvider con);
+
+    /**
+     *
+     * @return
+     */
     public JoyDBProvider getDB();
+
+    /**
+     *
+     * @param format
+     */
     public void setDateFormat(String format);
+
+    /**
+     *
+     * @return
+     */
     public boolean isDistinct();
+
+    /**
+     *
+     * @param Distinct
+     */
     public void setDistinct(boolean Distinct);
+
+    /**
+     *
+     * @return
+     */
     public List<BOField> fields();
+
+    /**
+     *
+     * @param index
+     * @return
+     */
     public BOField field(int index);
+
+    /**
+     *
+     * @param Name
+     * @return
+     */
     public BOField field(String Name);
+
+    /**
+     *
+     * @return
+     */
     public boolean isInitialized();
+
+    /**
+     *
+     * @return
+     */
     public ResultSet select();
+
+    /**
+     *
+     * @param filtering
+     * @return
+     */
     public int count(boolean... filtering);
+
+    /**
+     *
+     * @return
+     */
     public JSONObject exp();
     // Write interfaces
+
+    /**
+     *
+     * @param data
+     * @param removeAllBefore
+     * @return
+     */
     public Collection<ActionLogReport> imp(JSONObject data, boolean removeAllBefore);
+
+    /**
+     *
+     * @return
+     */
     public int delete();
+
+    /**
+     *
+     */
     public void truncate();
+
+    /**
+     *
+     * @return
+     */
     public int insert();
+
+    /**
+     *
+     * @return
+     */
     public int update();
+
+    /**
+     *
+     * @return
+     */
     public int upsert();
+
+    /**
+     *
+     * @param fieldname
+     * @return
+     */
     public int getNewIDForField(String fieldname);
     // Read specific (query) interface
+
+    /**
+     *
+     * @param Query
+     */
     public void setQuery(String Query);
+
+    /**
+     *
+     * @return
+     */
     public String getQuery();
 }

@@ -29,17 +29,33 @@ import org.jdom2.Element;
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
 public class BORegistry extends JoyClassTemplate {
+
+    /**
+     *
+     */
     public List<BORegistryEntry> registry;
     
+    /**
+     *
+     */
     public BORegistry() {
         super();
         registry = new ArrayList();
     }
     
+    /**
+     *
+     * @return
+     */
     public List<BORegistryEntry> getAllEntries() {
         return registry;
     }
     
+    /**
+     *
+     * @param regFile
+     * @return
+     */
     public boolean loadXML(String regFile) {
         try {
             // read the registry config file
@@ -60,6 +76,11 @@ public class BORegistry extends JoyClassTemplate {
         }
     }
     
+    /**
+     *
+     * @param name
+     * @return
+     */
     public BORegistryEntry getRegistryEntry(String name) {
         for (int i=0; i < registry.size(); i++) {
             if (registry.get(i).getName().equalsIgnoreCase(name)) {

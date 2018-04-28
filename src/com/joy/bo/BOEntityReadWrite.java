@@ -43,6 +43,9 @@ public class BOEntityReadWrite extends BOEntityReadOnly {
      */
     private List<BOInitRecord> defaultRecords;
 
+    /**
+     *
+     */
     public BOEntityReadWrite() {
         super();
         defaultRecords = new ArrayList<>();
@@ -132,6 +135,14 @@ public class BOEntityReadWrite extends BOEntityReadOnly {
     *   @removeAllBefore: delete all records before import
     *   return : Joy Logs & errors
     */
+
+    /**
+     *
+     * @param data
+     * @param removeAllBefore
+     * @return
+     */
+
     @Override
     public Collection<ActionLogReport> imp(JSONObject data, 
                                                   boolean removeAllBefore) {

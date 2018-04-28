@@ -54,6 +54,11 @@ public class SQLScriptRunner {
         this.stopOnError = stopOnError;
     }
 
+    /**
+     *
+     * @param delimiter
+     * @param fullLineDelimiter
+     */
     public void setDelimiter(String delimiter, boolean fullLineDelimiter) {
         this.delimiter = delimiter;
         this.fullLineDelimiter = fullLineDelimiter;

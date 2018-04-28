@@ -28,6 +28,10 @@ public class JoyJsonSingle extends JoyClassTemplate {
     private String name;
     private Object value;
 
+    /**
+     *
+     * @return
+     */
     public JSONObject getData() {
         try {
             return JOY.GET_JSON_VALUESET(name, value);
@@ -36,27 +40,51 @@ public class JoyJsonSingle extends JoyClassTemplate {
         }
     }
     
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     *
+     * @return
+     */
     public Object getValue() {
         return value;
     }
 
+    /**
+     *
+     * @param value
+     */
     public void setValue(Object value) {
         this.value = value;
     }
 
+    /**
+     *
+     */
     public JoyJsonSingle() {
         this.name = "";
         this.value = "";
     }
 
+    /**
+     *
+     * @param name
+     * @param value
+     */
     public JoyJsonSingle(String name, Object value) {
         super();
         this.name = name;

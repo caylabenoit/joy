@@ -37,30 +37,61 @@ public class Action extends JoyClassTemplate  {
     private List<FileItem> m_AttachedFiles;
     private JoyState state;
     
+    /**
+     *
+     * @return
+     */
     public BOFactory getBOFactory() {
         return state.getBOFactories().get(0);
     }
     
+    /**
+     *
+     * @param index
+     * @return
+     */
     public BOFactory getBOFactory(int index) {
         return state.getBOFactories().get(index);
     }
     
+    /**
+     *
+     * @return
+     */
     public JoyState getState() {
         return state;
     }
     
+    /**
+     *
+     * @return
+     */
     public JoyApiRequest getCurrentRequest() {
         return state.getAPIRequest();
     }
     
+    /**
+     *
+     * @return
+     */
     public boolean hasAttachedFiles() {
         return (m_AttachedFiles != null);
     }
     
+    /**
+     *
+     * @return
+     */
     public List<FileItem> attachedFiles() {
         return m_AttachedFiles;
     }
     
+    /**
+     *
+     * @param Index
+     * @return
+     * @throws IOException
+     */
     public InputStream attachedFile(int Index) throws IOException {
         return m_AttachedFiles.get(Index).getInputStream();
     }
@@ -73,10 +104,17 @@ public class Action extends JoyClassTemplate  {
         return msg;
     }
     
+    /**
+     *
+     * @param loc
+     */
     public void setMessageBundle(ActionLocaleMgnt loc) {
         m_localeBundle = loc;
     }
     
+    /**
+     *
+     */
     public Action() {
         super();
         this.m_localeBundle = null;

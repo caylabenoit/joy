@@ -24,24 +24,44 @@ public class MappingSignature {
     private String Name;
     private String ConfigFile;
 
+    /**
+     *
+     * @param Name
+     * @param ConfigFile
+     */
     public MappingSignature(String Name, String ConfigFile) {
         this.Name = Name;
         this.ConfigFile = ConfigFile;
     }
 
-    
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return Name;
     }
 
+    /**
+     *
+     * @param Name
+     */
     public void setName(String Name) {
         this.Name = Name;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getConfigFile() {
         return ConfigFile;
     }
 
+    /**
+     *
+     * @param ConfigFile
+     */
     public void setConfigFile(String ConfigFile) {
         this.ConfigFile = ConfigFile;
     }

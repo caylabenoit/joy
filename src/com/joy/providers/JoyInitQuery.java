@@ -24,23 +24,44 @@ public class JoyInitQuery {
     private String dbProvider;
     private String sql;
 
+    /**
+     *
+     * @param DBProvider
+     * @param SQL
+     */
     public JoyInitQuery(String DBProvider, String SQL) {
         this.dbProvider = DBProvider;
         this.sql = SQL;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getDBProvider() {
         return dbProvider;
     }
 
+    /**
+     *
+     * @param DBProvider
+     */
     public void setDBProvider(String DBProvider) {
         this.dbProvider = DBProvider;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getSQL() {
         return sql;
     }
 
+    /**
+     *
+     * @param SQL
+     */
     public void setSQL(String SQL) {
         this.sql = SQL;
     }

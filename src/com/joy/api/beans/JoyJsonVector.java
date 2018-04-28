@@ -54,27 +54,51 @@ import java.sql.SQLException;
 public class JoyJsonVector extends JoyClassTemplate {
     private JSONArray items;
 
+    /**
+     *
+     */
     public JoyJsonVector() {
         super();
         items = new JSONArray();
     }
 
+    /**
+     *
+     * @return
+     */
     public JSONArray getItems() {
         return items;
     }
 
+    /**
+     *
+     * @param items
+     */
     public void setItems(JSONArray items) {
         this.items = items;
     }
     
+    /**
+     *
+     * @param obj
+     */
     public void addItem(JoyJsonSingle obj) {
         items.put(obj.getData());
     }
     
+    /**
+     *
+     * @param name
+     * @param value
+     */
     public void addItem(String name, Object value) {
         addItem(new JoyJsonSingle(name, value));
     }
     
+    /**
+     *
+     * @return
+     */
     public JSONObject getData() {
         try {
             JSONObject finalObj = new JSONObject();

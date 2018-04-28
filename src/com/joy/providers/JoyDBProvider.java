@@ -45,11 +45,17 @@ import com.joy.common.JoyClassTemplate;
 public class JoyDBProvider extends JoyClassTemplate {
     private Connection dbConnection;
     
-    
+    /**
+     *
+     * @return
+     */
     public boolean isInitialized() {
         return (dbConnection != null);
     }
     
+    /**
+     *
+     */
     public void end() {
         try {
             dbConnection.close();
@@ -160,10 +166,19 @@ public class JoyDBProvider extends JoyClassTemplate {
         return dbConnection;
     }
     
+    /**
+     *
+     * @param SQL
+     */
     public void executeSQL(String SQL) {
         getResultSet(SQL);
     }
     
+    /**
+     *
+     * @param SQL
+     * @return
+     */
     public ResultSet getResultSet(String SQL) {
         try {
             getLog().fine("SQL > " + SQL);
@@ -185,6 +200,11 @@ public class JoyDBProvider extends JoyClassTemplate {
         return null;
     }
     
+    /**
+     *
+     * @param SQL
+     * @return
+     */
     public PreparedStatement prepareSQL(String SQL) {
         try {
             getLog().fine("Connection: " + this.dbConnection + " | SQL > " + SQL);
@@ -195,6 +215,10 @@ public class JoyDBProvider extends JoyClassTemplate {
         return null;
     }
     
+    /**
+     *
+     * @param rs
+     */
     public void closeResultSet(ResultSet rs) {
         try {
             getLog().fine("Close recordset, Cursor: " + rs.toString());
@@ -204,6 +228,10 @@ public class JoyDBProvider extends JoyClassTemplate {
         }
     }
 
+    /**
+     *
+     * @param myFile
+     */
     public void runScript(String myFile) {
         try {
             getLog().info("Run script from " + myFile);

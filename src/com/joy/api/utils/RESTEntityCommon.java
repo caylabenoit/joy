@@ -26,6 +26,9 @@ import com.joy.api.ActionTypeREST;
  */
 public class RESTEntityCommon extends ActionTypeREST {
 
+    /**
+     *
+     */
     public RESTEntityCommon() {
         super();
     }
@@ -34,6 +37,7 @@ public class RESTEntityCommon extends ActionTypeREST {
      * Return a filtered entity object
      * The URL must have the entity name just after api (ex. http://.../api/[entity name]/...
      * Parameters are used to filter the entity
+     * @param entityName
      * @return JSON Term's list
      */
     protected IEntity getFilteredEntity(String entityName) {

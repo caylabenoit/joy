@@ -31,6 +31,10 @@ import java.util.List;
 public class JoyTaskManager extends JoyClassTemplate {
     private List<ActionTypeTASK> tasks;     // tasks threads
     private int lastTaskId;
+
+    /**
+     *
+     */
     public void init() {
         // Task Manager initialization here
         lastTaskId = 1;
@@ -111,6 +115,11 @@ public class JoyTaskManager extends JoyClassTemplate {
         return oneTask;
     }
     
+    /**
+     *
+     * @param limit
+     * @return
+     */
     public String getJSONTasksDesc(int limit) {
         try {
             int li = 0;
@@ -130,6 +139,7 @@ public class JoyTaskManager extends JoyClassTemplate {
     
     /**
      * Return the JSON task list
+     * @param limit
      * @return 
      */
     public String getJSONTasks(int limit) {
@@ -150,10 +160,19 @@ public class JoyTaskManager extends JoyClassTemplate {
         }
     }
     
+    /**
+     *
+     * @return
+     */
     public List<ActionTypeTASK> getTasks() {
         return tasks;
     }
     
+    /**
+     *
+     * @param id
+     * @return
+     */
     public ActionTypeTASK getTask(int id) {
         for (ActionTypeTASK task : tasks) 
             if (task.getId() == id)

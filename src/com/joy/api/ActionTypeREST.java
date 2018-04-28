@@ -57,6 +57,9 @@ public class ActionTypeREST extends Action {
     private JSONArray matrixes;
     private JSONArray others;
 
+    /**
+     *
+     */
     public ActionTypeREST() {
         singles = new JSONArray();
         vectors = new JSONArray();
@@ -190,6 +193,12 @@ public class ActionTypeREST extends Action {
         return true;
     }
     
+    /**
+     *
+     * @param jsonMatrixName
+     * @param matrix
+     * @return
+     */
     public boolean addMatrix(String jsonMatrixName, JoyJsonMatrix matrix) {
         try {
             matrixes.put(new JoyJsonSingle(jsonMatrixName, matrix.getData()).getData());
@@ -200,6 +209,12 @@ public class ActionTypeREST extends Action {
         return true;
     }
     
+    /**
+     *
+     * @param jsonMatrixName
+     * @param entity
+     * @return
+     */
     public boolean addMatrix(String jsonMatrixName, IEntity entity) {
         try {
             ResultSet rs = entity.select();

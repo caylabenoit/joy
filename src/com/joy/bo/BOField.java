@@ -76,77 +76,149 @@ public class BOField extends JoyClassTemplate implements Cloneable {
         return myClone;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getLabel() {
         return label;
     }
 
+    /**
+     *
+     * @param Label
+     */
     public void setLabel(String Label) {
         this.label = Label;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getTableName() {
         return table;
     }
 
+    /**
+     *
+     * @param TableName
+     */
     public void setTableName(String TableName) {
         this.table = TableName;
     }
     
+    /**
+     *
+     * @return
+     */
     public boolean isNotUsed() {
         return doNotUse;
     }
 
+    /**
+     *
+     */
     public void doNotUseThisField() {
         this.doNotUse = true;
     }
     
+    /**
+     *
+     */
     public void useThisField() {
         this.doNotUse = false;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getColumnName() {
         return name;
     }
 
+    /**
+     *
+     * @param Value
+     */
     public void setKeyValue(Object Value) {
         this.value = Value;
         this.key = true;
         this.valueSet = true;
     }
     
+    /**
+     *
+     * @return
+     */
     public Object getValue() {
         return value;
     }
     
+    /**
+     *
+     * @param Value
+     */
     public void setValue(Object Value) {
         this.value = Value;
         this.valueSet = true;
     }
     
+    /**
+     *
+     * @param ColumnName
+     */
     public void setColumnName(String ColumnName) {
         this.name = ColumnName;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isKey() {
         return key;
     }
 
+    /**
+     *
+     */
     public void setKey() {
         this.key = true;
     }
     
+    /**
+     *
+     */
     public void unsetKey() {
         this.key = false;
     }
     
+    /**
+     *
+     * @return
+     */
     public BOFieldType getFieldType() {
         return dataType;
     }
 
+    /**
+     *
+     * @param FieldType
+     */
     public void setFieldType(BOFieldType FieldType) {
         this.dataType = FieldType;
     }
 
+    /**
+     *
+     * @param TableName
+     * @param ColumnName
+     * @param Key
+     * @param FieldType
+     * @param Label
+     */
     public BOField(String TableName, String ColumnName, boolean Key, BOFieldType FieldType, String Label) {
         super();
         this.name = ColumnName;
@@ -159,6 +231,9 @@ public class BOField extends JoyClassTemplate implements Cloneable {
         this.label = Label;
     }
 
+    /**
+     *
+     */
     public BOField() {
         super();
         this.name = "";

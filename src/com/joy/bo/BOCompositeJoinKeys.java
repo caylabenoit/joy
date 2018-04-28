@@ -24,28 +24,52 @@ public class BOCompositeJoinKeys {
     private String masterField;
     private String slaveField;
 
+    /**
+     *
+     */
     public BOCompositeJoinKeys() {
         this.masterField = "";
         this.slaveField = "";
     }
 
+    /**
+     *
+     * @param masterField
+     * @param slaveField
+     */
     public BOCompositeJoinKeys(String masterField, String slaveField) {
         this.masterField = masterField;
         this.slaveField = slaveField;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getMasterKey() {
         return masterField;
     }
 
+    /**
+     *
+     * @param LeftField
+     */
     public void setMasterKey(String LeftField) {
         this.masterField = LeftField;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getSlaveKey() {
         return slaveField;
     }
 
+    /**
+     *
+     * @param RightField
+     */
     public void setSlaveKey(String RightField) {
         this.slaveField = RightField;
     }

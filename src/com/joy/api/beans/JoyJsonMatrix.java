@@ -33,20 +33,35 @@ public class JoyJsonMatrix extends JoyClassTemplate {
     private JSONArray rows;
     private JSONArray columns;
     
+    /**
+     *
+     */
     public JoyJsonMatrix() {
         super();
         rows = new JSONArray();
         columns = new JSONArray();
     }
     
+    /**
+     *
+     * @param obj
+     */
     public void addRow(JoyJsonVector obj) {
         rows.put(obj.getData());
     }
 
+    /**
+     *
+     * @return
+     */
     public JSONArray getRows() {
         return rows;
     }
 
+    /**
+     *
+     * @param rows
+     */
     public void setRows(JSONArray rows) {
         this.rows = rows;
     }

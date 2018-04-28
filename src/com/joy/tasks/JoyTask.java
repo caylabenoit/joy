@@ -42,23 +42,41 @@ public class JoyTask extends Thread {
     private List<String> trace;
     private Logger joyLog;
 
+    /**
+     *
+     * @return
+     */
     public Logger getLog() {
         return joyLog;
     }
     
+    /**
+     *
+     */
     public JoyTask() {
         trace = new ArrayList();
         joyLog = Logger.getLogger(this.getClass().getPackage().getName());
     }
     
+    /**
+     *
+     * @param message
+     */
     public void addTrace(String message) {
         trace.add(message);
     }
     
+    /**
+     *
+     * @return
+     */
     public List<String> getTraces() {
         return trace;
     }
     
+    /**
+     *
+     */
     public void end() {
 
         session = null;
@@ -66,6 +84,10 @@ public class JoyTask extends Thread {
         endDatetime = new Date();
     }
     
+    /**
+     *
+     * @return
+     */
     public long getDurationInSeconds() {
         try {
             long diff = endDatetime.getTime() - startDatetime.getTime();
@@ -75,83 +97,161 @@ public class JoyTask extends Thread {
         }
     }
     
+    /**
+     *
+     * @return
+     */
     public Date getStartDatetime() {
         return startDatetime;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getStringStartDatetime() {
         return JOY.DATE_FORMAT(startDatetime);
     }
     
+    /**
+     *
+     * @return
+     */
     public Date getEndDatetime() {
         return endDatetime;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getStringEndDatetime() {
         return JOY.DATE_FORMAT(endDatetime);
     }
     
+    /**
+     *
+     * @return
+     */
     public String getMessage() {
         return message;
     }
 
+    /**
+     *
+     * @param Message
+     */
     public void setMessage(String Message) {
         this.message = Message;
     }
     
+    /**
+     *
+     */
     public void resetMessages() {
         this.message = "";
     }
     
+    /**
+     *
+     * @param Message
+     */
     public void addMessage(String Message) {
         this.message += Message;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getTaskObject() {
         return taskObject;
     }
 
+    /**
+     *
+     * @param taskObject
+     */
     public void setTaskObject(String taskObject) {
         this.taskObject = taskObject;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getTaskId() {
         return taskId;
     }
 
+    /**
+     *
+     * @param taskId
+     */
     public void setTaskId(int taskId) {
         this.taskId = taskId;
     }
 
-    
+    /**
+     *
+     * @return
+     */
     public String getTaskName() {
         return taskName;
     }
 
+    /**
+     *
+     * @param taskName
+     */
     public void setTaskName(String taskName) {
         this.taskName = taskName;
     }
     
+    /**
+     *
+     * @return
+     */
     public JoyTaskManager getTaskManager() {
         return taskManager;
     }
 
+    /**
+     *
+     * @param taskManager
+     */
     public void setTaskManager(JoyTaskManager taskManager) {
         this.taskManager = taskManager;
     }
     
+    /**
+     *
+     * @return
+     */
     public HttpSession getSession() {
         return session;
     }
 
+    /**
+     *
+     * @param mySession
+     */
     public void setSession(HttpSession mySession) {
         this.session = mySession;
     }
 
+    /**
+     *
+     * @return
+     */
     public HttpServletRequest getRequest() {
         return request;
     }
 
+    /**
+     *
+     * @param request
+     */
     public void setRequest(HttpServletRequest request) {
         this.request = request;
     }
@@ -178,6 +278,10 @@ public class JoyTask extends Thread {
         return JoyTaskStatus.Success;
     }
     
+    /**
+     *
+     * @return
+     */
     public JoyTaskStatus getStatus() {
         if (status == JoyTaskStatus.Running && !this.isAlive()) {
             return JoyTaskStatus.Failed;

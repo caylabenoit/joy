@@ -24,27 +24,51 @@ public class BOPlugin {
     private String name;
     private String className;
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setName(String name) {
         this.name = name.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getClassName() {
         return className;
     }
 
+    /**
+     *
+     * @param className
+     */
     public void setClassName(String className) {
         this.className = className;
     }
 
+    /**
+     *
+     * @param name
+     * @param className
+     */
     public BOPlugin(String name, String className) {
         this.name = name.toUpperCase();
         this.className = className;
     }
 
+    /**
+     *
+     */
     public BOPlugin() {
         this.name = "";
         this.className = "";

@@ -21,9 +21,29 @@ package com.joy.bo;
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
 public enum BOFieldType {
+
+    /**
+     *
+     */
     fieldString,
+
+    /**
+     *
+     */
     fieldInteger,
+
+    /**
+     *
+     */
     fieldBoolean,
+
+    /**
+     *
+     */
     fieldDate,
+
+    /**
+     *
+     */
     fieldFloat
 }

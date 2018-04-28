@@ -29,38 +29,74 @@ public class LookupMap {
     private String entityLookupKey;
     private List<FieldMap> lookupConditions;
 
+    /**
+     *
+     */
     public LookupMap() {
         lookupConditions = new ArrayList();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTo() {
         return entityTo;
     }
 
+    /**
+     *
+     * @param To
+     */
     public void setTo(String To) {
         this.entityTo = To;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getEntityLookup() {
         return entityLookup;
     }
 
+    /**
+     *
+     * @param EntityLookup
+     */
     public void setEntityLookup(String EntityLookup) {
         this.entityLookup = EntityLookup;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getEntityLookupKey() {
         return entityLookupKey;
     }
 
+    /**
+     *
+     * @param EntityLookupKey
+     */
     public void setEntityLookupKey(String EntityLookupKey) {
         this.entityLookupKey = EntityLookupKey;
     }
     
+    /**
+     *
+     * @param From
+     * @param To
+     */
     public void addCondition (String From, String To) {
         lookupConditions.add(new FieldMap(From, To, false, false));
     }
 
+    /**
+     *
+     * @return
+     */
     public List<FieldMap> getLookupConditions() {
         return lookupConditions;
     }

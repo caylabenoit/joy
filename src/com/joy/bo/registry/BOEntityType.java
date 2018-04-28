@@ -21,8 +21,24 @@ package com.joy.bo.registry;
  * @author Benoit Cayla (benoit@famillecayla.fr)
  */
 public enum BOEntityType {
+
+    /**
+     *
+     */
     boComposite,
+
+    /**
+     *
+     */
     boTable,
+
+    /**
+     *
+     */
     boQuery,
+
+    /**
+     *
+     */
     boNothing
 }

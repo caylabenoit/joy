@@ -27,42 +27,87 @@ public class JoyParameter {
     private Object value;
     private ParameterType type;
 
+    /**
+     *
+     */
     public enum ParameterType {
-        LIST, VALUE
+
+        /**
+         *
+         */
+        LIST,
+
+        /**
+         *
+         */
+        VALUE
     };
 
+    /**
+     *
+     * @return
+     */
     public ParameterType getType() {
         return type;
     }
 
+    /**
+     *
+     * @param Type
+     */
     public void setType(ParameterType Type) {
         this.type = Type;
     }
         
+    /**
+     *
+     * @param Name
+     * @param Value
+     * @param type
+     */
     public JoyParameter(String Name, Object Value, ParameterType type) {
         this.name = Name;
         this.value = Value;
         this.type = type; 
     }    
     
+    /**
+     *
+     */
     public JoyParameter() {
         name = "";
         value = null;
         this.type = ParameterType.VALUE;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @param Name
+     */
     public void setName(String Name) {
         this.name = Name;
     }
 
+    /**
+     *
+     * @return
+     */
     public Object getValue() {
         return value;
     }
     
+    /**
+     *
+     * @return
+     */
     public List<JoyParameter> getList() {
         if (this.type == ParameterType.LIST)
             return (List<JoyParameter>)value;
@@ -87,6 +132,10 @@ public class JoyParameter {
         return null;
     }
     
+    /**
+     *
+     * @param Value
+     */
     public void setValue(Object Value) {
         this.value = Value;
     }

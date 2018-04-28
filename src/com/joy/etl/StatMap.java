@@ -25,32 +25,59 @@ public class StatMap {
     private int rowsInserted;
     private boolean fatalError;
 
+    /**
+     *
+     * @return
+     */
     public boolean isFatalError() {
         return fatalError;
     }
 
+    /**
+     *
+     * @param FatalError
+     */
     public void setFatalError(boolean FatalError) {
         this.fatalError = FatalError;
     }
     
+    /**
+     *
+     */
     public StatMap() {
         rowsUpdated=0;
         rowsInserted=0;
         fatalError=false;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getRowsUpdated() {
         return rowsUpdated;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getRowsInserted() {
         return rowsInserted;
     }
 
+    /**
+     *
+     * @param nb
+     */
     public void incRowsUpdated(int nb) {
         rowsUpdated += nb;
     }
     
+    /**
+     *
+     * @param nb
+     */
     public void incRowsInserted(int nb) {
         rowsInserted += nb;
     }

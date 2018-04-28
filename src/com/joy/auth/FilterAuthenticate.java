@@ -41,6 +41,10 @@ public class FilterAuthenticate extends FilterCommon {
         return C.DEFAULT_USER;
     }
     
+    /**
+     *
+     * @param state
+     */
     @Override
     protected void process(JoyState state) {
         String defaultPublicKey = C.DEFAULT_USER;

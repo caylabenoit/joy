@@ -30,6 +30,10 @@ import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
  */
 public class FilterTask extends FilterCommon {
 
+    /**
+     *
+     * @param state
+     */
     @Override
     protected void process(JoyState state) {
         boolean hasActiveSession = false;

@@ -28,11 +28,34 @@ import java.util.List;
  */
 public class JoyJsonPOSTReturn extends JoyClassTemplate {
     
+    /**
+     *
+     */
     public enum JoyEnumPOSTUpSertCodes {
+
+        /**
+         *
+         */
         update ("Update"),
+
+        /**
+         *
+         */
         insert  ("Insert"),
+
+        /**
+         *
+         */
         delete  ("Delete"),
+
+        /**
+         *
+         */
         nothing  ("Nothing"),
+
+        /**
+         *
+         */
         upsert ("Upsert");      
         private final String name;       
         JoyEnumPOSTUpSertCodes(String s) {  name = s;  }
@@ -44,38 +67,71 @@ public class JoyJsonPOSTReturn extends JoyClassTemplate {
     private boolean status;
     private JoyEnumPOSTUpSertCodes updateType;
 
+    /**
+     *
+     * @return
+     */
     public boolean isStatus() {
         return status;
     }
 
+    /**
+     *
+     */
     public void setStatusOk() {
         this.status = true;
     }
     
+    /**
+     *
+     */
     public void setStatusKo() {
         this.status = false;
     }
     
+    /**
+     *
+     * @return
+     */
     public JoyEnumPOSTUpSertCodes getUpdateType() {
         return updateType;
     }
 
+    /**
+     *
+     * @param updateType
+     */
     public void setUpdateType(JoyEnumPOSTUpSertCodes updateType) {
         this.updateType = updateType;
     }
     
+    /**
+     *
+     * @param nbRowsAffected
+     */
     public void setNbRowsAffected(int nbRowsAffected) {
         this.nbRowsAffected = nbRowsAffected;
     }
     
+    /**
+     *
+     */
     public JoyJsonPOSTReturn() {
         messages = new ArrayList();
     }
 
+    /**
+     *
+     * @param message
+     */
     public void addMessage(String message) {
         messages.add (message);
     }
     
+    /**
+     *
+     * @return
+     */
     public JSONObject getJsonReturn() {
         try {
             JSONObject main = new  JSONObject();

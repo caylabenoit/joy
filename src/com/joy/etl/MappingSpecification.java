@@ -37,30 +37,58 @@ public class MappingSpecification extends JoyClassTemplate {
     private List<LookupMap> LookupMaps;
     private String Filter;
 
+    /**
+     *
+     * @return
+     */
     public String getFilter() {
         return Filter;
     }
 
+    /**
+     *
+     * @param Filter
+     */
     public void setFilter(String Filter) {
         this.Filter = Filter;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getFrom() {
         return From;
     }
 
+    /**
+     *
+     * @param From
+     */
     public void setFrom(String From) {
         this.From = From;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTo() {
         return To;
     }
 
+    /**
+     *
+     * @param To
+     */
     public void setTo(String To) {
         this.To = To;
     }
     
+    /**
+     *
+     * @param id
+     */
     public MappingSpecification(String id) {
         FieldMaps = new ArrayList();
         LookupMaps = new ArrayList();
@@ -68,10 +96,18 @@ public class MappingSpecification extends JoyClassTemplate {
         Filter = "";
     }
     
+    /**
+     *
+     * @param field
+     */
     public void add(FieldMap field) {
         FieldMaps.add(field);
     }
     
+    /**
+     *
+     * @param lookup
+     */
     public void add(LookupMap lookup) {
         LookupMaps.add(lookup);
     }

@@ -21,5 +21,24 @@ package com.joy.tasks;
  * @author Benoit CAYLA (benoit@famillecayla.fr)
  */
 public enum JoyTaskStatus {
-    Running, Failed, Success, Paused
+
+    /**
+     *
+     */
+    Running,
+
+    /**
+     *
+     */
+    Failed,
+
+    /**
+     *
+     */
+    Success,
+
+    /**
+     *
+     */
+    Paused
 }

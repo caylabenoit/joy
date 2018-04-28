@@ -33,18 +33,33 @@ public class ChartWithDataset {
     private List<JoyParameter> colors;
     private String transparency;
     
+    /**
+     *
+     * @return
+     */
     public boolean isOneColorByValue() {
         return oneColorByValue;
     }
 
+    /**
+     *
+     * @param oneColorByValue
+     */
     public void setOneColorByValue(boolean oneColorByValue) {
         this.oneColorByValue = oneColorByValue;
     }
 
+    /**
+     *
+     * @return
+     */
     protected boolean isEmpty() {
         return points.isEmpty();
     } 
     
+    /**
+     *
+     */
     public ChartWithDataset() {
         points = (List<ChartDatasetPoint>)new ArrayList();
         oneColorByValue = false;
@@ -52,6 +67,11 @@ public class ChartWithDataset {
         transparency = "1";
     }
     
+    /**
+     *
+     * @param _Colors
+     * @param _transparency
+     */
     public ChartWithDataset(List<JoyParameter> _Colors, String _transparency) {
         points = (List<ChartDatasetPoint>)new ArrayList();
         oneColorByValue = false;
@@ -59,6 +79,12 @@ public class ChartWithDataset {
         colors = _Colors;
     }
     
+    /**
+     *
+     * @param label
+     * @param dataset
+     * @param Value
+     */
     public void add(String label, 
                     String dataset, 
                     Float Value)

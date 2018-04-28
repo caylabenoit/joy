@@ -27,23 +27,42 @@ public class BOQueryExecution {
     private List<BOField> values;
     private String sql;
 
+    /**
+     *
+     * @return
+     */
     public List<BOField> getValues() {
         return values;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getSQL() {
         return sql;
     }
 
+    /**
+     *
+     * @param SQL
+     */
     public void setSQL(String SQL) {
         this.sql = SQL;
     }
 
+    /**
+     *
+     */
     public BOQueryExecution() {
         sql = "";
         values = new ArrayList();
     }
     
+    /**
+     *
+     * @param o
+     */
     public void addValue(BOField o) {
         values.add(o);
     }

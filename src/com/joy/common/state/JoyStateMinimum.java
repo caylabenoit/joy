@@ -34,39 +34,77 @@ public class JoyStateMinimum extends JoyClassTemplate {
     private JSONObject taskConfiguration;
     private HttpServletResponse currentResponse;
     
+    /**
+     *
+     * @return
+     */
     public HttpServletResponse getCurrentResponse() {
         return currentResponse;
     }
     
+    /**
+     *
+     * @return
+     */
     public JSONObject getTaskConfiguration() {
         return taskConfiguration;
     }
 
+    /**
+     *
+     * @param taskConfiguration
+     */
     public void setTaskConfiguration(String taskConfiguration) {
         this.taskConfiguration = new JSONObject(JOY.FILE_TO_STRING(taskConfiguration));
     }
     
+    /**
+     *
+     * @return
+     */
     public JSONObject getRestConfiguration() {
         return restConfiguration;
     }
 
+    /**
+     *
+     * @param restConfigurationFile
+     */
     public void setRestConfiguration(String restConfigurationFile) {
         restConfiguration = new JSONObject(JOY.FILE_TO_STRING(restConfigurationFile));
     }
 
+    /**
+     *
+     * @return
+     */
     public ActionLocaleMgnt getMessageBundle() {
         return messageBundle;
     }
 
+    /**
+     *
+     * @param MessageBundle
+     */
     public void setMessageBundle(ActionLocaleMgnt MessageBundle) {
         this.messageBundle = MessageBundle;
     }
 
+    /**
+     *
+     */
     public JoyStateMinimum() {
         super();
         messageBundle = new ActionLocaleMgnt();
     }
     
+    /**
+     *
+     * @param sce
+     * @param _request
+     * @param _response
+     * @return
+     */
     public boolean init(ServletContext sce, HttpServletRequest _request, HttpServletResponse _response) {
         this.currentResponse = _response;
         return true;

@@ -32,6 +32,11 @@ public class JoyApiRequest extends JoyClassTemplate {
     private List<JoyApiRequestParameter> parameters;
     private String httpMethod;
 
+    /**
+     *
+     * @param _request
+     * @param ApiStart
+     */
     public JoyApiRequest(HttpServletRequest _request, 
                          String ApiStart) {
         try {
@@ -72,32 +77,59 @@ public class JoyApiRequest extends JoyClassTemplate {
         }
     }
     
+    /**
+     *
+     * @return
+     */
     public List<String> getActions() {
         return actions;
     }
     
+    /**
+     *
+     * @param index
+     * @return
+     */
     public String getAction(int index) {
         try {
             return actions.get(index);
         } catch (Exception e) { return null; }
     }
     
+    /**
+     *
+     * @return
+     */
     public String getMainAction() {
         try {
             return actions.get(0);
         } catch (Exception e) { return null; }
     }
     
+    /**
+     *
+     * @return
+     */
     public List<JoyApiRequestParameter> getParameters() {
         return parameters;
     }
     
+    /**
+     *
+     * @param index
+     * @return
+     */
     public JoyApiRequestParameter getParameter(int index) {
         try {
             return parameters.get(index);
         } catch (Exception e) { return null; }
     }
     
+    /**
+     *
+     * @param name
+     * @return
+     */
     public JoyApiRequestParameter getParameter(String name) {
         try {
             for (JoyApiRequestParameter param : parameters) 
@@ -107,6 +139,10 @@ public class JoyApiRequest extends JoyClassTemplate {
         return null;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getHttpMethod() {
         return httpMethod;
     }

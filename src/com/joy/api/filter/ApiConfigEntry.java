@@ -29,7 +29,12 @@ public class ApiConfigEntry {
         private String mime;
         private boolean secure;
         
-        public ApiConfigEntry(String name, JSONObject json) {
+    /**
+     *
+     * @param name
+     * @param json
+     */
+    public ApiConfigEntry(String name, JSONObject json) {
             JSONArray services = json.getJSONArray("services");
             for (Object tag : services) {
                 JSONObject item = (JSONObject)tag;
@@ -47,31 +52,59 @@ public class ApiConfigEntry {
             }
         }
 
-        public boolean isSecure() {
+    /**
+     *
+     * @return
+     */
+    public boolean isSecure() {
             return secure;
         }
 
-        public String getName() {
+    /**
+     *
+     * @return
+     */
+    public String getName() {
             return name;
         }
 
-        public void setName(String name) {
+    /**
+     *
+     * @param name
+     */
+    public void setName(String name) {
             this.name = name;
         }
 
-        public String getClassName() {
+    /**
+     *
+     * @return
+     */
+    public String getClassName() {
             return className;
         }
 
-        public void setClassName(String className) {
+    /**
+     *
+     * @param className
+     */
+    public void setClassName(String className) {
             this.className = className;
         }
 
-        public String getMime() {
+    /**
+     *
+     * @return
+     */
+    public String getMime() {
             return mime;
         }
 
-        public void setMime(String mime) {
+    /**
+     *
+     * @param mime
+     */
+    public void setMime(String mime) {
             this.mime = mime;
         }
 }

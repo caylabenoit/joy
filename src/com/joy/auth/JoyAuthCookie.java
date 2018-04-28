@@ -27,14 +27,26 @@ public class JoyAuthCookie extends JoyClassTemplate {
     private String publicKey;
     private String cryptedToken;
 
+    /**
+     *
+     * @return
+     */
     public String getPublicKey() {
         return publicKey;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCryptedToken() {
         return cryptedToken;
     }
 
+    /**
+     *
+     * @param globalToken
+     */
     public JoyAuthCookie(String globalToken) {
         String[] tokenparsed = globalToken.split("\\|");
         

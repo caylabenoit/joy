@@ -30,15 +30,27 @@ public class JoyReadStream extends JoyClassTemplate implements Runnable {
     private Thread thread;   
     private String cmdreturn;
 
+    /**
+     *
+     * @return
+     */
     public String getCmdreturn() {
         return cmdreturn;
     }
     
+    /**
+     *
+     * @param name
+     * @param is
+     */
     public JoyReadStream(String name, InputStream is) {
         this.name = name;
         this.is = is;
     }       
     
+    /**
+     *
+     */
     public void start () {
         thread = new Thread (this);
         thread.start ();

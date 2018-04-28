@@ -121,6 +121,10 @@ public class JSONTokener {
         return -1;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean end() {
         return this.eof && !this.usePrevious;
     }

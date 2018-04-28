@@ -25,32 +25,62 @@ public class ChartDatasetPoint {
     private String dataset;
     private Float value;    // liste des groupes de bars
 
+    /**
+     *
+     * @param label
+     * @param dataset
+     * @param value
+     */
     public ChartDatasetPoint(String label, String dataset, Float value) {
         this.label = label;
         this.dataset = dataset;
         this.value = value;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getLabel() {
         return label;
     }
 
+    /**
+     *
+     * @param label
+     */
     public void setLabel(String label) {
         this.label = label;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getDataset() {
         return dataset;
     }
 
+    /**
+     *
+     * @param dataset
+     */
     public void setDataset(String dataset) {
         this.dataset = dataset;
     }
 
+    /**
+     *
+     * @return
+     */
     public Float getValue() {
         return value;
     }
 
+    /**
+     *
+     * @param value
+     */
     public void setValue(Float value) {
         this.value = value;
     }

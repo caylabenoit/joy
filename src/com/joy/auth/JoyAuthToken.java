@@ -50,6 +50,12 @@ public class JoyAuthToken extends JoyClassTemplate {
         return key;
     }
 
+    /**
+     *
+     * @param Data
+     * @return
+     * @throws Exception
+     */
     protected String encrypt(String Data) throws Exception {
         Key key = generateKey();
         Cipher c = Cipher.getInstance(C.AUTH_ALGO);
@@ -59,6 +65,12 @@ public class JoyAuthToken extends JoyClassTemplate {
         return encryptedValue;
     }
 
+    /**
+     *
+     * @param encryptedData
+     * @return
+     * @throws Exception
+     */
     protected String decrypt(String encryptedData) throws Exception {
         Key key = generateKey();
         Cipher c = Cipher.getInstance(C.AUTH_ALGO);
@@ -69,26 +81,49 @@ public class JoyAuthToken extends JoyClassTemplate {
         return decryptedValue;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPublicKey() {
         return publicKey;
     }
     
+    /**
+     *
+     * @param _p
+     */
     public void setPublicKey(String _p) {
         publicKey = _p;
     }
 
+    /**
+     *
+     * @param privateKey
+     */
     public void setPrivateKey(String privateKey) {
         this.privateKey = privateKey;
     }
 
+    /**
+     *
+     * @param timeoutInMinutes
+     */
     public void setTimeoutInMinutes(int timeoutInMinutes) {
         this.timeoutInMinutes = timeoutInMinutes;
     }
     
+    /**
+     *
+     * @return
+     */
     public Date getDateSession() {
         return dateSession;
     }
 
+    /**
+     *
+     */
     public JoyAuthToken() {
         this.publicKey = "";
         this.dateSession = getCurrentDate();
@@ -107,6 +142,11 @@ public class JoyAuthToken extends JoyClassTemplate {
         return cal.getTime();
     }
     
+    /**
+     *
+     * @param myDate
+     * @return
+     */
     public Date getDateFromToken(String myDate) {
         try {
             DateFormat dateFormat = new SimpleDateFormat(C.DEFAULT_DATE_FORMAT);
@@ -116,6 +156,10 @@ public class JoyAuthToken extends JoyClassTemplate {
         }
     }
     
+    /**
+     *
+     * @return
+     */
     public String buildAuthCookie() {
         try {
             return this.publicKey + "|" + this.encrypt(this.publicKey + "|" + getStrCurrentDate());
@@ -124,6 +168,11 @@ public class JoyAuthToken extends JoyClassTemplate {
         }
     }
     
+    /**
+     *
+     * @param _cookie
+     * @return
+     */
     public boolean checkAuthCookie(String _cookie) {
         try {
             JoyAuthCookie myToken = new JoyAuthCookie(_cookie);

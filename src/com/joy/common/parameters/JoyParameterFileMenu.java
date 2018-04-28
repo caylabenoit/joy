@@ -24,23 +24,44 @@ public class JoyParameterFileMenu {
     private String name;
     private String filename;
 
+    /**
+     *
+     * @param name
+     * @param filename
+     */
     public JoyParameterFileMenu(String name, String filename) {
         this.name = name;
         this.filename = filename;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getFilename() {
         return filename;
     }
 
+    /**
+     *
+     * @param filename
+     */
     public void setFilename(String filename) {
         this.filename = filename;
     }

@@ -28,7 +28,12 @@ public class taskConfigEntry {
         private String className;
         private boolean secure;
         
-        public taskConfigEntry(String name, JSONObject json) {
+    /**
+     *
+     * @param name
+     * @param json
+     */
+    public taskConfigEntry(String name, JSONObject json) {
             JSONArray services = json.getJSONArray("services");
             for (Object tag : services) {
                 JSONObject item = (JSONObject)tag;
@@ -45,23 +50,43 @@ public class taskConfigEntry {
             }
         }
         
-        public boolean isSecure() {
+    /**
+     *
+     * @return
+     */
+    public boolean isSecure() {
             return secure;
         }
         
-        public String getName() {
+    /**
+     *
+     * @return
+     */
+    public String getName() {
             return name;
         }
 
-        public void setName(String name) {
+    /**
+     *
+     * @param name
+     */
+    public void setName(String name) {
             this.name = name;
         }
 
-        public String getClassName() {
+    /**
+     *
+     * @return
+     */
+    public String getClassName() {
             return className;
         }
 
-        public void setClassName(String className) {
+    /**
+     *
+     * @param className
+     */
+    public void setClassName(String className) {
             this.className = className;
         }
 

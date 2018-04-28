@@ -26,18 +26,34 @@ import java.util.List;
 public class BOInitRecord {
     private List<BOInitField> fields;
 
+    /**
+     *
+     */
     public BOInitRecord() {
         fields = new ArrayList<>();
     }
     
+    /**
+     *
+     * @param field
+     */
     public void addField(BOInitField field) {
         fields.add(field);
     }
     
+    /**
+     *
+     * @param name
+     * @param value
+     */
     public void addField(String name, String value) {
         fields.add(new BOInitField(name, value));
     }
 
+    /**
+     *
+     * @return
+     */
     public List<BOInitField> getFields() {
         return fields;
     }

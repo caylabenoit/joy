@@ -50,50 +50,99 @@ public class JoyParameterFactory extends JoyClassTemplate {
     private String naviFile;
     private String authPrivateKey;
     
+    /**
+     *
+     * @return
+     */
     public List<JoyParameterFileMenu> getMenuFiles() {
         return menuFiles;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getAuthPrivateKey() {
         return (authPrivateKey == null ? C.AUTH_PRIVATEKEY : authPrivateKey);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getNaviFile() {
         return naviFile;
     }
     
+    /**
+     *
+     * @return
+     */
     public boolean isNoLogin() {
         return noLogin;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getApplicationName() {
         return applicationName;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getDefaultLocalCountry() {
         return (defaultLocalCountry.isEmpty() ? "US" : defaultLocalCountry);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getDefaultLocalLanguage() {
         return (defaultLocalLanguage.isEmpty() ? "en" : defaultLocalLanguage);
     }
     
+    /**
+     *
+     * @return
+     */
     public String getConfigFolder() {
         return (applicationFolder.isEmpty() ? "" : applicationFolder + "/" + C.CONFIG_DIR_FROM_APPDIR + "/");
     }
     
+    /**
+     *
+     * @return
+     */
     public String getLanguageFolder() {
         return (applicationFolder.isEmpty() ? "" : applicationFolder + "/" + C.LANG_DIR_FROM_APPDIR + "/");
     }
     
+    /**
+     *
+     * @return
+     */
     public String getApplicationFolder() {
         return applicationFolder;
     }
 
+    /**
+     *
+     * @param m_ApplicationFolder
+     */
     public void setApplicationFolder(String m_ApplicationFolder) {
         this.applicationFolder = m_ApplicationFolder;
     }
     
+    /**
+     *
+     * @param name
+     * @return
+     */
     public String getMapping(String name) {
         for (MappingSignature sig :  mappingConfigList) 
             if (sig.getName().equalsIgnoreCase(name))
@@ -101,10 +150,19 @@ public class JoyParameterFactory extends JoyClassTemplate {
         return "";
     }
     
+    /**
+     *
+     * @return
+     */
     public int getSessionItemout() {
         return sessionTimeoutMin;
     }
     
+    /**
+     *
+     * @param Name
+     * @return
+     */
     public JoyParameter getParameter(String Name) {
         for (JoyParameter param: applicationParameters) 
             if (param.getName().equalsIgnoreCase(Name))
@@ -112,6 +170,9 @@ public class JoyParameterFactory extends JoyClassTemplate {
         return null;
     }
 
+    /**
+     *
+     */
     public JoyParameterFactory() {
         initialized = false;
         noLogin = false;
@@ -123,26 +184,50 @@ public class JoyParameterFactory extends JoyClassTemplate {
         menuFiles = new ArrayList();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isInitialized() {
         return initialized;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getJoyDefaultDateFormat() {
         return defaultDateFormat;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getVersion() {
         return version;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getJoyBundledMessageFile() {
         return bundledMessageFile;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getAPIStartPath() {
         return apiStartPath;
     }
     
+    /**
+     *
+     * @return
+     */
     public List<String> getEntities() {
         return entitiesConfigList;
     }
@@ -275,6 +360,10 @@ public class JoyParameterFactory extends JoyClassTemplate {
         return initialized;
     }
 
+    /**
+     *
+     * @return
+     */
     public JSONObject getJson() {
         JSONObject paramsObj = new JSONObject();
         

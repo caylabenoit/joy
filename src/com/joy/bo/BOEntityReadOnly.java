@@ -38,20 +38,70 @@ import com.joy.common.JoyClassTemplate;
  */
 public class BOEntityReadOnly extends JoyClassTemplate implements IEntity {
     
+    /**
+     *
+     */
     protected static String JOY_QUERY_ALIAS = "JOYCUSTOM";
     
+    /**
+     *
+     */
     protected List<BOField> fields;         // fields of the entity
+
+    /**
+     *
+     */
     protected String name;                  // entity name
+
+    /**
+     *
+     */
     protected String label;                 // entity label / name if no label specified
+
+    /**
+     *
+     */
     protected String query;                 // entity query (not for tables)
+
+    /**
+     *
+     */
     protected boolean distinct;             // clause distinct requested
+
+    /**
+     *
+     */
     protected String dateFormat;            // default date format
+
+    /**
+     *
+     */
     protected List<String> sortedFields;    // sorted field list
+
+    /**
+     *
+     */
     protected List<String> filters;         // Filters (where clause) list
+
+    /**
+     *
+     */
     protected JoyDBProvider dbConnection;   // DB connection
+
+    /**
+     *
+     */
     protected BOEntityRWType boType;          // type of entity : table or query
+
+    /**
+     *
+     */
     protected int limitRecords;             // limit the number of record collected
     
+    /**
+     *
+     * @return
+     */
     @Override
     public String getQuery() {
         if (this.boType != boReadWrite) 
@@ -70,11 +120,19 @@ public class BOEntityReadOnly extends JoyClassTemplate implements IEntity {
         this.boType = boType;
     }
 
+    /**
+     *
+     * @param Query
+     */
     @Override
     public void setQuery(String Query) {
         this.query = Query;
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public JoyDBProvider getDB() {
         return this.dbConnection;
@@ -143,19 +201,33 @@ public class BOEntityReadOnly extends JoyClassTemplate implements IEntity {
             filters.add(clauseList[i]);
     }
     
+    /**
+     *
+     */
     @Override
     public void resetFilters() {
         filters.clear();
     }
     
+    /**
+     *
+     * @return
+     */
     public List<String> sorts() {
         return sortedFields;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<String> filters() {
         return filters;
     }
     
+    /**
+     *
+     */
     @Override
     public void resetSorts() {
         sortedFields.clear();
@@ -181,28 +253,46 @@ public class BOEntityReadOnly extends JoyClassTemplate implements IEntity {
         }
     }
     
+    /**
+     *
+     * @param args
+     */
     @Override
     public void useOnlyTheseFields(String... args) {
         this.useNoFields();
         useOrNotTheseFields(true, args);
     }
     
+    /**
+     *
+     * @param args
+     */
     @Override
     public void doNotUseTheseFields(String... args) {
         useOrNotTheseFields(false, args);
     }
     
+    /**
+     *
+     * @param args
+     */
     @Override
     public void useTheseFields(String... args) {
         useOrNotTheseFields(true, args);
     }
     
+    /**
+     *
+     */
     @Override
     public void useNoFields() {
         for (BOField field : fields) 
             field.doNotUseThisField();
     }
     
+    /**
+     *
+     */
     @Override
     public void reset() {
         resetValues();
@@ -212,17 +302,27 @@ public class BOEntityReadOnly extends JoyClassTemplate implements IEntity {
         resetFilters();
     }
     
+    /**
+     *
+     * @param format
+     */
     @Override
     public void setDateFormat(String format) {
         dateFormat = format;
     }
     
+    /**
+     *
+     */
     @Override
     public void resetValues() {
         for (BOField field : fields) 
             field.setValue(null);
     }
     
+    /**
+     *
+     */
     @Override
     public void resetKeys() {
         for (BOField field : fields) 
@@ -234,16 +334,27 @@ public class BOEntityReadOnly extends JoyClassTemplate implements IEntity {
             field.useThisField();
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isDistinct() {
         return distinct;
     }
 
+    /**
+     *
+     * @param Distinct
+     */
     @Override
     public void setDistinct(boolean Distinct) {
         this.distinct = Distinct;
     }
     
+    /**
+     *
+     */
     public BOEntityReadOnly() {
         this.sortedFields =  new ArrayList();
         this.fields = new ArrayList();
@@ -256,11 +367,20 @@ public class BOEntityReadOnly extends JoyClassTemplate implements IEntity {
         this.name = "";
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public List<BOField> fields() {
         return fields;
     }
     
+    /**
+     *
+     * @param Name
+     * @return
+     */
     @Override
     public BOField field(String Name) {
         BOField retField = null;
@@ -272,6 +392,11 @@ public class BOEntityReadOnly extends JoyClassTemplate implements IEntity {
         return retField;
     }
 
+    /**
+     *
+     * @param index
+     * @return
+     */
     @Override
     public BOField field(int index) {
         BOField retField = fields.get(index);
@@ -281,6 +406,10 @@ public class BOEntityReadOnly extends JoyClassTemplate implements IEntity {
         return retField;
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isInitialized() {
         return (!fields.isEmpty() && !name.equals(""));
@@ -291,6 +420,11 @@ public class BOEntityReadOnly extends JoyClassTemplate implements IEntity {
         return name;
     }
     
+    /**
+     *
+     * @param rs
+     * @return
+     */
     protected JSONObject exportResultSet(ResultSet rs)  {
         JoyJsonMatrix matrix = new JoyJsonMatrix();
         
@@ -570,40 +704,77 @@ public class BOEntityReadOnly extends JoyClassTemplate implements IEntity {
         return retVal;
     }
     
+    /**
+     *
+     */
     @Override
     public void insertDefaultRecords() {}
 
+    /**
+     *
+     * @param data
+     * @param removeAllBefore
+     * @return
+     */
     @Override
     public Collection<ActionLogReport> imp(JSONObject data, boolean removeAllBefore) {
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int delete() {
         return 0;
     }
 
+    /**
+     *
+     */
     @Override
     public void truncate() {}
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int insert() {
         return 0;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int update() {
         return 0;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int upsert() {
         return 0;
     }
 
+    /**
+     *
+     * @param record
+     */
     @Override
     public void addDefaultRecord(BOInitRecord record) {}
     
+    /**
+     *
+     * @param fieldname
+     * @return
+     */
     @Override
     public int getNewIDForField(String fieldname) { return -1; }
 }

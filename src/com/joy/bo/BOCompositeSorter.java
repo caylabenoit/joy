@@ -25,24 +25,43 @@ public class BOCompositeSorter {
     private String alias;
     private boolean descSort;
 
+    /**
+     *
+     * @param field
+     * @param alias
+     * @param desc
+     */
     public BOCompositeSorter(String field, String alias, boolean desc) {
         this.fieldName = field;
         this.descSort = desc;
         this.alias = (alias == null ? "" : alias);
     }
     
+    /**
+     *
+     * @param field
+     * @param alias
+     */
     public BOCompositeSorter(String field, String alias) {
         this.fieldName = field;
         this.alias = (alias == null ? "" : alias);
         this.descSort = false;
     }
     
+    /**
+     *
+     * @param field
+     */
     public BOCompositeSorter(String field) {
         this.fieldName = field;
         this.alias = "";
         this.descSort = false;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getSort() {
         return (alias.isEmpty() ? fieldName : alias + "." + fieldName) + " " + (this.descSort ? "DESC" : "ASC");
     }

@@ -26,6 +26,13 @@ public class BOCompositeFilter {
     private String operator;
     private String value;
 
+    /**
+     *
+     * @param alias
+     * @param name
+     * @param operator
+     * @param value
+     */
     public BOCompositeFilter(String alias, String name, String operator, String value) {
         this.alias = alias;
         this.name = name;
@@ -33,14 +40,26 @@ public class BOCompositeFilter {
         this.value = (value == null ? "NULL" : value);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getFullName() {
         return (alias == null ? name : alias + "." + name);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getOperator() {
         return (operator.isEmpty() ? "=" : operator);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getValue() {
         return (value.isEmpty() ? "NULL" : value);
     }

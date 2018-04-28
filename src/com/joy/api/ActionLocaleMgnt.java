@@ -28,27 +28,48 @@ public class ActionLocaleMgnt {
     private String language;
     private String country;
     
-    
+    /**
+     *
+     */
     public ActionLocaleMgnt() {
         this.messages = null;
         this.language = "en";
         this.country = "US";
     }
 
+    /**
+     *
+     * @param _Label
+     * @return
+     */
     public String getMessage(String _Label) {
         return messages.getString(_Label);
     }
     
+    /**
+     *
+     * @return
+     */
     public boolean isInitilized() {
         return (this.messages != null);
     }
     
+    /**
+     *
+     * @param Language
+     * @param Country
+     */
     public ActionLocaleMgnt(String Language, String Country) {
         this.language = Language;
         this.country = Country;
         messages = null;
     }
 
+    /**
+     *
+     * @param fileMessage
+     * @return
+     */
     public boolean init(String fileMessage) {
         try {
             Locale currentLocale;
@@ -62,26 +83,50 @@ public class ActionLocaleMgnt {
         }
     }
     
+    /**
+     *
+     * @return
+     */
     public ResourceBundle getMessages() {
         return messages;
     }
 
+    /**
+     *
+     * @param Messages
+     */
     public void setMessages(ResourceBundle Messages) {
         this.messages = Messages;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getLanguage() {
         return language;
     }
 
+    /**
+     *
+     * @param Language
+     */
     public void setLanguage(String Language) {
         this.language = Language;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCountry() {
         return country;
     }
 
+    /**
+     *
+     * @param Country
+     */
     public void setCountry(String Country) {
         this.country = Country;
     }

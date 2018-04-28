@@ -26,11 +26,17 @@ import java.util.logging.Logger;
 public class JoyClassTemplate {
     private final Logger joyLog;
     
-
+    /**
+     *
+     * @return
+     */
     public Logger getLog() {
         return joyLog;
     }
 
+    /**
+     *
+     */
     public JoyClassTemplate() {
         joyLog = Logger.getLogger(this.getClass().getPackage().getName());
     }

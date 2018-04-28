@@ -38,13 +38,26 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class FilterCommon extends JoyClassTemplate implements Filter {
 
-    
+    /**
+     *
+     * @param fc
+     * @throws ServletException
+     */
     @Override
     public void init(FilterConfig fc) throws ServletException {}
 
+    /**
+     *
+     */
     @Override
     public void destroy() {}
     
+    /**
+     *
+     * @param request
+     * @param response
+     * @param chain
+     */
     @Override
     public void doFilter(ServletRequest request, 
                          ServletResponse response, 
@@ -94,6 +107,10 @@ public class FilterCommon extends JoyClassTemplate implements Filter {
         }
     }
     
+    /**
+     *
+     * @param state
+     */
     protected void process(JoyState state) {}
     
     /**
@@ -134,6 +151,10 @@ public class FilterCommon extends JoyClassTemplate implements Filter {
         return srvConfig;
     }
     
+    /**
+     *
+     * @param state
+     */
     protected void joyFinalize(JoyState state) {
         try {
             getLog().log(Level.FINE, "------ [JOY v{0}]  End Of Request Treatment ------", C.JOY_VERSION);

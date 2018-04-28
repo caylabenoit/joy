@@ -50,15 +50,26 @@ import java.text.ParseException;
 public class JOY {
     private static JoyTaskManager S_TASK_MANAGER;
     
+    /**
+     *
+     * @param log
+     */
     public static void SYSTEM_LOG(String log) {
         System.out.println("JOY> " + log);
     }
     
+    /**
+     *
+     * @return
+     */
     public static JoyTaskManager TASKS() {
         return S_TASK_MANAGER;
     }
     
-     public static void INIT() {
+    /**
+     *
+     */
+    public static void INIT() {
          if (S_TASK_MANAGER == null) {
             S_TASK_MANAGER = new JoyTaskManager();
             S_TASK_MANAGER.init();
@@ -163,6 +174,14 @@ public class JOY {
         }
     }
     
+    /**
+     *
+     * @param _object
+     * @param _actiontype
+     * @param _Label
+     * @param args
+     * @return
+     */
     public static String HREF(String _object,
             String _actiontype,
             String _Label,
@@ -210,10 +229,21 @@ public class JOY {
         return urlRet;
     }
 
+    /**
+     *
+     * @param value
+     * @return
+     */
     public static String T(String value) {
         return (value == null ? "" : value);
     }
 
+    /**
+     *
+     * @param value
+     * @param defaultValue
+     * @return
+     */
     public static String T(String value, String defaultValue) {
         return (value == null ? defaultValue : value);
     }
@@ -265,11 +295,23 @@ public class JOY {
         return dateFormat.format(cal.getTime());
     }
 
+    /**
+     *
+     * @param myDate
+     * @param format
+     * @return
+     */
     public static String DATE_TO_STRING(Date myDate, String format) {
         DateFormat dateFormat = new SimpleDateFormat(format);
         return dateFormat.format(myDate);
     }
     
+    /**
+     *
+     * @param myDate
+     * @param format
+     * @return
+     */
     public static Date STRING_TO_DATE(String myDate, String format) {
         try {
             DateFormat dateFormat = new SimpleDateFormat(format);
@@ -359,6 +401,12 @@ public class JOY {
         }
     }
 
+    /**
+     *
+     * @param color
+     * @param transparency
+     * @return
+     */
     public static String RGBA(String color, String transparency) {
         return "rgba(" + color + "," + transparency + ")";
     }

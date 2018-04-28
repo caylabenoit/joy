@@ -39,6 +39,12 @@ public class ChartCounterData {
     private static String DEFAULT_WARN = "rgba(240,173,78,1)";
     private static String DEFAULT_GOOD = "rgba(92,184,92,1)";
 
+    /**
+     *
+     * @param _Value
+     * @param _Label
+     * @param _Code
+     */
     public ChartCounterData(Float _Value, String _Label, String _Code) {
         hasData = (_Value != null);
         value = (_Value == null ? 0 : _Value); 
@@ -52,70 +58,137 @@ public class ChartCounterData {
         colorGood = "";
     }
     
+    /**
+     *
+     * @param BadToWarn
+     * @param WarnToGood
+     */
     public void setThresolds(int BadToWarn, int WarnToGood) {
         thresoldBadToWarn = BadToWarn;
         thresoldWarningToGood = WarnToGood;
     }
     
+    /**
+     *
+     * @param bad
+     * @param warn
+     * @param good
+     */
     public void setColors(String bad, String warn, String good) {
         colorBad = (bad == null ? DEFAULT_BAD : bad);
         colorWarning = (warn == null ? DEFAULT_WARN : warn);
         colorGood = (good == null ? DEFAULT_GOOD : good);
     }
     
+    /**
+     *
+     * @return
+     */
     public int getThresoldBadToWarn() {
         return (thresoldBadToWarn < 0 ? DEFAULT_THRES_BAD_TO_WARN : thresoldBadToWarn);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getThresoldwarningToGood() {
         return (thresoldWarningToGood < 0 ? DEFAULT_THRES_WARN_TO_GOOD : thresoldWarningToGood);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getColorBad() {
         return (colorBad.isEmpty() ? DEFAULT_BAD : colorBad);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getColorWarning() {
         return (colorWarning.isEmpty() ? DEFAULT_WARN : colorWarning);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getColorGood() {
         return (colorGood.isEmpty() ? DEFAULT_GOOD : colorGood);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMaxValue() {
         return maxValue;
     }
 
+    /**
+     *
+     * @param MaxValue
+     */
     public void setMaxValue(int MaxValue) {
         this.maxValue = MaxValue;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCode() {
         return code;
     }
 
+    /**
+     *
+     * @param Code
+     */
     public void setCode(String Code) {
         this.code = Code;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getLabel()
     {
         return label;        
     }
     
+    /**
+     *
+     * @return
+     */
     public boolean hasData() {
         return hasData;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getValue() {
         return (value == null? "No value": value.toString());
     }
     
+    /**
+     *
+     * @return
+     */
     public String getBadValue() {
         return (value == null? String.valueOf(maxValue) : String.valueOf(maxValue - value));
     }
 
+    /**
+     *
+     * @return
+     */
     public String getColor () {
         if (value > this.getThresoldwarningToGood()) 
             return this.getColorGood(); // "rgba(92,184,92,1)"; //"#5cb85c"; 
