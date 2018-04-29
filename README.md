@@ -1,8 +1,8 @@
 # joy
-Java joy framework
+Java RestFul joy framework
 
 This frameworks simplify and group the use of
-* MVC 
+* RESTFul use
 * SQL & data management
 * JSON management
 * Log management
