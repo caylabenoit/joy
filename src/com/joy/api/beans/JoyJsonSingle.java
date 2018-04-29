@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 benoit
+ * Copyright (C) 2017 Benoit Cayla (benoit@famillecayla.fr)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,8 @@ import com.joy.common.JoyClassTemplate;
 import com.joy.json.JSONObject;
 
 /**
- *
+ * This class encapsulate a value (json export). 
+ * A value is put in a json with its name.
  * @author benoit
  */
 public class JoyJsonSingle extends JoyClassTemplate {
@@ -29,7 +30,7 @@ public class JoyJsonSingle extends JoyClassTemplate {
     private Object value;
 
     /**
-     *
+     * Return the value encapsulated
      * @return
      */
     public JSONObject getData() {
@@ -41,7 +42,7 @@ public class JoyJsonSingle extends JoyClassTemplate {
     }
     
     /**
-     *
+     * return the Name of the value
      * @return
      */
     public String getName() {
@@ -49,7 +50,7 @@ public class JoyJsonSingle extends JoyClassTemplate {
     }
 
     /**
-     *
+     * Set the Name of the value
      * @param name
      */
     public void setName(String name) {
@@ -57,7 +58,7 @@ public class JoyJsonSingle extends JoyClassTemplate {
     }
 
     /**
-     *
+     * return the value
      * @return
      */
     public Object getValue() {
@@ -65,7 +66,7 @@ public class JoyJsonSingle extends JoyClassTemplate {
     }
 
     /**
-     *
+     * Set the value
      * @param value
      */
     public void setValue(Object value) {
@@ -73,7 +74,7 @@ public class JoyJsonSingle extends JoyClassTemplate {
     }
 
     /**
-     *
+     * Initialisation
      */
     public JoyJsonSingle() {
         this.name = "";
@@ -81,7 +82,7 @@ public class JoyJsonSingle extends JoyClassTemplate {
     }
 
     /**
-     *
+     * Return the Json object with name and value.
      * @param name
      * @param value
      */

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 benoit
+ * Copyright (C) 2017 Benoit Cayla (benoit@famillecayla.fr)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * This class encapsulate a bidimensionnal array (json export). 
+ * it's used by the rest call to return this kind of object in a specific and formatted and structurated json.
+ * It alwaws return the row count (json rowcount value), and the rows in a json array.
  * @author benoit
  */
 public class JoyJsonMatrix extends JoyClassTemplate {
@@ -34,7 +36,7 @@ public class JoyJsonMatrix extends JoyClassTemplate {
     private JSONArray columns;
     
     /**
-     *
+     * Initialization
      */
     public JoyJsonMatrix() {
         super();
@@ -43,7 +45,8 @@ public class JoyJsonMatrix extends JoyClassTemplate {
     }
     
     /**
-     *
+     * Add a new row in the bidimensionnal array.
+     * The given row is a JoyJsonVector object
      * @param obj
      */
     public void addRow(JoyJsonVector obj) {
@@ -51,7 +54,7 @@ public class JoyJsonMatrix extends JoyClassTemplate {
     }
 
     /**
-     *
+     * Return all the rows.
      * @return
      */
     public JSONArray getRows() {
@@ -59,15 +62,7 @@ public class JoyJsonMatrix extends JoyClassTemplate {
     }
 
     /**
-     *
-     * @param rows
-     */
-    public void setRows(JSONArray rows) {
-        this.rows = rows;
-    }
-
-    /**
-     * Return the JSON Value with all the data
+     * Return the JSON array values with all the data (structured)
      * @return JSON
      */
     public JSONObject getData() {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 benoit
+ * Copyright (C) 2017 Benoit Cayla (benoit@famillecayla.fr)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,20 +20,10 @@ package com.joy.api.beans;
 {
   "vector": [
     {
-      "name": "TERM_TYPE_LIST",
+      "name": "Table",
       "value": {
-        "itemcount": 6,
-        "items": [
-          {
-            "name": "0",
-            "value": "Unknown"
-          },
-          {
-            "name": "5"
-            "value": "Unknown"
-          },
-          ...
-        ]
+        "itemcount": 2,
+        "items": [ { "name": "0", "value": "Unknown"}, { "name": "5" "value": "Unknown"} ]
       }
     }
   ]
@@ -48,14 +38,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- *
+ * This class encapsulate a 1 dimension array (json export). 
+ * it's used by the rest call to return this kind of object in a specific and formatted and structurated json.
+ * THis object is used to update (CRUD) the datasets.
+ * It also return the numbre of items (itemcount)
  * @author benoit
  */
 public class JoyJsonVector extends JoyClassTemplate {
     private JSONArray items;
 
     /**
-     *
+     * Initialisation
      */
     public JoyJsonVector() {
         super();
@@ -63,23 +56,15 @@ public class JoyJsonVector extends JoyClassTemplate {
     }
 
     /**
-     *
+     * Return all the items (vectors)
      * @return
      */
     public JSONArray getItems() {
         return items;
     }
-
-    /**
-     *
-     * @param items
-     */
-    public void setItems(JSONArray items) {
-        this.items = items;
-    }
     
     /**
-     *
+     * Add a value in a JoyJsonSingle format in the vector
      * @param obj
      */
     public void addItem(JoyJsonSingle obj) {
@@ -87,17 +72,17 @@ public class JoyJsonVector extends JoyClassTemplate {
     }
     
     /**
-     *
-     * @param name
-     * @param value
+     * Add a value in a JoyJsonSingle format in the vector
+     * @param name name
+     * @param value object value
      */
     public void addItem(String name, Object value) {
         addItem(new JoyJsonSingle(name, value));
     }
     
     /**
-     *
-     * @return
+     * Returns the JSON final string with all the vectors.
+     * @return json
      */
     public JSONObject getData() {
         try {

@@ -23,7 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * This class manage the CRUD returns in a formatted JSON object. 
+ * It's used by the framework after an update call to returns the status and messages.
  * @author Benoit Cayla (benoit@famillecayla.fr)
  */
 public class JoyJsonPOSTReturn extends JoyClassTemplate {
@@ -34,31 +35,32 @@ public class JoyJsonPOSTReturn extends JoyClassTemplate {
     public enum JoyEnumPOSTUpSertCodes {
 
         /**
-         *
+         * Update request
          */
         update ("Update"),
 
         /**
-         *
+         * Insert request
          */
         insert  ("Insert"),
 
         /**
-         *
+         * Delete request
          */
         delete  ("Delete"),
 
         /**
-         *
+         * Nothing !
          */
         nothing  ("Nothing"),
 
         /**
-         *
+         * Insert or update request
          */
         upsert ("Upsert");      
         private final String name;       
         JoyEnumPOSTUpSertCodes(String s) {  name = s;  }
+        @Override
         public String toString() { return this.name;  }
     }
     
@@ -68,29 +70,29 @@ public class JoyJsonPOSTReturn extends JoyClassTemplate {
     private JoyEnumPOSTUpSertCodes updateType;
 
     /**
-     *
-     * @return
+     * return the status of the update (OK or KO)
+     * @return true if OK
      */
     public boolean isStatus() {
         return status;
     }
 
     /**
-     *
+     * Set the status to OK
      */
     public void setStatusOk() {
         this.status = true;
     }
     
     /**
-     *
+     * Set the status to KO
      */
     public void setStatusKo() {
         this.status = false;
     }
     
     /**
-     *
+     * Get the update type requested
      * @return
      */
     public JoyEnumPOSTUpSertCodes getUpdateType() {
@@ -98,7 +100,7 @@ public class JoyJsonPOSTReturn extends JoyClassTemplate {
     }
 
     /**
-     *
+     * Set the update requested type 
      * @param updateType
      */
     public void setUpdateType(JoyEnumPOSTUpSertCodes updateType) {
@@ -106,7 +108,7 @@ public class JoyJsonPOSTReturn extends JoyClassTemplate {
     }
     
     /**
-     *
+     * Set the Numbre of rows affected by the update (used only by the framework)
      * @param nbRowsAffected
      */
     public void setNbRowsAffected(int nbRowsAffected) {
@@ -114,14 +116,14 @@ public class JoyJsonPOSTReturn extends JoyClassTemplate {
     }
     
     /**
-     *
+     * Initialization
      */
     public JoyJsonPOSTReturn() {
         messages = new ArrayList();
     }
 
     /**
-     *
+     * Add a message. This is used to return errors or warning after an update
      * @param message
      */
     public void addMessage(String message) {
@@ -129,7 +131,8 @@ public class JoyJsonPOSTReturn extends JoyClassTemplate {
     }
     
     /**
-     *
+     * Return the CRUD return objet (JSON) in a structured format.
+     * Example : { "status": XXX, "nbrowsaffected": XXX, "type": XXX, "messages": [ Messages here]} 
      * @return
      */
     public JSONObject getJsonReturn() {
