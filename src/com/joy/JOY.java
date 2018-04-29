@@ -14,6 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+
 package com.joy;
 
 import com.joy.common.JoyReadStream;
@@ -44,7 +46,7 @@ import java.text.ParseException;
 
 
 /**
- *
+ * Joy main class
  * @author Benoit CAYLA (benoit@famillecayla.fr) CAYLA
  */
 public class JOY {
