@@ -7,3 +7,5 @@ This frameworks simplify and group the use of
 * JSON management
 * Log management
 * An other ...
+See my web site here for more http://benoit.famillecayla.fr/
+Use the empty template here https://github.com/caylabenoit/joytemplate
